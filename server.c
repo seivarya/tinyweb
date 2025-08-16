@@ -39,7 +39,7 @@ struct server server_constructor(int domain, int service, int protocol, unsigned
 	if (getsockname(server.socket, (struct sockaddr *)&server.address, &addrlen) == -1) {
 		perror("getsockname");
 	} else {
-		printf("listening on > %u\n", ntohs(server.address.sin_port));
+		printf("listening on > http://127.0.0.1:%u\n", ntohs(server.address.sin_port));
 	}
 
 	server.launch = launch;
