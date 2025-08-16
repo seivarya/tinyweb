@@ -3,23 +3,28 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h> 
+#include <sys/types.h>
 
 struct server {
 
 	int domain;
 	int service;
 	int protocol;
-	int backlog;
+
+	unsigned long interface;
 	int port;
 
-	u_long interface;
+	int backlog;
 	
-	struct sockaddr_in6 address;
-	void(*launch)(void);
+	struct sockaddr_in address;
+
+	int socket;
+
+	void(*launch)(struct server *server); // for launching server.
 
 };
 
 
-struct server server_constructor(int domain, int service, int protocol, int backlog, int port, u_long interface);
+struct server server_constructor(int domain, int service, int protocol, unsigned long interface, int port, int backlog, void(*launch)(struct server *server)); // function prototype
 
 #endif /*SERVER_H*/
