@@ -11,7 +11,7 @@ void launch(struct server *server) {
 		"<html>\n"
 		"<head>\n"
 		"    <meta charset=\"utf-8\">\n"
-		"    <title>web server written in .c</title>\n"
+		"    <title>web server | home</title>\n"
 		"    <style>\n"
 		"        body {\n"
 		"            background-color: black;\n"
