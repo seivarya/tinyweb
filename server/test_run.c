@@ -43,7 +43,7 @@ void launch(struct server *server) {
 	sprintf(response,
 	 "HTTP/1.0 200 OK\r\n"
 	 "Content-Length: %zu\r\n"
-	 "Content-Type: text/html\r\n"
+	 "Content-Type: text/plain\r\n"
 	 "\r\n"
 	 "%s", strlen(body), body);
 
