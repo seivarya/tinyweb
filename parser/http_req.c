@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "http_req.h"
 #include <string.h>
-
 int select_method(char *method) {
 	if (method == NULL) {
 		printf("Error: no method found\n");
@@ -34,14 +33,18 @@ struct http_request http_request_constructor(char *request_string) {
 	printf("invoked http_request struct\n");
 
 	size_t length = strlen(request_string);
+
+	char requested[length];
+	strcpy(requested, request_string); // because passed char * as parameter is immutable.
+
 	for (int i = 0; i < length - 1; i++) {
-		if (request_string[i] == '\n' && request_string[i + 1] == '\n') {
+		if (requested[i] == '\n' && requested[i + 1] == '\n') {
 			// replacing the str with '|' where \n\n <content> exists
-			request_string[i + 1] = '|';
+			requested[i + 1] = '|';
 		}
 	}
 
-	char *request_line = strtok(request_string, "\n");
+	char *request_line = strtok(requested, "\n");
 	char *header       = strtok(NULL, "|");
 	char *body         = strtok(NULL, "|");
 
@@ -67,5 +70,3 @@ struct http_request http_request_constructor(char *request_string) {
 
 	return request;
 }
-
-

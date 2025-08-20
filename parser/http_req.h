@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "../data structures/dictionary.h"  // TODO: add data structures here.
+ 
 enum http_methods {
 	GET,
 	POST,
