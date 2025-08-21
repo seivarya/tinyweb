@@ -15,5 +15,11 @@ struct linked_list_int {
 	void(*remove)(int index, struct linked_list_int *linked_list);
 	int (*retrieve)(int index, struct linked_list_int *linked_list);
 
+	struct linked_list_int (*constructor)(void);
 };
+
+
+struct linked_list_int linked_list_int_constructor();
+
+
 #endif
