@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node_int *create_node_int(int data); // declarations
+struct node_int *create_node_int(int data);
 void destroy_node_int(struct node_int *node_to_destroy);
 
 struct node_int *iterate_int(int index, struct linked_list_int *linked_list);
@@ -11,79 +11,83 @@ void insert_node_int(int index, int data, struct linked_list_int *linked_list);
 void remove_node_int(int index, struct linked_list_int *linked_list);
 int retrieve_data_int(int index, struct linked_list_int *linked_list);
 
-struct linked_list_int linked_list_int_constructor() { // contructor
-	struct linked_list_int new_list;
+struct linked_list_int linked_list_int_constructor() {
+    struct linked_list_int new_list;
 
-	new_list.head = NULL;
-	new_list.length = 0;
+    new_list.head = NULL;
+    new_list.length = 0;
 
-	new_list.insert = insert_node_int;
-	new_list.remove = remove_node_int;
-	new_list.retrieve = retrieve_data_int;
-	new_list.constructor = linked_list_int_constructor;
-	
-	printf("linked_list_int_contructor invoked");
+    new_list.insert = insert_node_int;
+    new_list.remove = remove_node_int;
+    new_list.retrieve = retrieve_data_int;
 
-	return new_list;
+    return new_list;
 }
 
 struct node_int *create_node_int(int data) {
-	struct node_int *new_node_address = (struct node_int *)malloc(sizeof(struct node_int));
+    struct node_int *new_node_address = (struct node_int *)malloc(sizeof(struct node_int));
 
-	if (!new_node_address) {
-		printf("allocation failed\n");
-		exit(1);
-	}
+    if (!new_node_address) {
+        printf("allocation failed\n");
+        exit(1);
+    }
 
-	new_node_address->data = data;
-	new_node_address->next = NULL;
+    new_node_address->data = data;
+    new_node_address->next = NULL;
 
-	return new_node_address;
+    return new_node_address;
 }
 
 void destroy_node_int(struct node_int *node_to_destroy) {
-	free(node_to_destroy);
+    free(node_to_destroy);
 }
 
 struct node_int *iterate_int(int index, struct linked_list_int *linked_list) {
-	if (index < 0 || index >= linked_list->length) {
-		printf("index out of bounds.\n");
-		exit(9);
-	}
+    if (index < 0 || index >= linked_list->length) {
+        printf("index out of bounds.\n");
+        exit(9);
+    }
 
-	struct node_int *cursor = linked_list->head;
-	for (int i = 0; i < index; i++) {
-		cursor = cursor->next;
-	}
-	return cursor;
+    struct node_int *cursor = linked_list->head;
+    for (int i = 0; i < index; i++)
+        cursor = cursor->next;
+    return cursor;
 }
 
 void insert_node_int(int index, int data, struct linked_list_int *linked_list) {
+    struct node_int *node_to_insert = create_node_int(data);
 
-	struct node_int *node_to_insert = create_node_int(data);
-	struct node_int *cursor = iterate_int(index - 1, linked_list);
-
-	node_to_insert->next = cursor->next;
-	cursor->next = node_to_insert;
+    if (index == 0) {
+        node_to_insert->next = linked_list->head;
+        linked_list->head = node_to_insert;
+    } else {
+        struct node_int *cursor = iterate_int(index - 1, linked_list);
+        node_to_insert->next = cursor->next;
+        cursor->next = node_to_insert;
+    }
+    linked_list->length++;
 }
 
 void remove_node_int(int index, struct linked_list_int *linked_list) {
-	struct node_int *cursor = iterate_int(index - 1, linked_list);
-	struct node_int *node_to_remove = cursor->next;
+    if (index == 0) {
+        struct node_int *node_to_remove = linked_list->head;
+        linked_list->head = linked_list->head->next;
+        destroy_node_int(node_to_remove);
+    } else {
+        struct node_int *cursor = iterate_int(index - 1, linked_list);
+        struct node_int *node_to_remove = cursor->next;
+        cursor->next = node_to_remove->next;
+        destroy_node_int(node_to_remove);
+    }
+    linked_list->length--;
 }
 
+int retrieve_data_int(int index, struct linked_list_int *linked_list) {
+    if (index < 0 || index >= linked_list->length) {
+        printf("index out of bounds.\n");
+        exit(1);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    struct node_int *cursor = iterate_int(index, linked_list);
+    return cursor->data;
+}
