@@ -23,7 +23,7 @@ struct linked_list linked_list_constructor(void) {
 };
 
 struct node *create_node(void *data, int data_type, int size) { 
-	struct node *new_node = (struct node *)malloc(sizeof(struct node));
+	struct node *new_node = malloc(sizeof(struct node));
 	*new_node = node_constructor(data, data_type, size); // uses the node constructor to check dtype and assign
 	return new_node;
 }
@@ -68,11 +68,17 @@ void remove_node (struct linked_list *linked_list, int index) {
 	linked_list->length--;
 }
 
-void *retrieve_data(struct linked_list *linked_list, int index) {
-	
+void *retrieve_node(struct linked_list *linked_list, int index) {
+	struct node *node_to_retrieve;
+	if (index == 0) {
+		return linked_list->head;
+	} else {
+		node_to_retrieve = iterate(index, linked_list);
+		return node_to_retrieve;
+	}
 }
 
-int get_size_for_type(int data_type) {
+int get_size_for_d_type(int data_type) {
 	switch (data_type) {
 		case Int:    return sizeof(int);
 		case Float:  return sizeof(float);
