@@ -15,6 +15,7 @@ struct node node_constructor(void *data, int data_type, int size) {
 
 	switch (data_type) {
 
+	
 		case Int: TYPE_HANDLE(int);
 		case Float: TYPE_HANDLE(float);
 		case Char: TYPE_HANDLE(char);
