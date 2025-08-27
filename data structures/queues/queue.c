@@ -19,4 +19,3 @@ struct queue queue_constructor() {
 	
 	return queue;
 }
-
