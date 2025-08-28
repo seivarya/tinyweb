@@ -35,7 +35,6 @@ struct node node_constructor(void *data, int data_type, int size) {
 }
 
 void node_destructor(struct node *node) {
-	if (!node) return;
 	free(node->data);
 	free(node);
 }

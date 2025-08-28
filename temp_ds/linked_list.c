@@ -4,11 +4,9 @@ struct node *create_node(void *data, int data_type, int size);
 
 struct node *iterate(int index, struct linked_list *linked_list);
 
-void insert_node(struct linked_list *linked_list, int index, void *data, int data_type);
+void insert_node(struct linked_list *linked_list, int index, void *data, int data_type, int size);
 void remove_node(struct linked_list *linked_list, int index);
 void *retrieve_node(struct linked_list *linked_list, int index);
-
-int get_size_for_d_type (int data_type);
 
 struct linked_list linked_list_constructor(void) {
 	struct linked_list list;
@@ -21,6 +19,13 @@ struct linked_list linked_list_constructor(void) {
 
 	return list;
 };
+
+void linked_list_destructor(struct linked_list *linked_list) {
+	for (int i = 0; i < linked_list->length; i++) {
+		linked_list->remove(linked_list, 0); 
+	}
+	printf("=== linked list destroyed successfully ===\n"); 
+}
 
 struct node *create_node(void *data, int data_type, int size) { 
 	struct node *new_node = malloc(sizeof(struct node));
@@ -40,8 +45,7 @@ struct node *iterate (int index, struct linked_list *linked_list) {
 	return cursor;
 }
 
-void insert_node (struct linked_list *linked_list, int index, void *data, int data_type) {
-	int size = get_size_for_d_type(data_type);
+void insert_node (struct linked_list *linked_list, int index, void *data, int data_type, int size) {
 	struct node *node_to_insert = create_node(data, data_type, size);
 
 	if (index == 0) {
@@ -78,16 +82,3 @@ void *retrieve_node(struct linked_list *linked_list, int index) {
 	}
 }
 
-int get_size_for_d_type(int data_type) {
-	switch (data_type) {
-		case Int:    return sizeof(int);
-		case Float:  return sizeof(float);
-		case Double: return sizeof(double);
-		case Char:   return sizeof(char);
-		case Long:   return sizeof(long);
-		case Bool:   return sizeof(bool);
-		default:
-			printf("=== invalid data type ===\n");
-			exit(1);
-	}
-}

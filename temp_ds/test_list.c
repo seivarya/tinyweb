@@ -1,64 +1,89 @@
 #include "linked_list.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 
 int main(void) {
 	struct linked_list list = linked_list_constructor();
+	printf("=== linked list constructed ===\n");
 
-	// ==== Int ====
-	int *ival = malloc(sizeof(int));
-	*ival = 42;
-	list.insert(&list, 0, ival, Int);
-	struct node *ival_node = list.retrieve(&list, 0);
-	printf("Int test: %d\n", *(int*)ival_node->data);
+	// single element nodes
 
-	// ==== Float ====
-	float *fval = malloc(sizeof(float));
-	*fval = 3.14f;
-	list.insert(&list, 1, fval, Float);
-	struct node *fval_node = list.retrieve(&list, 1);
-	printf("Float test: %f\n", *(float*)fval_node->data);
+	int a = 10;
+	list.insert(&list, 0, &a, Int, 1);
 
-	// ==== Double ====
-	double *dval = malloc(sizeof(double));
-	*dval = 2.718281828;
-	list.insert(&list, 2, dval, Double);
-	struct node *dval_node = list.retrieve(&list, 2);
-	printf("Double test: %lf\n", *(double*)dval_node->data);
+	float b = 10.32f;
+	list.insert(&list, 1, &b, Float, 1);
 
-	// ==== Char ====
-	char *cval = malloc(sizeof(char));
-	*cval = 'X';
-	list.insert(&list, 3, cval, Char);
-	struct node *cval_node = list.retrieve(&list, 3);
-	printf("Char test: %c\n", *(char*)cval_node->data);
+	bool c = true;
+	list.insert(&list, 2, &c, Bool, 1);
 
-	// ==== Long ====
-	long *lval = malloc(sizeof(long));
-	*lval = 123456789L;
-	list.insert(&list, 4, lval, Long);
-	struct node *lval_node = list.retrieve(&list, 4);
-	printf("Long test: %ld\n", *(long*)lval_node->data);
+	printf("=== single element nodes ===\n");
+	struct node *int_single_node = (struct node *)list.retrieve(&list, 0);
+	printf("index 0: %d\n", *(int *)int_single_node->data);
 
-	// ==== Bool ====
-	bool *bval = malloc(sizeof(bool));
-	*bval = true;
-	list.insert(&list, 5, bval, Bool);
-	struct node *bval_node = list.retrieve(&list, 5);
-	printf("Bool test: %s\n", *(bool*)bval_node->data ? "true" : "false");
+	struct node *float_single_node = (struct node *)list.retrieve(&list, 1);
+	printf("index 1: %.2f\n", *(float *)float_single_node->data);
 
-	// ==== Invalid Data Type ====
-	printf("Now testing invalid data type (should exit with error):\n");
-	char *ival2 = malloc(sizeof(char));
-	*ival2 = 'x';
-	// This should hit the "invalid data type" in get_size_for_d_type()
-	list.insert(&list, 6, ival2, 9999);
+	struct node *bool_single_node = (struct node *)list.retrieve(&list, 2);
+	printf("index 2: %s\n", (*(bool *)bool_single_node->data) ? "true" : "false");
 
-	// Cleanup (won’t reach here if invalid test exits program)
-	while (list.length > 0) {
-		list.remove(&list, 0);
+	// multi-element nodes
+	
+	printf("=== multi-element nodes ===\n");
+	int int_array[5] = {1, 2, 4, 3, 5};
+	list.insert(&list, 3, int_array, Int, 5);
+
+	float float_array[3] = {2.2f, 42.3f, 77.5f};
+	list.insert(&list, 4, float_array, Float, 3);
+
+	bool bool_array[6] = {true, true, false, false, true, false};
+	list.insert(&list, 5, bool_array, Bool, 6);
+
+	// mixed multi + single nodes 
+
+	long long_val = 123456789L;
+	list.insert(&list, 6, &long_val, Long, 1);
+
+	double double_array[2] = {3.14159, 2.71828};
+	list.insert(&list, 7, double_array, Double, 2);
+
+	// priting entire linked list
+	
+	printf("\n=== full linked list ===\n");
+	for (int i = 0; i < list.length; i++) {
+		struct node *node = (struct node *)list.retrieve(&list, i);
+		printf("index %d: < ", i);
+		for (int j = 0; j < node->size; j++) {
+
+			if (j > 0) {
+				printf(", ");
+			}
+
+			switch (node->data_type) {
+				case Int:
+					printf("%d", ((int *)node->data)[j]);
+					break;
+				case Float:
+					printf("%.2f", ((float *)node->data)[j]);
+					break;
+				case Double:
+					printf("%.5f", ((double *)node->data)[j]);
+					break;
+				case Char:
+					printf("%c", ((char *)node->data)[j]);
+					break;
+				case Long:
+					printf("%ld", ((long *)node->data)[j]);
+					break;
+				case Bool:
+					printf("%s", ((bool *)node->data)[j] ? "true" : "false");
+					break;
+			}
+		}
+		printf(" >\n");
 	}
+
+	linked_list_destructor(&list);
 
 	return 0;
 }

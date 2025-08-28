@@ -1,83 +1,61 @@
 #include "queue.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 
-
-//FIX: pop and peek return node instead of data. so this test is mostly incorrect. fix the pop peak returned node and point it to that specific node's data instead.
-
-
 int main(void) {
-	struct queue q = queue_constructor();
+	struct queue queue = queue_constructor();
+	printf("=== queue constructed ===\n");
 
-	printf("==== pushing ints ====\n");
-	for (int i = 0; i < 5; i++) {
-		int *value = malloc(sizeof(int));
-		*value = i * 10;
-		q.push(&q, value, Int);
-
-		// peek after each push
-		struct node *peeked = q.peek(&q);
-		printf("peek after push %d: %d\n", i, *(int *)peeked->data);
+	printf("=== pushing values ===\n");
+	for (int i = 0; i < 10; i++) {
+		int array[5] = {i, i * 2, i + 21, i - 2, i ^ 2};
+		queue.push(&queue, array, Int, 5);
 	}
 
-	printf("==== pushing float ====\n");
-	float *fval = malloc(sizeof(float));
-	*fval = 3.14f;
-	q.push(&q, fval, Float);
-	struct node *peeked1 = q.peek(&q);
-	printf("peek after pushing float (still head int 0): %d\n", *(int *)peeked1->data);
+	// printing entire queue
 
-	printf("==== pushing double ====\n");
-	double *dval = malloc(sizeof(double));
-	*dval = 2.71828;
-	q.push(&q, dval, Double);
-	struct node *peeked2 = q.peek(&q);
-	printf("peek after pushing double (still head int 0): %d\n", *(int *)peeked2->data);
-
-	printf("==== pushing char ====\n");
-	char *cval = malloc(sizeof(char));
-	*cval = 'Z';
-	q.push(&q, cval, Char);
-
-	printf("==== pushing long ====\n");
-	long *lval = malloc(sizeof(long));
-	*lval = 123456789L;
-	q.push(&q, lval, Long);
-
-	printf("==== pushing bool ====\n");
-	bool *bval = malloc(sizeof(bool));
-	*bval = true;
-	q.push(&q, bval, Bool);
-
-	printf("\n==== popping everything (with peek before pop) ====\n");
-	while (q.list.length > 0) {
-		struct node *peeked = q.peek(&q);
-		printf("peek sees next to pop -> ");
-		switch (peeked->data_type) {
-			case Int:    printf("Int: %d\n", *(int *)peeked->data); break;
-			case Float:  printf("Float: %f\n", *(float *)peeked->data); break;
-			case Double: printf("Double: %lf\n", *(double *)peeked->data); break;
-			case Char:   printf("Char: %c\n", *(char *)peeked->data); break;
-			case Long:   printf("Long: %ld\n", *(long *)peeked->data); break;
-			case Bool:   printf("Bool: %s\n", *(bool *)peeked->data ? "true" : "false"); break;
+	printf("\n=== full queue before pop ===\n");
+	for (int i = 0; i < queue.list.length; i++) {
+		struct node *n = (struct node *)queue.list.retrieve(&queue.list, i);
+		printf("index %d: <", i);
+		for (int j = 0; j < n->size; j++) {
+			if (j > 0) printf(", ");
+			printf("%d", ((int *)n->data)[j]);
 		}
+		printf("> -> \n");
+	}
+	printf("\n");
+	// peeking 
+	
+	printf("\n=== peeked values at head ===\n");
+	struct node *head_node = (struct node *)queue.peek(&queue);
+	printf("head node: < ");
+	for (int j = 0; j < head_node->size; j++) {
+		if (j > 0) printf(", ");
+		printf("%d", ((int *)head_node->data)[j]);
+	}
+	printf(" >\n");
 
-		struct node *node = q.pop(&q);
-		printf("popped same -> ");
-		switch (node->data_type) {
-			case Int:    printf("Int: %d\n", *(int *)node->data); break;
-			case Float:  printf("Float: %f\n", *(float *)node->data); break;
-			case Double: printf("Double: %lf\n", *(double *)node->data); break;
-			case Char:   printf("Char: %c\n", *(char *)node->data); break;
-			case Long:   printf("Long: %ld\n", *(long *)node->data); break;
-			case Bool:   printf("Bool: %s\n", *(bool *)node->data ? "true" : "false"); break;
+	// pop test
+	
+	printf("\n=== popping 3 nodes ===\n");
+	for (int k = 0; k < 3; k++) {
+		queue.pop(&queue);
+		if (queue.list.length > 0) {
+			head_node = (struct node *)queue.peek(&queue);
+			printf("new head: < ");
+			for (int j = 0; j < head_node->size; j++) {
+				if (j > 0) printf(", ");
+				printf("%d", ((int *)head_node->data)[j]);
+			}
+			printf(" >\n");
+		} else {
+			printf("queue is now empty\n");
 		}
-		printf("---\n");
-
-		node_destructor(node); // cleanup
 	}
 
-	printf("\nall queue tests passed.\n");
+	printf("=== destroying queue ===");
+	queue_destructor(&queue);
+
 	return 0;
 }
