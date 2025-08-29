@@ -1,12 +1,7 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
-#include "node.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-
+#include "../node/node.h"
 
 struct linked_list {
 	struct node *head;

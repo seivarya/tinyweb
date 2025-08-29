@@ -30,8 +30,10 @@ void linked_list_destructor(struct linked_list *linked_list) {
 struct node *create_node(void *data, int size) { 
 	struct node *new_node = malloc(sizeof(struct node));
 	*new_node = node_constructor(data, size); // uses the node constructor to check dtype and assign
+
 	return new_node;
 }
+
 struct node *iterate (int index, struct linked_list *linked_list) {
 	if (index < 0 || index >= linked_list->length) {
 		printf("=== index out of bounds ===");
@@ -39,9 +41,11 @@ struct node *iterate (int index, struct linked_list *linked_list) {
 	}
 
 	struct node *cursor = linked_list->head;
+	
 	for (int i = 0; i < index; i++) {
 		cursor = cursor->next;
 	}
+	
 	return cursor;
 }
 
@@ -56,11 +60,13 @@ void insert_node (struct linked_list *linked_list, int index, void *data, int si
 		node_to_insert->next = cursor->next;
 		cursor->next = node_to_insert;
 	}
+
 	linked_list->length++;
 }
 
 void remove_node (struct linked_list *linked_list, int index) {
 	struct node *node_to_remove;
+
 	if (index == 0) {
 		node_to_remove = linked_list->head;
 		linked_list->head = linked_list->head->next;
@@ -69,12 +75,14 @@ void remove_node (struct linked_list *linked_list, int index) {
 		node_to_remove = cursor->next;
 		cursor->next = node_to_remove->next;
 	}
+
 	node_destructor(node_to_remove);
 	linked_list->length--;
 }
 
 void *retrieve_node(struct linked_list *linked_list, int index) {
 	struct node *node_to_retrieve;
+	
 	if (index == 0) {
 		return linked_list->head;
 	} else {
@@ -82,4 +90,3 @@ void *retrieve_node(struct linked_list *linked_list, int index) {
 		return node_to_retrieve;
 	}
 } /* LINKED_LIST_C */
-

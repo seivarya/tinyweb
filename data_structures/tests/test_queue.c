@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "queue.h"
+#include "../queue/queue.h"
 
 int main(void) {
 	struct queue queue = queue_constructor();

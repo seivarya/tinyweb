@@ -1,6 +1,5 @@
 #include "queue.h"
 
-
 void push(struct queue *queue, void *data, int size);
 void pop(struct queue *queue);
 void *peek(struct queue *queue);
