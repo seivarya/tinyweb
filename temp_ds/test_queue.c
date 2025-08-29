@@ -1,60 +1,67 @@
-#include "queue.h"
 #include <stdio.h>
-#include <stdbool.h>
+#include "queue.h"
 
 int main(void) {
 	struct queue queue = queue_constructor();
-	printf("=== queue constructed ===\n");
 
-	printf("=== pushing values ===\n");
-	for (int i = 0; i < 10; i++) {
-		int array[5] = {i, i * 2, i + 21, i - 2, i ^ 2};
-		queue.push(&queue, array, Int, 5);
-	}
+	printf("=== pushing single ints ===\n");
+	int a = 100;
+	queue.push(&queue, &a, sizeof(a));
 
-	// printing entire queue
+	int b = 200;
+	queue.push(&queue, &b, sizeof(b));
 
-	printf("\n=== full queue before pop ===\n");
+	int c = 300;
+	queue.push(&queue, &c, sizeof(c));
+
+	printf("=== peeking head ===\n");
+	struct node *head = (struct node *)queue.peek(&queue);
+	printf("head: %d\n", *(int *)head->data);
+
+	printf("=== pushing array ===\n");
+	int arr[5] = {10, 20, 30, 40, 50};
+	queue.push(&queue, &arr, sizeof(arr));
+
+	printf("=== print queue ===\n");
 	for (int i = 0; i < queue.list.length; i++) {
-		struct node *n = (struct node *)queue.list.retrieve(&queue.list, i);
-		printf("index %d: <", i);
-		for (int j = 0; j < n->size; j++) {
-			if (j > 0) printf(", ");
-			printf("%d", ((int *)n->data)[j]);
-		}
-		printf("> -> \n");
-	}
-	printf("\n");
-	// peeking 
-	
-	printf("\n=== peeked values at head ===\n");
-	struct node *head_node = (struct node *)queue.peek(&queue);
-	printf("head node: < ");
-	for (int j = 0; j < head_node->size; j++) {
-		if (j > 0) printf(", ");
-		printf("%d", ((int *)head_node->data)[j]);
-	}
-	printf(" >\n");
+		struct node *n = queue.list.retrieve(&queue.list, i);
 
-	// pop test
-	
-	printf("\n=== popping 3 nodes ===\n");
-	for (int k = 0; k < 3; k++) {
-		queue.pop(&queue);
-		if (queue.list.length > 0) {
-			head_node = (struct node *)queue.peek(&queue);
-			printf("new head: < ");
-			for (int j = 0; j < head_node->size; j++) {
-				if (j > 0) printf(", ");
-				printf("%d", ((int *)head_node->data)[j]);
+		// determine if it's single int or array based on size (simplified)
+		if (i < 3) { // first 3 are single ints
+			printf("%d: %d\n", i, *(int *)n->data);
+		} else { // last is array
+			int *arr_data = (int *)n->data;
+			printf("%d: ", i);
+			for (int j = 0; j < 5; j++) {
+				printf("%d ", arr_data[j]);
 			}
-			printf(" >\n");
-		} else {
-			printf("queue is now empty\n");
+			printf("\n");
 		}
 	}
 
-	printf("=== destroying queue ===");
+	printf("=== popping head ===\n");
+	queue.pop(&queue);
+
+	printf("=== new head ===\n");
+	head = (struct node *)queue.peek(&queue);
+	printf("new head using peek: %d\n", *(int *)head->data);
+
+	printf("=== print queue after pop ===\n");
+	for (int i = 0; i < queue.list.length; i++) {
+		struct node *n = queue.list.retrieve(&queue.list, i);
+
+		if (i < 2) { // now only 2 single ints left
+			printf("%d: %d\n", i, *(int *)n->data);
+		} else { // array
+			int *arr_data = (int *)n->data;
+			printf("%d: ", i);
+			for (int j = 0; j < 5; j++) {
+				printf("%d ", arr_data[j]);
+			}
+			printf("\n");
+		}
+	}
+
 	queue_destructor(&queue);
 
 	return 0;

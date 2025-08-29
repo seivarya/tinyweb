@@ -1,10 +1,10 @@
 #include "linked_list.h"
 
-struct node *create_node(void *data, int data_type, int size);
+struct node *create_node(void *data, int size);
 
 struct node *iterate(int index, struct linked_list *linked_list);
 
-void insert_node(struct linked_list *linked_list, int index, void *data, int data_type, int size);
+void insert_node(struct linked_list *linked_list, int index, void *data, int size);
 void remove_node(struct linked_list *linked_list, int index);
 void *retrieve_node(struct linked_list *linked_list, int index);
 
@@ -27,9 +27,9 @@ void linked_list_destructor(struct linked_list *linked_list) {
 	printf("=== linked list destroyed successfully ===\n"); 
 }
 
-struct node *create_node(void *data, int data_type, int size) { 
+struct node *create_node(void *data, int size) { 
 	struct node *new_node = malloc(sizeof(struct node));
-	*new_node = node_constructor(data, data_type, size); // uses the node constructor to check dtype and assign
+	*new_node = node_constructor(data, size); // uses the node constructor to check dtype and assign
 	return new_node;
 }
 struct node *iterate (int index, struct linked_list *linked_list) {
@@ -45,8 +45,8 @@ struct node *iterate (int index, struct linked_list *linked_list) {
 	return cursor;
 }
 
-void insert_node (struct linked_list *linked_list, int index, void *data, int data_type, int size) {
-	struct node *node_to_insert = create_node(data, data_type, size);
+void insert_node (struct linked_list *linked_list, int index, void *data, int size) {
+	struct node *node_to_insert = create_node(data, size);
 
 	if (index == 0) {
 		node_to_insert->next = linked_list->head;
@@ -58,6 +58,7 @@ void insert_node (struct linked_list *linked_list, int index, void *data, int da
 	}
 	linked_list->length++;
 }
+
 void remove_node (struct linked_list *linked_list, int index) {
 	struct node *node_to_remove;
 	if (index == 0) {
@@ -80,5 +81,5 @@ void *retrieve_node(struct linked_list *linked_list, int index) {
 		node_to_retrieve = iterate(index, linked_list);
 		return node_to_retrieve;
 	}
-}
+} /* LINKED_LIST_C */
 

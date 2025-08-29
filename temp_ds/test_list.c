@@ -1,86 +1,65 @@
-#include "linked_list.h"
 #include <stdio.h>
-#include <stdbool.h>
+#include "linked_list.h"
 
 int main(void) {
 	struct linked_list list = linked_list_constructor();
-	printf("=== linked list constructed ===\n");
 
-	// single element nodes
+	printf("=== inserting single ints ===\n");
+	int a = 100;
+	list.insert(&list, 0, &a, sizeof(a));  // insert at head
 
-	int a = 10;
-	list.insert(&list, 0, &a, Int, 1);
+	int b = 200;
+	list.insert(&list, 1, &b, sizeof(b));  // insert at tail
 
-	float b = 10.32f;
-	list.insert(&list, 1, &b, Float, 1);
+	int c = 300;
+	list.insert(&list, 2, &c, sizeof(c));  // insert at tail
 
-	bool c = true;
-	list.insert(&list, 2, &c, Bool, 1);
+	printf("=== peeking head ===\n");
+	struct node *head = (struct node *)list.retrieve(&list, 0);
+	printf("head: %d\n", *(int *)head->data);
 
-	printf("=== single element nodes ===\n");
-	struct node *int_single_node = (struct node *)list.retrieve(&list, 0);
-	printf("index 0: %d\n", *(int *)int_single_node->data);
+	printf("=== inserting array ===\n");
+	int arr[5] = {10, 20, 30, 40, 50};
+	list.insert(&list, 3, &arr, sizeof(arr));
 
-	struct node *float_single_node = (struct node *)list.retrieve(&list, 1);
-	printf("index 1: %.2f\n", *(float *)float_single_node->data);
-
-	struct node *bool_single_node = (struct node *)list.retrieve(&list, 2);
-	printf("index 2: %s\n", (*(bool *)bool_single_node->data) ? "true" : "false");
-
-	// multi-element nodes
-	
-	printf("=== multi-element nodes ===\n");
-	int int_array[5] = {1, 2, 4, 3, 5};
-	list.insert(&list, 3, int_array, Int, 5);
-
-	float float_array[3] = {2.2f, 42.3f, 77.5f};
-	list.insert(&list, 4, float_array, Float, 3);
-
-	bool bool_array[6] = {true, true, false, false, true, false};
-	list.insert(&list, 5, bool_array, Bool, 6);
-
-	// mixed multi + single nodes 
-
-	long long_val = 123456789L;
-	list.insert(&list, 6, &long_val, Long, 1);
-
-	double double_array[2] = {3.14159, 2.71828};
-	list.insert(&list, 7, double_array, Double, 2);
-
-	// priting entire linked list
-	
-	printf("\n=== full linked list ===\n");
+	printf("=== print linked list ===\n");
 	for (int i = 0; i < list.length; i++) {
-		struct node *node = (struct node *)list.retrieve(&list, i);
-		printf("index %d: < ", i);
-		for (int j = 0; j < node->size; j++) {
+		struct node *n = list.retrieve(&list, i);
 
-			if (j > 0) {
-				printf(", ");
+		// determine if it's single int or array based on index (simplified)
+		if (i < 3) { // first 3 are single ints
+			printf("%d: %d\n", i, *(int *)n->data);
+		} else { // last is array
+			int *arr_data = (int *)n->data;
+			printf("%d: ", i);
+			for (int j = 0; j < 5; j++) {
+				printf("%d ", arr_data[j]);
 			}
-
-			switch (node->data_type) {
-				case Int:
-					printf("%d", ((int *)node->data)[j]);
-					break;
-				case Float:
-					printf("%.2f", ((float *)node->data)[j]);
-					break;
-				case Double:
-					printf("%.5f", ((double *)node->data)[j]);
-					break;
-				case Char:
-					printf("%c", ((char *)node->data)[j]);
-					break;
-				case Long:
-					printf("%ld", ((long *)node->data)[j]);
-					break;
-				case Bool:
-					printf("%s", ((bool *)node->data)[j] ? "true" : "false");
-					break;
-			}
+			printf("\n");
 		}
-		printf(" >\n");
+	}
+
+	printf("=== removing head ===\n");
+	list.remove(&list, 0);
+
+	printf("=== new head ===\n");
+	head = (struct node *)list.retrieve(&list, 0);
+	printf("new head: %d\n", *(int *)head->data);
+
+	printf("=== print linked list after removing head ===\n");
+	for (int i = 0; i < list.length; i++) {
+		struct node *n = list.retrieve(&list, i);
+
+		if (i < 2) { // now only 2 single ints left
+			printf("%d: %d\n", i, *(int *)n->data);
+		} else { // array
+			int *arr_data = (int *)n->data;
+			printf("%d: ", i);
+			for (int j = 0; j < 5; j++) {
+				printf("%d ", arr_data[j]);
+			}
+			printf("\n");
+		}
 	}
 
 	linked_list_destructor(&list);
