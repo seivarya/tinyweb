@@ -11,7 +11,7 @@ struct node node_constructor(void *data, int size) {
 	memcpy(node.data, data, size);
 
 	node.next = NULL;
-
+	node.previous = NULL;
 	return node;
 }
 

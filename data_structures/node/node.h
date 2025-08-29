@@ -9,6 +9,7 @@
 struct node {
 	void *data;
 	struct node *next;
+	struct node *previous; // as long as no one touches this in linked list, queue implementation it won't have any effect.
 };
 
 struct node node_constructor(void *data, int size);
