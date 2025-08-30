@@ -8,7 +8,7 @@ struct binary_tree {
 	struct node *head;
 
 	int (*compare)(void *data_fir, void *data_sec);
-	void (*insert)(struct binary_tree *tree, void *data);
+	void (*insert)(struct binary_tree *tree, void *data, int size);
 
 	void * (*search)(struct binary_tree *tree, void *data);
 };
