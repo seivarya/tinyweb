@@ -13,6 +13,7 @@ QUEUE_DIR = $(DS_DIR)/queue
 NODE_DIR = $(DS_DIR)/node
 TEST_DIR = $(DS_DIR)/tests
 BINARY_TREE_DIR = $(DS_DIR)/tree
+
 # ===========================
 # Source files
 # ===========================
