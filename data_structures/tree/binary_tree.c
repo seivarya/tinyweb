@@ -17,26 +17,31 @@ struct binary_tree binary_tree_constructor(int (*compare)(void *data_fir, void *
 	return tree;
 }
 
-// void binary_tree_destructor(struct binary_tree *tree) {
-// 	free(tree);
-// 	exit(1); // FIX: remove later
-// }
+void binary_tree_destructor(struct binary_tree *tree) {
+	free(tree->head);
+	free(tree);
 
-struct node * create_node(void *data, int size) {
-	struct node *new_node = (struct node *)malloc(sizeof(struct node));
-	*new_node = node_constructor(data, size);
-	return new_node;
+	/* exit(1); // FIX: remove later */
 }
 
-void destroy_node(struct node *node_to_destroy) {
-	node_destructor(node_to_destroy);
+struct node * create_node(void *data, int size) {
+	struct node *new_node = malloc(sizeof(struct node));
+	if (!new_node) {
+		perror("=== malloc failed ===");
+		exit(1);
+	}
+	*new_node = node_constructor(data, size); 
+	return new_node;
+
 }
 
 
 struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data, int *direction) {
 	int test = 0;
 	if (test == 0) {
+		/* printf("val changed"); */
 		*direction = 1; //  FIX: issue
+		test++;
 	}
 	if (tree->compare(cursor->data, data) == 1) {
 		if (cursor->next) {
@@ -71,11 +76,13 @@ void * search(struct binary_tree *tree, void *data) {
 
 void insert(struct binary_tree *tree, void *data, int size) {
 
+	int direction;
+	/* printf("invoked\n"); */
 	if (tree->head == NULL) {
 		tree->head = create_node(data, size);
+		return; // special case for head.
 	}
 
-	int direction;
 	struct node *cursor = iterate(tree, tree->head, data, &direction);
 
 	if (direction == 1) {
@@ -86,4 +93,5 @@ void insert(struct binary_tree *tree, void *data, int size) {
 		printf("node already exists\n");
 		exit(1);
 	}
+	/* printf("finished\n"); */
 }
