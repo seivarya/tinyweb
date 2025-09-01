@@ -2,7 +2,7 @@
 #define DICTIONARY_H
 
 #include "../tree/binary_tree.h"
-#include "entry.h"
+#include "entry/entry.h"
 
 struct dictionary {
 	struct binary_tree tree;
