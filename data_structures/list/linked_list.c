@@ -13,16 +13,16 @@ struct linked_list linked_list_constructor(void) {
 	list.head =  NULL;
 	list.length = 0;
 
-	list.insert = insert_node;
-	list.remove = remove_node;
-	list.retrieve = retrieve_node;
+	list.list_node_insert= insert_node;
+	list.list_node_remove = remove_node;
+	list.list_node_retrieve = retrieve_node;
 
 	return list;
 };
 
 void linked_list_destructor(struct linked_list *linked_list) {
 	for (int i = 0; i < linked_list->length; i++) {
-		linked_list->remove(linked_list, 0); 
+		linked_list->list_node_remove(linked_list, 0); 
 	}
 	printf("=== linked list destroyed successfully ===\n"); 
 }

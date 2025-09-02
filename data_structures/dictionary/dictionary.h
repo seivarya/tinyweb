@@ -6,8 +6,8 @@
 
 struct dictionary {
 	struct binary_tree tree;
-	void (*insert)(struct dictionary *dict, void *key, int key_size, void *value, int value_size);
-	void * (*search)(struct dictionary *dict, void *key);
+	void (*dict_insert)(struct dictionary *dict, void *key, int key_size, void *value, int value_size);
+	void * (*dict_search)(struct dictionary *dict, void *key);
 	
 };
 

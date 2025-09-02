@@ -1,28 +1,29 @@
 #include "dictionary.h"
 
-void insert (struct dictionary *dict, void *key, int key_size, void *value, int value_size);
-void * search (struct dictionary *dict, void *key);
+void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size);
+void * search_dict (struct dictionary *dict, void *key);
 
 struct dictionary dict_constructor(int (*compare)(void *key_fir, void *key_sec)) {
 
 	struct dictionary dict;
 
 	dict.tree = binary_tree_constructor(compare); // passing the user defined compare function.
-	dict.insert = insert;
-	dict.search = search;
+	dict.dict_insert = insert_dict;
+	dict.dict_search = search_dict;
 
 	return dict;
 }
 
-void insert(struct dictionary *dict, void *key, int key_size, void *value, int value_size) {
+void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size) {
 	struct entry entry = entry_constructor(key, key_size, value, value_size);
 
-	dict->tree.insert(&dict->tree, &entry, sizeof(entry)); // dict ptr so -> & tree.insert will treat entry struct as the data
+	dict->tree.binary_node_insert(&dict->tree, &entry, sizeof(struct entry)); // dict ptr so -> & tree.insert will treat entry struct as the data
 }
 
-void * search(struct dictionary *dict, void *key) {
-	void * result = dict->tree.search(&dict->tree, key);
+void * search_dict(struct dictionary *dict, void *key) {
 
+	printf("here");
+	void * result = dict->tree.binary_node_search(&dict->tree, key);
 	if (result) {
 		return ((struct entry *)result)->value; // cast entry * and return the val.
 	} else {

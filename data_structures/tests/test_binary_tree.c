@@ -55,7 +55,7 @@ void run_basic_tests() {
 
 	for (int i = 0; i < 10; i++) {
 		printf("inserting %d...\n", data_array[i]);
-		tree.insert(&tree, &data_array[i], sizeof(int));
+		tree.binary_node_insert(&tree, &data_array[i], sizeof(int));
 
 		printf("tree inorder after insert:\n");
 		recurse_print(tree.head, 0);
@@ -65,7 +65,7 @@ void run_basic_tests() {
 	// search tests
 	int to_search[] = {23, 75, 11, 100, -5};
 	for (int i = 0; i < 5; i++) {
-		int *found = tree.search(&tree, &to_search[i]);
+		int *found = tree.binary_node_search(&tree, &to_search[i]);
 		if (found) {
 			printf("[*] pass search(%d) = %d\n", to_search[i], *found);
 		} else {
@@ -83,7 +83,7 @@ void run_edge_tests() {
 	// ascending insert
 	printf("\nascending insert:\n");
 	for (int i = 0; i < 5; i++) {
-		tree.insert(&tree, &ascending[i], sizeof(int));
+		tree.binary_node_insert(&tree, &ascending[i], sizeof(int));
 	}
 	recurse_print(tree.head, 0);
 
@@ -91,15 +91,15 @@ void run_edge_tests() {
 	struct binary_tree tree2 = binary_tree_constructor(&compare);
 	printf("\ndescending insert:\n");
 	for (int i = 0; i < 5; i++) {
-		tree2.insert(&tree2, &descending[i], sizeof(int));
+		tree2.binary_node_insert(&tree2, &descending[i], sizeof(int));
 	}
 	recurse_print(tree2.head, 0);
 
 	// duplicate insert check
 	printf("\nduplicate insert test:\n");
 	int dup = 42;
-	tree2.insert(&tree2, &dup, sizeof(int));
-	tree2.insert(&tree2, &dup, sizeof(int)); // should trigger "node already exists"
+	tree2.binary_node_insert(&tree2, &dup, sizeof(int));
+	tree2.binary_node_insert(&tree2, &dup, sizeof(int)); // should trigger "node already exists"
 }
 
 void run_random_tests() {
@@ -108,7 +108,7 @@ void run_random_tests() {
 	int nums[20];
 	for (int i = 0; i < 20; i++) {
 		nums[i] = rand() % 100;
-		tree.insert(&tree, &nums[i], sizeof(int));
+		tree.binary_node_insert(&tree, &nums[i], sizeof(int));
 	}
 
 	printf("tree inorder (should be sorted):\n");
@@ -116,7 +116,7 @@ void run_random_tests() {
 
 	// verify search for all inserted numbers
 	for (int i = 0; i < 20; i++) {
-		int *found = tree.search(&tree, &nums[i]);
+		int *found = tree.binary_node_search(&tree, &nums[i]);
 		if (!found || *found != nums[i]) {
 			printf("[*] fail search(%d) failed!\n", nums[i]);
 		}
@@ -125,7 +125,7 @@ void run_random_tests() {
 	// search for some random numbers not likely in tree
 	for (int i = 0; i < 5; i++) {
 		int x = 200 + rand() % 50;
-		int *found = tree.search(&tree, &x);
+		int *found = tree.binary_node_search(&tree, &x);
 		if (found) {
 			printf("[*] fail search(%d) returned %d but shouldn't exist!\n", x, *found);
 		} else {

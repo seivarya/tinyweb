@@ -7,10 +7,10 @@ struct linked_list {
 	struct node *head;
 	int length;
 
-	void (*insert)(struct linked_list *linked_list, int index, void *data, int size);
-	void (*remove)(struct linked_list *linked_list, int index);
-	void* (*retrieve)(struct linked_list *linked_list, int index);
-	void (*reverse)(struct linked_list *linked_list); // TODO: later maybe
+	void (*list_node_insert)(struct linked_list *linked_list, int index, void *data, int size);
+	void (*list_node_remove)(struct linked_list *linked_list, int index);
+	void* (*list_node_retrieve)(struct linked_list *linked_list, int index);
+	void (*list_reverse)(struct linked_list *linked_list); // TODO: later maybe
 
 };
 

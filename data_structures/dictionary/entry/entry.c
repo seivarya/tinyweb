@@ -1,6 +1,4 @@
 #include "entry.h"
-#include <stdlib.h>
-#include <string.h>
 
 struct entry entry_constructor(void *key, int key_size, void *value, int value_size) {
 	struct entry entry;

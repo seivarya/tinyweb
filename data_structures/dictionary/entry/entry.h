@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <string.h>
+
 struct entry {
 	void *key;
 	void *value;

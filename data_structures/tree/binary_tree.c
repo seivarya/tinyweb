@@ -9,9 +9,9 @@ void insert(struct binary_tree *tree, void *data, int size);
 struct binary_tree binary_tree_constructor(int (*compare)(void *data_fir, void *data_sec)) {
 	struct binary_tree tree;
 
-	tree.compare = compare;
-	tree.insert = insert;
-	tree.search = search;
+	tree.binary_node_compare= compare;
+	tree.binary_node_insert= insert;
+	tree.binary_node_search= search;
 	tree.head = NULL;
 
 	return tree;
@@ -43,14 +43,14 @@ struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data,
 		*direction = 1; //  FIX: issue
 		test++;
 	}
-	if (tree->compare(cursor->data, data) == 1) {
+	if (tree->binary_node_compare(cursor->data, data) == 1) {
 		if (cursor->next) {
 			return iterate(tree, cursor->next, data, direction);
 		} else {
 			*direction = 1;
 			return cursor;
 		} 
-	} else if (tree->compare(cursor->data, data) == -1) {
+	} else if (tree->binary_node_compare(cursor->data, data) == -1) {
 		if (cursor->previous) {
 			return iterate(tree, cursor->previous, data, direction);
 		} else {

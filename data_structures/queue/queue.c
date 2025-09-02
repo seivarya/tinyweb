@@ -20,15 +20,15 @@ void queue_destructor(struct queue *queue) {
 }
 
 void push(struct queue *queue, void *data, int size) {
-	queue->list.insert(&queue->list, queue->list.length, data, size);
+	queue->list.list_node_insert(&queue->list, queue->list.length, data, size);
 }
 
 void pop(struct queue *queue) {
-	queue->list.remove(&queue->list, 0);
+	queue->list.list_node_remove(&queue->list, 0);
 	printf("=== popped node ===\n");
 }
 
 void *peek(struct queue *queue) {
-	struct node *node_head = queue->list.retrieve(&queue->list, 0); // index 0 since it's head always.
+	struct node *node_head = queue->list.list_node_retrieve(&queue->list, 0); // index 0 since it's head always.
 	return node_head; // returns head without destroying it.
 } /* QUEUE_C */

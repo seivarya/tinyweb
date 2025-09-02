@@ -24,7 +24,7 @@ int main(void) {
 
 	printf("=== print queue ===\n");
 	for (int i = 0; i < queue.list.length; i++) {
-		struct node *n = queue.list.retrieve(&queue.list, i);
+		struct node *n = queue.list.list_node_retrieve(&queue.list, i);
 
 		// determine if it's single int or array based on size (simplified)
 		if (i < 3) { // first 3 are single ints
@@ -48,7 +48,7 @@ int main(void) {
 
 	printf("=== print queue after pop ===\n");
 	for (int i = 0; i < queue.list.length; i++) {
-		struct node *n = queue.list.retrieve(&queue.list, i);
+		struct node *n = queue.list.list_node_retrieve(&queue.list, i);
 
 		if (i < 2) { // now only 2 single ints left
 			printf("%d: %d\n", i, *(int *)n->data);
