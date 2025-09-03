@@ -24,7 +24,7 @@ int main(void) {
 	recurse_print(dict.tree.head);
 
 	struct entry *element = dict.dict_search(&dict, (void *)2);
-	//  FIX: here entry casting isn't working?
+	//  FIX: here entry casting isn't working? nvm nothing is working here.
 }
 
 void recurse_print(struct node *node) {
