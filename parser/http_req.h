@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../data structures/dictionary.h"  // TODO: add data structures here.
+#include "../data_structures/dictionary/dictionary.h"  // TODO: add data structures here.
  
 enum http_methods {
 	GET,
@@ -27,5 +27,4 @@ struct http_request {
 
 struct http_request http_request_constructor(char *request_string);
 
-#endif
-
+#endif /* HTTP_REQ_H */

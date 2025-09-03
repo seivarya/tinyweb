@@ -43,6 +43,7 @@ struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data,
 		*direction = 1; //  FIX: issue
 		test++;
 	}
+	printf("iterate hit\n");
 	if (tree->binary_node_compare(cursor->data, data) == 1) {
 		if (cursor->next) {
 			return iterate(tree, cursor->next, data, direction);
@@ -66,6 +67,7 @@ struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data,
 void * search(struct binary_tree *tree, void *data) {
 	int direction;
 	struct node *cursor = iterate(tree, tree->head, data, &direction);
+	printf("hit\n");
 
 	if (direction == 0) {
 		return cursor->data;

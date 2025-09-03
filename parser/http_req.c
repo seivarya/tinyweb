@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "http_req.h"
 #include <string.h>
+
 int select_method(char *method) {
 	if (method == NULL) {
 		printf("Error: no method found\n");
