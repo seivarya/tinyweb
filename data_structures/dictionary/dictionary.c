@@ -39,3 +39,17 @@ void * search_dict(struct dictionary *dict, void *key) {
 		return ((struct entry *)result); // cast entry * and return.
 	}
 }
+
+// generic compare function:
+
+int compare_string_keys(void *entry_fir, void *entry_sec) {
+	if (strcmp((char *)((struct entry *)entry_fir)->key,
+	    (char *)((struct entry *)entry_sec)->key) > 0) {
+		return 1;
+	} else if (strcmp((char *)((struct entry *)entry_fir)->key,
+		   (char *)((struct entry *)entry_sec)->key) < 0) {
+		return -1;
+	} else {
+		return 0;
+	}
+}

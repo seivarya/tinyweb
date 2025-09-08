@@ -1,8 +1,6 @@
-#include <stdio.h>
 #include "http_req.h"
-#include <string.h>
-
 int select_method(char *method) {
+
 	if (method == NULL) {
 		printf("Error: no method found\n");
 		return -1;
@@ -66,8 +64,9 @@ struct http_request http_request_constructor(char *request_string) {
 	char *version = strtok(NULL, " ");
 	version = strtok(version, "/");
 	char *version_num = strtok(NULL, "/");
-
+	printf(NULL);
 	request.version = (float) atof(version_num);
 
+	request.header_fields = dict_constructor();
 	return request;
 }
