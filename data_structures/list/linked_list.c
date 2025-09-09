@@ -1,4 +1,6 @@
 #include "linked_list.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 struct node *create_node(void *data, int size);
 

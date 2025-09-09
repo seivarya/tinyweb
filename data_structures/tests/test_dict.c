@@ -1,4 +1,5 @@
 #include "../dictionary/dictionary.h"
+#include <stdio.h>
 
 int dict_compare(void *entry_ptr, void *key_ptr);
 void recurse_print(struct node *node);

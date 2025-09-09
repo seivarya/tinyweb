@@ -1,4 +1,6 @@
 #include "../list/linked_list.h"
+#include <stdio.h>
+
 
 int main(void) {
 	struct linked_list list = linked_list_constructor();

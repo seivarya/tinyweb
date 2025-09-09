@@ -1,5 +1,7 @@
 #include "../tree/binary_tree.h"
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // prototypes
 int compare(void *data_fir, void *data_sec);

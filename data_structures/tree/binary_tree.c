@@ -1,4 +1,6 @@
 #include "binary_tree.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 struct node * create_node(void *data, int size);
 void destroy_node(struct node *node_to_destroy);
@@ -20,8 +22,6 @@ struct binary_tree binary_tree_constructor(int (*compare)(void *data_fir, void *
 void binary_tree_destructor(struct binary_tree *tree) {
 	free(tree->head);
 	free(tree);
-
-	/* exit(1); // FIX: remove later */
 }
 
 struct node * create_node(void *data, int size) {
@@ -40,7 +40,7 @@ struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data,
 	int test = 0;
 	if (test == 0) {
 		/* printf("val changed"); */
-		*direction = 1; //  FIX: issue
+		*direction = 1; 
 		test++;
 	}
 	printf("iterate hit\n");

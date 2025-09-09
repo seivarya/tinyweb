@@ -1,11 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
 struct node {
 	void *data;
 	struct node *next;
