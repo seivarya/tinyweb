@@ -11,11 +11,12 @@ void launch(struct server *server) {
 
 	char buffer[30000];
 	int address_length = sizeof(server->address);
-	
+	int new_socket;
+
 	char *response = 
 		"HTTP/1.1 200 OK\r\n"
 		"Content-Type: text/html; charset=UTF8\r\n"
-		"Content-Length: 3008\r\n"
+		"Content-Length: 2931\r\n"
 		"\r\n"
 		"<!DOCTYPE html>\n"
 		"<html lang=\"en\">\n"
@@ -78,15 +79,16 @@ void launch(struct server *server) {
 		"    </div>\n"
 		"</body>\n"
 		"</html>\n";
-	printf("length is: %ld\n", strlen(response));
 
+	printf("\ncontent length is:: %ld\n", strlen(response));
 	while(1) {
+
 		printf("=== waiting ===\n=== on port: 1025 ===\n=== link: http://127.0.0.1:1025 ===\n");
-		int new_socket = accept(server->socket, (struct sockaddr *)&server->address, (socklen_t *)&address_length);
-		printf("=== new socket status : %d ===\n", new_socket);
+
+		new_socket = accept(server->socket, (struct sockaddr *)&server->address, (socklen_t *)&address_length);
 		
 		read(new_socket, buffer, 30000);
-		printf("buffer\n%s", buffer);
+		printf("%s\n", buffer);
 
 		write(new_socket, response, strlen(response));
 		close(new_socket);
@@ -99,4 +101,5 @@ int main(void) {
 	
 	struct server server = server_constructor(AF_INET, SOCK_STREAM, 0, 1025, 10, INADDR_ANY, &launch);
 	server.launch(&server);
+	printf("=== socket closed ===\n");
 }
