@@ -1,10 +1,20 @@
-#include "server.h"
+#include "server/server.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+
+void launch(struct server *server);
+
+int main(void) {
+	//  WARNING: i used port: 1025 in my constructor coz 1024 and < 1024 are privileged and can be only used by root users and despite being a root user myself, it's not working in my system.
+	
+	struct server server = server_constructor(AF_INET, SOCK_STREAM, 0, 1025, 10, INADDR_ANY, &launch);
+	server.launch(&server);
+	printf("=== socket closed ===\n");
+}
 
 void launch(struct server *server) {
 	printf("=== server launch invoked ===\n");
@@ -80,7 +90,6 @@ void launch(struct server *server) {
 		"</body>\n"
 		"</html>\n";
 
-	printf("\ncontent length is:: %ld\n", strlen(response));
 	while(1) {
 
 		printf("=== waiting ===\n=== on port: 1025 ===\n=== link: http://127.0.0.1:1025 ===\n");
@@ -90,16 +99,10 @@ void launch(struct server *server) {
 		read(new_socket, buffer, 30000);
 		printf("%s\n", buffer);
 
+
 		write(new_socket, response, strlen(response));
 		close(new_socket);
 		printf("=== socket closed ===\n");
 	}
 }
 
-int main(void) {
-	//  WARNING: i used port: 1025 in my constructor coz 1024 and < 1024 are privileged and can be only used by root users and despite being a root user myself, it's not working in my system.
-	
-	struct server server = server_constructor(AF_INET, SOCK_STREAM, 0, 1025, 10, INADDR_ANY, &launch);
-	server.launch(&server);
-	printf("=== socket closed ===\n");
-}
