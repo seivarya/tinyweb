@@ -3,8 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+enum http_methods parse_method(const char *method);
 
 struct http_request http_request_constructor(char * request_string) {
+
+	struct http_request request;
+
 	printf("=== http_request contructor invoked ===\n");
 
 	if(!request_string) {
@@ -12,9 +16,10 @@ struct http_request http_request_constructor(char * request_string) {
 		exit(1);
 	}
 
-	printf("request total length: %ld", strlen(request_string));
+	printf("request total length: %ld\n", strlen(request_string));
 
 	size_t len = strlen(request_string);
+
 	for (size_t i = 0; i + 3 < len; i++) {
 		if (request_string[i] == '\r' &&
 			request_string[i + 1] == '\n' &&
@@ -23,20 +28,58 @@ struct http_request http_request_constructor(char * request_string) {
 			request_string[i] = '|'; break;
 		}
 	}
-	char *request_line = strtok(request_string, "\r\n"); // fetch first instance of \r\n
-	char *header_fields = strtok(NULL, "|"); // fetch till modified | char as header fields... might use dict to make it correct key-val pairs
-	
-	char *body = strtok(NULL, "|");
 
-	struct http_request request;
+	char *request_line = strtok(request_string, "\r\n"); // fetch first instance of \r\n
+	printf("request_line: %s\n", request_line);
+
+	char *header_fields = strtok(NULL, "|"); // fetch till modified | char as header fields...
+	printf("header_fields: %s\n", header_fields);
+
+	char *body = strtok(NULL, "|");
+	printf("body: %s\n", body);
+
 	char *method = strtok(request_line, " ");
+	printf("method: %s\n", method);
+
+	request.method = parse_method(method);
+
+	char *URI = strtok(NULL, " ");
+	printf("URI: %s\n", URI);
+
+	request.URI = URI;
+
+	char *http_version = strtok(NULL, " ");
+	http_version = strtok(http_version, "/");
+	http_version = strtok(NULL, "/");
+
+	printf("http_version: %s\n", http_version);
+
+	request.http_version  = (float)atof(http_version);
+
+	return request;
 }
 
+enum http_methods parse_method(const char *method) {
 
-/*
- 
-WARNING: this approach is flawed for now, if the body has | inserted somewhere strtok will break instead of this.
+	if(strcmp(method, "GET") == 0) return GET;
 
-FIX: i dont need to do this strtok buisness! i can just insert | at i + 4 (so as to not modify the req or delimeter of \r\n\r\n and then parse for req_line and header_fields a...after that i can use use \r\n\r\n and skip | once and boomm i've the whole body
+	if(strcmp(method, "POST") == 0) return POST;
 
-*/
+	if(strcmp(method, "PUT") == 0) return PUT;
+	
+	if(strcmp(method, "HEAD") == 0) return HEAD;
+
+	if(strcmp(method, "PATCH") == 0) return PATCH;
+
+	if(strcmp(method, "DELETE") == 0) return DELETE;
+
+	if(strcmp(method, "CONNECT") == 0) return CONNECT;
+
+	if(strcmp(method, "OPTIONS") == 0) return OPTIONS;
+
+	if(strcmp(method, "TRACE") == 0) return TRACE;
+
+	printf("=== parse_method returns UNKNOWN ===\n");
+
+	return UNKNOWN; // incase method parsing goes wrong
+}

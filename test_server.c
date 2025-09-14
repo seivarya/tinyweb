@@ -1,4 +1,5 @@
 #include "server/server.h"
+#include "server/http_req.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -17,6 +18,7 @@ int main(void) {
 }
 
 void launch(struct server *server) {
+	struct http_request request; // test
 	printf("=== server launch invoked ===\n");
 
 	char buffer[30000];
@@ -98,6 +100,8 @@ void launch(struct server *server) {
 		
 		read(new_socket, buffer, 30000);
 		printf("%s\n", buffer);
+
+		request = http_request_constructor(buffer);
 
 
 		write(new_socket, response, strlen(response));

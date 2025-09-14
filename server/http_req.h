@@ -10,7 +10,8 @@ enum http_methods {
 	DELETE,
 	CONNECT,
 	OPTIONS,
-	TRACE
+	TRACE,
+	UNKNOWN
 };
 
 struct http_request {
