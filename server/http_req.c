@@ -1,20 +1,25 @@
 #include "http_req.h"
+#include "../data_structures/queue/queue.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 enum http_methods parse_method(const char *method);
 
-struct http_request http_request_constructor(char * request_string) {
+struct http_request http_request_constructor(char *request_string_arg) {
 
 	struct http_request request;
 
-	printf("=== http_request contructor invoked ===\n");
-
-	if(!request_string) {
+	if(!request_string_arg) {
 		printf("=== request string not found! ===\n");
 		exit(1);
 	}
+
+	char request_string[strlen(request_string_arg)];
+	strcpy(request_string, request_string_arg); // since
+
+	printf("=== http_request contructor invoked ===\n");
+
 
 	printf("request total length: %ld\n", strlen(request_string));
 
@@ -30,31 +35,42 @@ struct http_request http_request_constructor(char * request_string) {
 	}
 
 	char *request_line = strtok(request_string, "\r\n"); // fetch first instance of \r\n
-	printf("request_line: %s\n", request_line);
+	/* printf("request_line: %s\n", request_line); */
 
 	char *header_fields = strtok(NULL, "|"); // fetch till modified | char as header fields...
-	printf("header_fields: %s\n", header_fields);
+	/* printf("header_fields: %s\n", header_fields); */
 
 	char *body = strtok(NULL, "|");
-	printf("body: %s\n", body);
+	/* printf("body: %s\n", body); */
 
 	char *method = strtok(request_line, " ");
-	printf("method: %s\n", method);
+	/* printf("method: %s\n", method); */
 
 	request.method = parse_method(method);
 
 	char *URI = strtok(NULL, " ");
-	printf("URI: %s\n", URI);
+	/* printf("URI: %s\n", URI); */
 
 	request.URI = URI;
 
 	char *http_version = strtok(NULL, " ");
 	http_version = strtok(http_version, "/");
 	http_version = strtok(NULL, "/");
-
-	printf("http_version: %s\n", http_version);
+	/* printf("http_version: %s\n", http_version); */
 
 	request.http_version  = (float)atof(http_version);
+
+	request.header_fields = dict_constructor(compare_string_keys);
+
+	struct queue headers = queue_constructor();
+
+	char *token = strtok(header_fields, "\n");
+
+	while(token){
+		headers.push(&headers, token, sizeof(*token)); // pushing
+		token = strtok(NULL, "\n");
+		printf("token:: %s\n", token);
+	}
 
 	return request;
 }

@@ -1,6 +1,8 @@
 #ifndef HTTP_REQ_H
 #define HTTP_REQ_H
 
+#include "../data_structures/dictionary/dictionary.h"
+
 enum http_methods {
 	GET,
 	POST,
@@ -17,7 +19,8 @@ enum http_methods {
 struct http_request {
 	int method;
 	char *URI;
-	float http_version; // HEADERS TO BE ADDED LATER
+	float http_version; 
+	struct dictionary header_fields;
 };
 
 struct http_request http_request_constructor(char * request_string);

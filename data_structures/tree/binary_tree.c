@@ -35,11 +35,9 @@ struct node * create_node(void *data, int size) {
 
 }
 
-
 struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data, int *direction) {
 	int test = 0;
 	if (test == 0) {
-		/* printf("val changed"); */
 		*direction = 1; 
 		test++;
 	}
@@ -79,10 +77,9 @@ void * search(struct binary_tree *tree, void *data) {
 void insert(struct binary_tree *tree, void *data, int size) {
 
 	int direction;
-	/* printf("invoked\n"); */
 	if (tree->head == NULL) {
 		tree->head = create_node(data, size);
-		return; // special case for head.
+		return; // case for head.
 	}
 
 	struct node *cursor = iterate(tree, tree->head, data, &direction);
@@ -95,5 +92,4 @@ void insert(struct binary_tree *tree, void *data, int size) {
 		printf("node already exists\n");
 		exit(1);
 	}
-	/* printf("finished\n"); */
 }

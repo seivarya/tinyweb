@@ -1,26 +1,32 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <sys/socket.h>
+#include <stdint.h>
 #include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 
 struct server {
-
 	int domain;
 	int service;
 	int protocol;
 	int port;
 	int backlog;
-
-	u_long interface;
-
-	struct sockaddr_in address; //  WARNING: maybe ipv6 should be added instead of ipv4?
+	uint32_t interface;
 	int socket;
-
+	struct sockaddr_in address;
 	void (*launch)(struct server *server);
 };
 
-struct server server_constructor(int domain, int service, int protocol, int port, int backlog, u_long interface, void (*launch)(struct server *server));
+struct server server_constructor(
+	int domain,
+	int service,
+	int protocol,
+	int port,
+	int backlog,
+	uint32_t interface,
+	void (*launch)(struct server *server)
+);
 
-#endif /* SERVER_H */
+#endif // SERVER_H

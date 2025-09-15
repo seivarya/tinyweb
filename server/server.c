@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-struct server server_constructor(int domain, int service, int protocol, int port, int backlog, u_long interface, void (*launch)(struct server *server)) {
+struct server server_constructor(int domain, int service, int protocol, int port, int backlog, uint32_t interface, void (*launch)(struct server *server)) {
 
 	printf("=== constructor invoked ===\n");
 

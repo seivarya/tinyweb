@@ -1,4 +1,6 @@
 #include "dictionary.h"
+#include <stdio.h>
+#include <string.h>
 
 void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size);
 void * search_dict (struct dictionary *dict, void *key);
