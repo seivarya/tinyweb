@@ -8,7 +8,7 @@ void * search_dict (struct dictionary *dict, void *key);
 struct dictionary dict_constructor(int (*compare)(void *key_fir, void *key_sec)) {
 
 	struct dictionary dict;
-
+	
 	dict.tree = binary_tree_constructor(compare); // passing the user defined compare function.
 	dict.dict_insert = insert_dict;
 	dict.dict_search = search_dict;
@@ -23,7 +23,7 @@ void dict_destructor(struct dictionary *dict) {
 }
 
 void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size) {
-
+	printf("hitx\n");
 	struct entry *entry = malloc(sizeof(struct entry));
 	*entry = entry_constructor(key, key_size, value, value_size);
 

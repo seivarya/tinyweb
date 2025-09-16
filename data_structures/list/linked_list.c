@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node *create_node(void *data, int size);
+struct node *create_node_list(void *data, int size);
 
-struct node *iterate(int index, struct linked_list *linked_list);
+struct node *iterate_list(int index, struct linked_list *linked_list);
 
 void insert_node(struct linked_list *linked_list, int index, void *data, int size);
 void remove_node(struct linked_list *linked_list, int index);
@@ -29,14 +29,14 @@ void linked_list_destructor(struct linked_list *linked_list) {
 	printf("=== linked list destroyed successfully ===\n"); 
 }
 
-struct node *create_node(void *data, int size) { 
+struct node *create_node_list(void *data, int size) { 
 	struct node *new_node = malloc(sizeof(struct node));
 	*new_node = node_constructor(data, size); // uses the node constructor to check dtype and assign
 
 	return new_node;
 }
 
-struct node *iterate (int index, struct linked_list *linked_list) {
+struct node *iterate_list (int index, struct linked_list *linked_list) {
 	if (index < 0 || index >= linked_list->length) {
 		printf("=== index out of bounds ===");
 		exit(9);
@@ -52,13 +52,13 @@ struct node *iterate (int index, struct linked_list *linked_list) {
 }
 
 void insert_node (struct linked_list *linked_list, int index, void *data, int size) {
-	struct node *node_to_insert = create_node(data, size);
+	struct node *node_to_insert = create_node_list(data, size);
 
 	if (index == 0) {
 		node_to_insert->next = linked_list->head;
 		linked_list->head = node_to_insert;
 	} else {
-		struct node *cursor = iterate(index - 1, linked_list);
+		struct node *cursor = iterate_list(index - 1, linked_list);
 		node_to_insert->next = cursor->next;
 		cursor->next = node_to_insert;
 	}
@@ -73,7 +73,7 @@ void remove_node (struct linked_list *linked_list, int index) {
 		node_to_remove = linked_list->head;
 		linked_list->head = linked_list->head->next;
 	} else {
-		struct node *cursor = iterate(index - 1, linked_list);
+		struct node *cursor = iterate_list(index - 1, linked_list);
 		node_to_remove = cursor->next;
 		cursor->next = node_to_remove->next;
 	}
@@ -88,7 +88,7 @@ void *retrieve_node(struct linked_list *linked_list, int index) {
 	if (index == 0) {
 		return linked_list->head;
 	} else {
-		node_to_retrieve = iterate(index, linked_list);
+		node_to_retrieve = iterate_list(index, linked_list);
 		return node_to_retrieve;
 	}
 } /* LINKED_LIST_C */

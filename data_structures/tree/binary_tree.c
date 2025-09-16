@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node * create_node(void *data, int size);
+struct node * create_node_tree(void *data, int size);
 void destroy_node(struct node *node_to_destroy);
 
 void * search(struct binary_tree *tree, void *data);
@@ -24,7 +24,7 @@ void binary_tree_destructor(struct binary_tree *tree) {
 	free(tree);
 }
 
-struct node * create_node(void *data, int size) {
+struct node * create_node_tree(void *data, int size) {
 	struct node *new_node = malloc(sizeof(struct node));
 	if (!new_node) {
 		perror("=== malloc failed ===");
@@ -35,23 +35,23 @@ struct node * create_node(void *data, int size) {
 
 }
 
-struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data, int *direction) {
+struct node * iterate_tree(struct binary_tree *tree, struct node *cursor, void *data, int *direction) {
 	int test = 0;
 	if (test == 0) {
 		*direction = 1; 
 		test++;
 	}
-	printf("iterate hit\n");
+	printf("iterate_tree hit\n");
 	if (tree->binary_node_compare(cursor->data, data) == 1) {
 		if (cursor->next) {
-			return iterate(tree, cursor->next, data, direction);
+			return iterate_tree(tree, cursor->next, data, direction);
 		} else {
 			*direction = 1;
 			return cursor;
 		} 
 	} else if (tree->binary_node_compare(cursor->data, data) == -1) {
 		if (cursor->previous) {
-			return iterate(tree, cursor->previous, data, direction);
+			return iterate_tree(tree, cursor->previous, data, direction);
 		} else {
 			*direction = -1;
 			return cursor;
@@ -64,7 +64,7 @@ struct node * iterate(struct binary_tree *tree, struct node *cursor, void *data,
 
 void * search(struct binary_tree *tree, void *data) {
 	int direction;
-	struct node *cursor = iterate(tree, tree->head, data, &direction);
+	struct node *cursor = iterate_tree(tree, tree->head, data, &direction);
 	printf("hit\n");
 
 	if (direction == 0) {
@@ -78,16 +78,16 @@ void insert(struct binary_tree *tree, void *data, int size) {
 
 	int direction;
 	if (tree->head == NULL) {
-		tree->head = create_node(data, size);
+		tree->head = create_node_tree(data, size);
 		return; // case for head.
 	}
 
-	struct node *cursor = iterate(tree, tree->head, data, &direction);
+	struct node *cursor = iterate_tree(tree, tree->head, data, &direction);
 
 	if (direction == 1) {
-		cursor->next = create_node(data, size);
+		cursor->next = create_node_tree(data, size);
 	} else if (direction == -1) {
-		cursor->previous = create_node(data, size);
+		cursor->previous = create_node_tree(data, size);
 	} else {
 		printf("node already exists\n");
 		exit(1);

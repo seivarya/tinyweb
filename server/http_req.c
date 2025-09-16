@@ -35,28 +35,28 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	}
 
 	char *request_line = strtok(request_string, "\r\n"); // fetch first instance of \r\n
-	/* printf("request_line: %s\n", request_line); */
+	printf("request_line: %s\n", request_line); 
 
 	char *header_fields = strtok(NULL, "|"); // fetch till modified | char as header fields...
-	/* printf("header_fields: %s\n", header_fields); */
+	printf("header_fields: %s\n", header_fields);
 
 	char *body = strtok(NULL, "|");
-	/* printf("body: %s\n", body); */
+	printf("body: %s\n", body); 
 
 	char *method = strtok(request_line, " ");
-	/* printf("method: %s\n", method); */
+	printf("method: %s\n", method); 
 
 	request.method = parse_method(method);
 
 	char *URI = strtok(NULL, " ");
-	/* printf("URI: %s\n", URI); */
+	printf("URI: %s\n", URI); 
 
 	request.URI = URI;
 
 	char *http_version = strtok(NULL, " ");
 	http_version = strtok(http_version, "/");
 	http_version = strtok(NULL, "/");
-	/* printf("http_version: %s\n", http_version); */
+	printf("http_version: %s\n", http_version); 
 
 	request.http_version  = (float)atof(http_version);
 
@@ -68,8 +68,16 @@ struct http_request http_request_constructor(char *request_string_arg) {
 
 	while(token){
 		headers.push(&headers, token, sizeof(*token)); // pushing
+		printf("token: %s\n", token);
 		token = strtok(NULL, "\n");
-		printf("token:: %s\n", token);
+	}
+	char *header = (char *)headers.peek(&headers);
+	while(header) {
+		printf("hit\n");
+		char *key = strtok(header, ":");
+		char *value = strtok(NULL, "\n"); // a char that won't exist in header field.
+	
+		request.header_fields.dict_insert(&request.header_fields, key, sizeof(key), value, sizeof(value));
 	}
 
 	return request;
@@ -82,7 +90,7 @@ enum http_methods parse_method(const char *method) {
 	if(strcmp(method, "POST") == 0) return POST;
 
 	if(strcmp(method, "PUT") == 0) return PUT;
-	
+
 	if(strcmp(method, "HEAD") == 0) return HEAD;
 
 	if(strcmp(method, "PATCH") == 0) return PATCH;
