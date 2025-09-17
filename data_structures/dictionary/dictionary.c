@@ -23,7 +23,6 @@ void dict_destructor(struct dictionary *dict) {
 }
 
 void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size) {
-	printf("hitx\n");
 	struct entry *entry = malloc(sizeof(struct entry));
 	*entry = entry_constructor(key, key_size, value, value_size);
 

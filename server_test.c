@@ -101,7 +101,7 @@ void launch(struct server *server) {
 		read(new_socket, buffer, 30000);
 		printf("%s\n", buffer);
 
-		request = http_request_constructor(buffer);
+		request = http_request_constructor(buffer); // invoking constructor for debug
 
 
 		write(new_socket, response, strlen(response));
