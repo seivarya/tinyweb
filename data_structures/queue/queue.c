@@ -1,5 +1,4 @@
 #include "queue.h"
-#include <stdio.h>
 
 void push(struct queue *queue, void *data, int size);
 void pop(struct queue *queue);
@@ -26,7 +25,6 @@ void push(struct queue *queue, void *data, int size) {
 
 void pop(struct queue *queue) {
 	queue->list.list_node_remove(&queue->list, 0);
-	printf("=== popped node ===\n");
 }
 
 void *peek(struct queue *queue) {

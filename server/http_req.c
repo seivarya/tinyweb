@@ -35,28 +35,19 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	}
 
 	char *request_line = strtok(request_string, "\r\n"); // fetch first instance of \r\n
-	/* printf("request_line: %s\n", request_line);  */
-
 	char *header_fields = strtok(NULL, "|"); // fetch till modified | char as header fields...
-	printf("header_fields to parse: %s\n", header_fields);
-
 	char *body = strtok(NULL, "|");
-	/* printf("body: %s\n", body);  */
-
 	char *method = strtok(request_line, " ");
-	/* printf("method: %s\n", method);  */
 
 	request.method = parse_method(method);
 
 	char *URI = strtok(NULL, " ");
-	/* printf("URI: %s\n", URI);  */
 
 	request.URI = URI;
 
 	char *http_version = strtok(NULL, " ");
 	http_version = strtok(http_version, "/");
 	http_version = strtok(NULL, "/");
-	/* printf("http_version: %s\n", http_version); */ 
 
 	request.http_version  = (float)atof(http_version);
 
@@ -68,12 +59,25 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	
 	while(token) {
 		printf("token > %s\n", token);
-		headers_queue.push(&headers_queue, token, sizeof(&token));
+		headers_queue.push(&headers_queue, token, strlen(token) + 1);  
 		token = strtok(NULL, "\n");
 	}
-	
-	struct node *head_node = (struct node *)headers_queue.peek(&headers_queue);
-	printf("header node: %s\n", (char *)head_node->data);
+
+	char *header = (char *)(((struct node *)headers_queue.peek(&headers_queue))->data);
+	printf("header string; %s\n", header);
+
+	while(header) {
+		char *key = strtok(header, ":");
+		char *value = strtok(NULL, "|"); // new line for now
+
+		printf("key > %s\n", key);
+		printf("value > %s\n", value);
+
+		request.header_fields.dict_insert(&request.header_fields, key, (int)strlen(key) + 1, value, (int)strlen(value) + 1);
+		headers_queue.pop(&headers_queue);
+		header = (char *)(((struct node *)headers_queue.peek(&headers_queue))->data);
+	}
+
 	return request;
 }
 

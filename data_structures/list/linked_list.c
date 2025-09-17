@@ -1,5 +1,4 @@
 #include "linked_list.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 struct node *create_node_list(void *data, int size);
@@ -26,7 +25,6 @@ void linked_list_destructor(struct linked_list *linked_list) {
 	for (int i = 0; i < linked_list->length; i++) {
 		linked_list->list_node_remove(linked_list, 0); 
 	}
-	printf("=== linked list destroyed successfully ===\n"); 
 }
 
 struct node *create_node_list(void *data, int size) { 
@@ -38,7 +36,6 @@ struct node *create_node_list(void *data, int size) {
 
 struct node *iterate_list (int index, struct linked_list *linked_list) {
 	if (index < 0 || index >= linked_list->length) {
-		printf("=== index out of bounds ===");
 		exit(9);
 	}
 

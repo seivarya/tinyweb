@@ -41,7 +41,6 @@ struct node * iterate_tree(struct binary_tree *tree, struct node *cursor, void *
 		*direction = 1; 
 		test++;
 	}
-	printf("iterate_tree hit\n");
 	if (tree->binary_node_compare(cursor->data, data) == 1) {
 		if (cursor->next) {
 			return iterate_tree(tree, cursor->next, data, direction);
@@ -65,7 +64,6 @@ struct node * iterate_tree(struct binary_tree *tree, struct node *cursor, void *
 void * search(struct binary_tree *tree, void *data) {
 	int direction;
 	struct node *cursor = iterate_tree(tree, tree->head, data, &direction);
-	printf("hit\n");
 
 	if (direction == 0) {
 		return cursor->data;
