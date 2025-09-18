@@ -6,6 +6,7 @@
 
 enum http_methods parse_method(const char *method);
 
+void extract_header_fields();
 struct http_request http_request_constructor(char *request_string_arg) {
 
 	struct http_request request;
@@ -56,26 +57,37 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	struct queue headers_queue= queue_constructor();
 
 	char *token = strtok(header_fields, "\n");
-	
+
 	while(token) {
-		printf("token > %s\n", token);
+		/* printf("token > %s\n", token); */
 		headers_queue.push(&headers_queue, token, strlen(token) + 1);  
 		token = strtok(NULL, "\n");
 	}
+	char *header;
+	struct node *node_ptr = headers_queue.peek(&headers_queue);
 
-	char *header = (char *)(((struct node *)headers_queue.peek(&headers_queue))->data);
-	printf("header string; %s\n", header);
+	if (node_ptr) {
+		header = (char *)(node_ptr->data);
+	} else {
+		header = NULL;
+	}
 
-	while(header) {
+	while (header) {
 		char *key = strtok(header, ":");
 		char *value = strtok(NULL, "|"); // new line for now
 
-		printf("key > %s\n", key);
-		printf("value > %s\n", value);
+		request.header_fields.dict_insert(&request.header_fields,
+				    key, (int)strlen(key) + 1,
+				    value, (int)strlen(value) + 1);
 
-		request.header_fields.dict_insert(&request.header_fields, key, (int)strlen(key) + 1, value, (int)strlen(value) + 1);
 		headers_queue.pop(&headers_queue);
-		header = (char *)(((struct node *)headers_queue.peek(&headers_queue))->data);
+
+		node_ptr = headers_queue.peek(&headers_queue);
+		if (node_ptr) {
+			header = (char *)(node_ptr->data);
+		} else {
+			header = NULL;
+		}
 	}
 
 	return request;
