@@ -17,10 +17,6 @@ enum http_methods {
 };
 
 struct http_request {
-	int method;
-	char *URI;
-	float http_version; //  FIX: to be removed later.
-
 	struct dictionary body;
 	struct dictionary request_line;
 	struct dictionary header_fields;

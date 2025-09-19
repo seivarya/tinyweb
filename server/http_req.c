@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum http_methods parse_method(const char *method);
+void extract_header_fields(struct http_request *request, char *header_fields);
+void extract_request_line_fields(struct http_request *request, char *request_line);
+void extract_body(struct http_request *request, char *body);
 
-void extract_header_fields();
+
 struct http_request http_request_constructor(char *request_string_arg) {
 
 	struct http_request request;
@@ -19,10 +21,7 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	char request_string[strlen(request_string_arg)];
 	strcpy(request_string, request_string_arg); // since
 
-	printf("=== http_request contructor invoked ===\n");
-
-
-	printf("request total length: %ld\n", strlen(request_string));
+	printf("REQUEST TOTAL LENGTH: %ld\n", strlen(request_string));
 
 	size_t len = strlen(request_string);
 
@@ -38,82 +37,103 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	char *request_line = strtok(request_string, "\r\n"); // fetch first instance of \r\n
 	char *header_fields = strtok(NULL, "|"); // fetch till modified | char as header fields...
 	char *body = strtok(NULL, "|");
-	char *method = strtok(request_line, " ");
 
-	request.method = parse_method(method);
+	printf("REQUEST_LINE BEFORE PASSING TO PRIV FUNC. %s\n", request_line);
+	printf("HEADER_FIELDS BEFORE PASSING TO PRIV FUNC. %s\n", header_fields);
+	/* printf("BODY BEFORE PASSING TO PRIV FUNC. %s\n", body); */
+	/* char *method = strtok(request_line, " "); */
 
-	char *URI = strtok(NULL, " ");
+	extract_request_line_fields(&request, request_line);
+	extract_header_fields(&request, header_fields); // extracting header fields
 
-	request.URI = URI;
-
-	char *http_version = strtok(NULL, " ");
-	http_version = strtok(http_version, "/");
-	http_version = strtok(NULL, "/");
-
-	request.http_version  = (float)atof(http_version);
-
-	request.header_fields = dict_constructor(compare_string_keys); // dict init
-
-	struct queue headers_queue= queue_constructor();
-
-	char *token = strtok(header_fields, "\n");
-
-	while(token) {
-		/* printf("token > %s\n", token); */
-		headers_queue.push(&headers_queue, token, strlen(token) + 1);  
-		token = strtok(NULL, "\n");
-	}
-	char *header;
-	struct node *node_ptr = headers_queue.peek(&headers_queue);
-
-	if (node_ptr) {
-		header = (char *)(node_ptr->data);
-	} else {
-		header = NULL;
-	}
-
-	while (header) {
-		char *key = strtok(header, ":");
-		char *value = strtok(NULL, "|"); // new line for now
-
-		request.header_fields.dict_insert(&request.header_fields,
-				    key, (int)strlen(key) + 1,
-				    value, (int)strlen(value) + 1);
-
-		headers_queue.pop(&headers_queue);
-
-		node_ptr = headers_queue.peek(&headers_queue);
-		if (node_ptr) {
-			header = (char *)(node_ptr->data);
-		} else {
-			header = NULL;
-		}
-	}
+	/* extract_body(&request, body); */
 
 	return request;
 }
 
-enum http_methods parse_method(const char *method) {
+void extract_request_line_fields(struct http_request *request, char *request_line) {
+	char *uri, *http_version, *method;
+	char fields[strlen(request_line)];
+	strcpy(fields, request_line); // copy the str literal to local inst.
 
-	if(strcmp(method, "GET") == 0) return GET;
+	method = strtok(fields, " "); 
+	uri = strtok(NULL, " ");
 
-	if(strcmp(method, "POST") == 0) return POST;
+	http_version = strtok(NULL, "\0");
 
-	if(strcmp(method, "PUT") == 0) return PUT;
+	struct dictionary request_line_dict = dict_constructor(compare_string_keys);
 
-	if(strcmp(method, "HEAD") == 0) return HEAD;
+	request_line_dict.dict_insert(&request_line_dict, "method", sizeof("method"), method, strlen(method) + 1);
+	request_line_dict.dict_insert(&request_line_dict, "uri", sizeof("uri"), uri, strlen(uri) + 1);
+	request_line_dict.dict_insert(&request_line_dict, "http_version", sizeof("http_version"), http_version, strlen(http_version) + 1);
 
-	if(strcmp(method, "PATCH") == 0) return PATCH;
+	request->request_line = request_line_dict; // assigning the contructed dictionary to request_line
+	printf("starting body parse\n");
 
-	if(strcmp(method, "DELETE") == 0) return DELETE;
+	/* struct entry *fetched_val = request->request_line.dict_search(&request->request_line, "method"); */
 
-	if(strcmp(method, "CONNECT") == 0) return CONNECT;
 
-	if(strcmp(method, "OPTIONS") == 0) return OPTIONS;
-
-	if(strcmp(method, "TRACE") == 0) return TRACE;
-
-	printf("=== parse_method returns UNKNOWN ===\n");
-
-	return UNKNOWN; // incase method parsing goes wrong
+	printf("INSERTED METHOD: %s\n", method);
+	printf("INSERTERD URI: %s\n", uri);
+	printf("INSERTED HTTP_VERSION: %s\n", http_version);
 }
+
+void extract_header_fields(struct http_request *request, char *header_fields) {
+	char fields[strlen(header_fields)];
+	strcpy(fields, header_fields);
+
+	struct queue headers = queue_constructor();
+
+	char *token = strtok(fields, "\n");
+	
+	while(token) {
+		printf("TOKEN ABOUT TO BE PUSHED > %s\n", token);
+		headers.push(&headers, token, strlen(token) + 1);
+
+		token = strtok(NULL, "\n");
+	}
+
+	char *header;
+	struct node *node = headers.peek(&headers);
+	struct dictionary header_fields_dict = dict_constructor(compare_string_keys);
+
+	if(node) {
+		header = (char *)node->data;
+	} else {
+		header = NULL;
+	}
+
+	while(header) {
+		char *key = strtok(header, ":");
+		char *value = strtok(NULL, "\0"); // ???what
+
+		printf("KEY TO BE INSERTED > %s\n", key);
+		printf("VALUE TO BE INSERTED > %s\n", value);
+
+		header_fields_dict.dict_insert(&header_fields_dict, key, (int)(strlen(key) + 1), value, (int)(strlen(value) + 1));
+
+		headers.pop(&headers);
+
+		node = headers.peek(&headers);
+
+		if (node) {
+			header = (char *)(node->data);
+		} else {
+			header = NULL;
+		}
+	}
+		
+}
+void extract_body(struct http_request *request, char *body) {
+	printf("body extracted successfully\n");
+}
+
+void http_request_destructor(struct http_request *request) {
+
+	dict_destructor(&request->request_line);
+	dict_destructor(&request->header_fields);
+	dict_destructor(&request->body);
+
+	printf("=== http_request struct destroyed ===\n");
+}
+
