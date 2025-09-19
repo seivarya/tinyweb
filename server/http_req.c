@@ -68,11 +68,13 @@ void extract_request_line_fields(struct http_request *request, char *request_lin
 	request_line_dict.dict_insert(&request_line_dict, "http_version", sizeof("http_version"), http_version, strlen(http_version) + 1);
 
 	request->request_line = request_line_dict; // assigning the contructed dictionary to request_line
-	printf("starting body parse\n");
+	
 
-	/* struct entry *fetched_val = request->request_line.dict_search(&request->request_line, "method"); */
+	char *test = "method";
+	struct entry *fetched_val = request_line_dict.dict_search(&request_line_dict, &test); 
+	char *val = (char *)fetched_val->value;
 
-
+	printf("test_value: %s\n", val);
 	printf("INSERTED METHOD: %s\n", method);
 	printf("INSERTERD URI: %s\n", uri);
 	printf("INSERTED HTTP_VERSION: %s\n", http_version);
