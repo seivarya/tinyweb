@@ -3,6 +3,8 @@
 
 #include "../node/node.h"
 
+//  INFO: linked list object initialization
+
 struct linked_list {
 	struct node *head;
 	int length;
@@ -10,9 +12,10 @@ struct linked_list {
 	void (*list_node_insert)(struct linked_list *linked_list, int index, void *data, int size);
 	void (*list_node_remove)(struct linked_list *linked_list, int index);
 	void* (*list_node_retrieve)(struct linked_list *linked_list, int index);
-	void (*list_reverse)(struct linked_list *linked_list); // TODO: later maybe
-
+	void (*list_reverse)(struct linked_list *linked_list); //  TODO: later maybe
 };
+
+//  INFO: methods
 
 struct linked_list linked_list_constructor(void);
 void linked_list_destructor(struct linked_list *linked_list);

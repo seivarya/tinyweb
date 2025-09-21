@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//  INFO: node constructor
 
 struct node node_constructor(void *data, int size) {
 	if (size < 1) {
@@ -18,6 +19,8 @@ struct node node_constructor(void *data, int size) {
 	node.previous = NULL;
 	return node;
 }
+
+//  INFO: node destructor
 
 void node_destructor(struct node *node) {
 	free(node->data);

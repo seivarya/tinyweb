@@ -2,8 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
+//  INFO: function prototypes
+
 void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size);
 void * search_dict (struct dictionary *dict, void *key);
+
+//  INFO: dictionary constructor
 
 struct dictionary dict_constructor(int (*compare)(void *key_fir, void *key_sec)) {
 
@@ -16,10 +20,14 @@ struct dictionary dict_constructor(int (*compare)(void *key_fir, void *key_sec))
 	return dict;
 }
 
+//  INFO: dictionary destructor
+
 void dict_destructor(struct dictionary *dict) {
 	free(dict->tree.head);
 	free(&(dict->tree));
 }
+
+//  INFO: public methods: line{14}
 
 void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size) {
 	struct entry *entry = malloc(sizeof(struct entry));
@@ -39,7 +47,7 @@ void * search_dict(struct dictionary *dict, void *key) {
 	}
 }
 
-// generic compare function:
+//  INFO: generic compare method
 
 int compare_string_keys(void *entry_fir, void *entry_sec) {
 	if (strcmp((char *)((struct entry *)entry_fir)->key,

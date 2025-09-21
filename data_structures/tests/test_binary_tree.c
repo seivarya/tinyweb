@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// prototypes
+//  INFO: method prototypes
+
 int compare(void *data_fir, void *data_sec);
 void recurse_print(struct node *node, int depth);
 void run_basic_tests();
@@ -16,11 +17,11 @@ int main(void) {
 	printf("=== running basic tests ===\n");
 	run_basic_tests();
 
-	printf("\n=== running edge case tests ===\n");
-	run_edge_tests();
-
 	printf("\n=== running random stress test ===\n");
 	run_random_tests();
+
+	printf("\n=== running edge case tests ===\n");
+	run_edge_tests();
 
 	printf("\nall tests finished.\n");
 	return 0;
@@ -64,7 +65,6 @@ void run_basic_tests() {
 		printf("-----\n");
 	}
 
-	// search tests
 	int to_search[] = {23, 75, 11, 100, -5};
 	for (int i = 0; i < 5; i++) {
 		int *found = tree.binary_node_search(&tree, &to_search[i]);

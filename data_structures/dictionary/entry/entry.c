@@ -1,6 +1,8 @@
 #include "entry.h"
 #include <string.h>
 
+//  INFO: entry constructor
+
 struct entry entry_constructor(void *key, int key_size, void *value, int value_size) {
 	struct entry entry;
 
@@ -12,6 +14,8 @@ struct entry entry_constructor(void *key, int key_size, void *value, int value_s
 
 	return entry;
 }
+
+//  INFO: entry destructor
 
 void entry_destructor(struct entry *entry) {
 	free(entry->key);

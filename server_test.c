@@ -1,5 +1,5 @@
 #include "server/server.h"
-#include "server/http_req.h"
+#include "request_parser/http_req.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -10,16 +10,16 @@
 void launch(struct server *server);
 
 int main(void) {
-	//  WARNING: i used port: 1025 in my constructor coz 1024 and < 1024 are privileged and can be only used by root users and despite being a root user myself, it's not working in my system.
-	
+	//  WARNING: i used port: 1025 in my constructor coz 1024 and < 1024 are privileged and can be only used by root users.
+
 	struct server server = server_constructor(AF_INET, SOCK_STREAM, 0, 1025, 10, INADDR_ANY, &launch);
 	server.launch(&server);
 	printf("=== socket closed ===\n");
 }
 
 void launch(struct server *server) {
-	struct http_request request; // test
-	printf("=== server launch invoked ===\n");
+	struct http_request request;
+	printf("=== server launched ===\n");
 
 	char buffer[30000];
 	int address_length = sizeof(server->address);

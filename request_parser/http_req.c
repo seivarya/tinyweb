@@ -4,9 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//  INFO: function prototypes
+
 void extract_header_fields(struct http_request *request, char *header_fields);
 void extract_request_line_fields(struct http_request *request, char *request_line);
 void extract_body(struct http_request *request, char *body);
+
+//  INFO: http_request constructor
 
 struct http_request http_request_constructor(char *request_string_arg) {
 	struct http_request request;
@@ -47,6 +51,19 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	return request;
 }
 
+//  INFO: http_request destructor
+
+void http_request_destructor(struct http_request *request) {
+
+	dict_destructor(&request->request_line);
+	dict_destructor(&request->header_fields);
+	dict_destructor(&request->body);
+
+	printf("=== http_request struct destroyed ===\n");
+}
+
+//  INFO: private methods
+
 void extract_request_line_fields(struct http_request *request, char *request_line) {
 	char *uri, *http_version, *method;
 	char fields[strlen(request_line)];
@@ -74,11 +91,11 @@ void extract_request_line_fields(struct http_request *request, char *request_lin
 		char *uri_value = fetched_uri->value;
 
 		printf("=== fetched uri > %s ===\n", uri_value);
-		extract_body(request, uri_value);
+		extract_body(request, uri_value); //  FIX: GET request don't have a body, the variables for the GET request is found into the url itself.
 	} else {
-		printf("=== get request not found > status %d ===\n", strcmp(val, "GET"));
+		printf("=== get request not found > strcmp_status %d ===\n", strcmp(val, "GET"));
 	}
-}
+} 
 
 void extract_header_fields(struct http_request *request, char *header_fields) {
 	char fields[strlen(header_fields)];
@@ -123,13 +140,6 @@ void extract_header_fields(struct http_request *request, char *header_fields) {
 
 void extract_body(struct http_request *request, char *body) {
 	printf("=== body extracted successfully ===\n");
-}
-
-void http_request_destructor(struct http_request *request) {
-	dict_destructor(&request->request_line);
-	dict_destructor(&request->header_fields);
-	dict_destructor(&request->body);
-
-	printf("=== http_request struct destroyed ===\n");
+	printf("=== body string: %s\n", body);
 }
 

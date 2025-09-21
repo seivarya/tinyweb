@@ -1,9 +1,12 @@
 #include "queue.h"
 
+//  INFO: function prototypes
+
 void push(struct queue *queue, void *data, int size);
 void pop(struct queue *queue);
 void *peek(struct queue *queue);
 
+//  INFO: queue constructor
 
 struct queue queue_constructor(void) {
 	struct queue queue;
@@ -15,9 +18,13 @@ struct queue queue_constructor(void) {
 	return queue;
 }
 
+//  INFO: queue destructor
+
 void queue_destructor(struct queue *queue) {
 	linked_list_destructor(&queue->list);
 }
+
+//  INFO: public methods
 
 void push(struct queue *queue, void *data, int size) {
 	queue->list.list_node_insert(&queue->list, queue->list.length, data, size);

@@ -2,11 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node * create_node_tree(void *data, int size);
-void destroy_node(struct node *node_to_destroy);
+//  INFO: function prototypes
 
+struct node * create_node_tree(void *data, int size);
+
+void destroy_node(struct node *node_to_destroy);
 void * search(struct binary_tree *tree, void *data);
 void insert(struct binary_tree *tree, void *data, int size);
+
+//  INFO: binary tree constructor
 
 struct binary_tree binary_tree_constructor(int (*compare)(void *data_fir, void *data_sec)) {
 	struct binary_tree tree;
@@ -19,10 +23,14 @@ struct binary_tree binary_tree_constructor(int (*compare)(void *data_fir, void *
 	return tree;
 }
 
+//  INFO: bianry tree destructor
+
 void binary_tree_destructor(struct binary_tree *tree) {
 	free(tree->head);
 	free(tree);
 }
+
+//  INFO: private methods
 
 struct node * create_node_tree(void *data, int size) {
 	struct node *new_node = malloc(sizeof(struct node));
@@ -62,6 +70,8 @@ struct node * iterate_tree(struct binary_tree *tree, struct node *cursor, void *
 	}
 }
 
+//  INFO: public methods
+
 void * search(struct binary_tree *tree, void *data) {
 	int direction;
 	struct node *cursor = iterate_tree(tree, tree->head, data, &direction);
@@ -89,6 +99,6 @@ void insert(struct binary_tree *tree, void *data, int size) {
 		cursor->previous = create_node_tree(data, size);
 	} else {
 		printf("node already exists\n");
-		exit(1);
+		exit(9);
 	}
 }
