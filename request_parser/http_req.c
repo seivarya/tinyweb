@@ -23,8 +23,6 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	char request_string[strlen(request_string_arg)];
 	strcpy(request_string, request_string_arg);
 
-	printf("=== request total length > %ld ===\n", strlen(request_string));
-
 	size_t len = strlen(request_string);
 
 	for (size_t i = 0; i + 3 < len; i++) {
