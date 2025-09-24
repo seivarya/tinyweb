@@ -46,6 +46,7 @@ struct node * create_node_tree(void *data, int size) {
 struct node * iterate_tree(struct binary_tree *tree, struct node *cursor, void *data, int *direction) {
 
 	int test = 0;
+	printf("data in tree: %s\n", (char *)data);
 	if (test == 0) {
 		*direction = 1; 
 		test++;

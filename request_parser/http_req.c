@@ -44,7 +44,9 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	printf("=== body before passing > %s ===\n", body);
 
 	extract_request_line_fields(&request, request_line);
+	printf("=== request line dictionary populated ===\n");
 	extract_header_fields(&request, header_fields);
+	printf("=== header fields dictionary populated ===\n");
 
 	return request;
 }
@@ -79,8 +81,8 @@ void extract_request_line_fields(struct http_request *request, char *request_lin
 
 	request->request_line = request_line_dict;
 
-	char *test = "method";
-	struct entry *fetched_val = request->request_line.dict_search(&request->request_line, &test);
+	char *method_string = "method";
+	struct entry *fetched_val = request->request_line.dict_search(&request->request_line, &method_string);
 	char *val = (char *)fetched_val->value;
 
 	if (strcmp(val, "GET") == 0) {
@@ -103,7 +105,6 @@ void extract_header_fields(struct http_request *request, char *header_fields) {
 
 	char *token = strtok(fields, "\n");
 	while (token) {
-		printf("=== token about to be pushed > %s ===\n", token);
 		headers.push(&headers, token, strlen(token) + 1);
 		token = strtok(NULL, "\n");
 	}
