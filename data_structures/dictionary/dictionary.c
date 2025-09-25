@@ -38,9 +38,8 @@ void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, 
 
 void * search_dict(struct dictionary *dict, void *key) {
 
-	struct entry fake_entry = { .key = key };
-
-	void *result = dict->tree.binary_node_search(&dict->tree, &fake_entry);
+	void *result = dict->tree.binary_node_search(&dict->tree, key); //  FIX: we can't pass a fucking key this shit was causing segfault since yesterday. we've to pass struct entry type since the dictionary built on node wrapped on entry structure.
+	
 	if (!result) {
 		printf("=== invalid key ===\n");
 		exit(1);
@@ -49,18 +48,15 @@ void * search_dict(struct dictionary *dict, void *key) {
 	}
 }
 
-//  INFO: string keys compare method
+//  INFO: generic compare method
 
 int compare_string_keys(void *entry_fir, void *entry_sec) {
-
 	if (strcmp((char *)((struct entry *)entry_fir)->key,
 	    (char *)((struct entry *)entry_sec)->key) > 0) {
 		return 1;
-
 	} else if (strcmp((char *)((struct entry *)entry_fir)->key,
 		   (char *)((struct entry *)entry_sec)->key) < 0) {
 		return -1;
-
 	} else {
 		return 0;
 	}
