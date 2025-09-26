@@ -82,12 +82,12 @@ void extract_request_line_fields(struct http_request *request, char *request_lin
 	request->request_line = request_line_dict;
 
 	char *method_string = "method";
-	struct entry *fetched_val = request->request_line.dict_search(&request->request_line, &method_string);
+	struct entry *fetched_val = request->request_line.dict_search(&request->request_line, method_string);
 	char *val = (char *)fetched_val->value;
 
 	if (strcmp(val, "GET") == 0) {
 		char *uri_str = "uri";
-		struct entry *fetched_uri = request->request_line.dict_search(&request->request_line, &uri_str);
+		struct entry *fetched_uri = request->request_line.dict_search(&request->request_line, uri_str);
 		char *uri_value = fetched_uri->value;
 
 		printf("=== fetched uri > %s ===\n", uri_value);
@@ -105,6 +105,7 @@ void extract_header_fields(struct http_request *request, char *header_fields) {
 
 	char *token = strtok(fields, "\n");
 	while (token) {
+		printf("=== token about to be pushed > %s ===\n", token);
 		headers.push(&headers, token, strlen(token) + 1);
 		token = strtok(NULL, "\n");
 	}
@@ -135,6 +136,7 @@ void extract_header_fields(struct http_request *request, char *header_fields) {
 			header = NULL;
 		}
 	}
+	request->header_fields = header_fields_dict; //  INFO: this line deserves a separate comment. wasted my 2 days successfully!
 }
 
 void extract_body(struct http_request *request, char *body) {

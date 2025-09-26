@@ -16,7 +16,7 @@ struct dictionary dict_constructor(int (*compare)(void *key_fir, void *key_sec))
 	dict.tree = binary_tree_constructor(compare); // passing the user defined compare function.
 	dict.dict_insert = insert_dict;
 	dict.dict_search = search_dict;
-
+ 
 	return dict;
 }
 
@@ -36,15 +36,22 @@ void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, 
 	dict->tree.binary_node_insert(&dict->tree, entry, sizeof(struct entry)); // dict ptr so -> & tree.insert will treat entry struct as the data
 }
 
-void * search_dict(struct dictionary *dict, void *key) {
-
-	void *result = dict->tree.binary_node_search(&dict->tree, key); //  FIX: we can't pass a fucking key this shit was causing segfault since yesterday. we've to pass struct entry type since the dictionary built on node wrapped on entry structure.
+void * search_dict(struct dictionary *dict, void *key) { //  FIX: user is giving us key so we've to make a fake entry out of it first in order to make it work
 	
+	printf("search dict reached : 1\n");
+	struct entry entry = {0};
+	entry.key = key; //  INFO: inserting key in fake entry
+	void *result = dict->tree.binary_node_search(&dict->tree, &entry); //  FIX: we can't pass a fucking key this shit was causing segfault since yesterday. we've to pass struct entry type since the dictionary built on node wrapped on entry structure.
+	
+
+	printf("RESULT FETCHED KEY > %s\n", (char *)(((struct entry *)result)->key));
+	printf("RESULT FETCHED VALUE > %s\n", (char *)(((struct entry *)result)->value));
+
 	if (!result) {
 		printf("=== invalid key ===\n");
 		exit(1);
 	} else {
-		return ((struct entry *)result); // cast entry * and return.
+		return  (struct entry *)(result); // cast entry * and return.
 	}
 }
 
