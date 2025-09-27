@@ -136,7 +136,7 @@ void extract_header_fields(struct http_request *request, char *header_fields) {
 			header = NULL;
 		}
 	}
-	request->header_fields = header_fields_dict; //  INFO: this line deserves a separate comment. wasted my 2 days successfully!
+	request->header_fields = header_fields_dict; 
 }
 
 void extract_body(struct http_request *request, char *body) {

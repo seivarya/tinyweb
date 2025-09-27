@@ -1,63 +1,74 @@
 #include "../dictionary/dictionary.h"
 #include <stdio.h>
+#include <string.h>
 
-int dict_compare(void *entry_ptr, void *key_ptr);
-void recurse_print(struct node *node);
-int compare(void *data_fir, void *data_sec);
+void print_dict(struct node *node);
+
+// utility: print dictionary in-order
+void print_dict(struct node *node) {
+	if (!node) return;
+	print_dict(node->previous);
+
+	struct entry *entry = (struct entry *)node->data;
+	printf("{ \"%s\": \"%s\" }\n", (char *)entry->key, (char *)entry->value);
+
+	print_dict(node->next);
+}
 
 int main(void) {
+	printf("=== dictionary test ===\n");
 
-	struct dictionary dict = dict_constructor(&dict_compare); // overwriting compare with dict_compare
+	// construct dictionary using string-key comparator
+	struct dictionary dict = dict_constructor(compare_string_keys);
 
-	int key_arr[5] = { 0, 1, 2, 3, 4 };
-	int val_arr[5] = { 121, 32, 43, 53, 43 };
+	// test case 1: insertion
+	printf("\n=== inserting entries ===\n");
+	const char *keys[]   = { "apple", "banana", "pear", "orange", "kiwi" };
+	const char *values[] = { "red",   "yellow", "green", "orange", "green" };
 
 	for (int i = 0; i < 5; i++) {
-		printf("entry added at: %d\n", i);
-		dict.dict_insert(&dict, &key_arr[i], sizeof(int), &val_arr[i], sizeof(int));
+		dict.dict_insert(&dict,
+		   (void *)keys[i], strlen(keys[i]) + 1,
+		   (void *)values[i], strlen(values[i]) + 1);
+		printf("=== inserted: { \"%s\": \"%s\" } ===\n", keys[i], values[i]);
 	}
-	printf("=== printing dictionary ===\n");
-	recurse_print(dict.tree.head);
 
-	printf("=== searching data ===\n");
-	int test_key;
+	// test case 2: print order
+	printf("\n=== printing dictionary (sorted order) ===\n");
+	print_dict(dict.tree.head);
 
-	printf("enter key to search: ");
-	scanf("%d", &test_key);
+	// test case 3: search existing keys
+	printf("\n=== searching existing keys ===\n");
+	const char *search_keys[] = { "banana", "kiwi", "apple" };
+	for (int i = 0; i < 3; i++) {
+		struct entry *found = dict.dict_search(&dict, (void *)search_keys[i]);
+		printf("=== search \"%s\" -> value: \"%s\" ===\n",
+	 search_keys[i], (char *)found->value);
+	}
 
-	struct entry *searched = dict.dict_search(&dict, &test_key);
-	int fetched_value = *(int *)searched->value;
-	int fetched_key = *(int *)searched->key;
+	// test case 4: search missing key
+	printf("\n=== searching missing key ===\n");
+	const char *missing_key = "grape";
+	printf("=== search \"%s\" ===\n", missing_key);
+	struct entry *missing = dict.dict_search(&dict, (void *)missing_key);
+	if (!missing) {
+		printf("=== key \"%s\" not found (pass) ===\n", missing_key);
+	} else {
+		printf("=== error: unexpected value for \"%s\" ===\n", missing_key);
+	}
 
-	printf("found entry with key: %d :: entry: { %d, %d }\n", fetched_key, fetched_key, fetched_value);
-}
+	// test case 5: duplicate insert
+	printf("\n=== inserting duplicate key (banana) with new value ===\n");
+	const char *new_value = "brown";
+	dict.dict_insert(&dict,
+		  (void *)"banana", strlen("banana") + 1,
+		  (void *)new_value, strlen(new_value) + 1);
 
-void recurse_print(struct node *node) {
-    if (!node) return;
+	printf("=== dictionary after duplicate insert ===\n");
+	print_dict(dict.tree.head);
 
-    recurse_print(node->previous);
-
-    struct entry *entry = (struct entry *)node->data;
-    int key   = *(int *)entry->key;
-    int value = *(int *)entry->value;
-
-    printf("{ %d: %d }\n", key, value);
-
-    recurse_print(node->next);
-}
-
-int compare(void *data_fir, void *data_sec) {
-
-	int a = *(int *)data_fir;
-	int b = *(int *)data_sec;
-
-	if (a < b) return -1;
-	if (a > b) return 1;
-
+	// cleanup
+	printf("\n=== dictionary test completed ===\n");
+	// normally free all nodes/entries here, os will reclaim memory on exit
 	return 0;
-}
-
-int dict_compare(void *entry_ptr, void *key_ptr) {
-    struct entry *e = (struct entry *)entry_ptr;
-    return compare(e->key, key_ptr);  // reuse your existing compare()
 }

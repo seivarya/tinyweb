@@ -15,7 +15,7 @@ void retrieve_page(struct http_request request, int socket);
 
 int main(void) {
 	//  WARNING: port used: 1025
-	
+
 	struct server server = server_constructor(AF_INET, SOCK_STREAM, 0, 1025, 10, INADDR_ANY, &launch);
 	server.launch(&server);
 	printf("=== socket closed ===\n");
@@ -24,7 +24,7 @@ int main(void) {
 void launch(struct server *server) {
 	int addrlen = sizeof(server->address);
 	long valread;
-	
+
 	while(1) {
 		printf("=== launch function triggered === \n");
 		printf("=== waiting ===\n");
@@ -37,16 +37,10 @@ void launch(struct server *server) {
 		printf("=== BUFFER START ===\n %s\n=== BUFFER END ===\n", buffer);
 
 		struct http_request request = http_request_constructor(buffer); // calling http_request_constructor
-		
+
 		//  TEST: tryin' to send generic response
 
 		printf("=== request constructor executed successfully ===\n");
-
-		char *name = "Host";
-
-		printf("host name added \n");
-		struct entry *content_type_entry = (struct entry *)(request.header_fields.dict_search(&request.header_fields, name));
-		// resume here
 
 		retrieve_page(request, new_socket);
 		close(new_socket);
@@ -55,9 +49,40 @@ void launch(struct server *server) {
 
 void retrieve_page(struct http_request request, int socket) {
 
-	char *uri = request.request_line.dict_search(&request.request_line, "uri");
+	char path[30000] = { 0 };
+	struct entry * uri_entry = (struct entry *)(request.request_line.dict_search(&request.request_line, "uri"));
+	char *url = strtok((char *)(uri_entry->value), "?");
+	char *variables = strtok(NULL, "\0"); //  INFO: will return (null) if uri is '/'
 
+	strcpy(path, "server/test_response");
 
-	printf("temp val\n");
+	if (strcmp(url, "/test") == 0) {
+		strcat(path, url);
 
+	} else {
+		strcat(path, "/index");
+	}
+
+	strcat(path, ".html"); // append .html in end
+
+	FILE *fp = fopen(path, "r");
+
+	fseek(fp, 0L, SEEK_END); //  INFO: seek to the end of the file
+	size_t file_size = ftell(fp); //  INFO: after seek we do ftell on file pointer to get it's location and that's the size of file!
+	rewind(fp); //  INFO: seeking to go to the beginning
+
+	printf("=== file size is > %ld ===\n", file_size);
+
+	char *buffer = malloc(file_size + 1);
+	fread(buffer, 1, file_size, fp);
+	fclose(fp);
+
+	char response[30000] = { 0 };
+	strcpy(response, "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"); // status line
+	strcat(response, buffer);
+
+	printf("=== response constructed successfully, writing it onto socket. ===\n");
+	write(socket, response, strlen(response));
+	printf("\r\n\r\n");
 }
+

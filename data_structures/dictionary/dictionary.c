@@ -38,18 +38,14 @@ void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, 
 
 void * search_dict(struct dictionary *dict, void *key) { //  FIX: user is giving us key so we've to make a fake entry out of it first in order to make it work
 	
-	printf("search dict reached : 1\n");
-	struct entry entry = {0};
+	struct entry entry = { 0 };
 	entry.key = key; //  INFO: inserting key in fake entry
-	void *result = dict->tree.binary_node_search(&dict->tree, &entry); //  FIX: we can't pass a fucking key this shit was causing segfault since yesterday. we've to pass struct entry type since the dictionary built on node wrapped on entry structure.
-	
 
-	printf("RESULT FETCHED KEY > %s\n", (char *)(((struct entry *)result)->key));
-	printf("RESULT FETCHED VALUE > %s\n", (char *)(((struct entry *)result)->value));
+	void *result = dict->tree.binary_node_search(&dict->tree, &entry); //  FIX: we can't pass a fucking key this shit was causing segfault since yesterday. we've to pass struct entry type since the dictionary built on node wrapped on entry structure.
 
 	if (!result) {
 		printf("=== invalid key ===\n");
-		exit(1);
+		return NULL;
 	} else {
 		return  (struct entry *)(result); // cast entry * and return.
 	}
@@ -58,11 +54,12 @@ void * search_dict(struct dictionary *dict, void *key) { //  FIX: user is giving
 //  INFO: generic compare method
 
 int compare_string_keys(void *entry_fir, void *entry_sec) {
-	if (strcmp((char *)((struct entry *)entry_fir)->key,
-	    (char *)((struct entry *)entry_sec)->key) > 0) {
+	int result = strcmp(((struct entry *)entry_fir)->key,
+		     ((struct entry *)entry_sec)->key);
+
+	if (result > 0) {
 		return 1;
-	} else if (strcmp((char *)((struct entry *)entry_fir)->key,
-		   (char *)((struct entry *)entry_sec)->key) < 0) {
+	} else if (result < 0) {
 		return -1;
 	} else {
 		return 0;
