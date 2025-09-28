@@ -1,5 +1,6 @@
-#include "http_req.h"
-#include "../data_structures/queue/queue.h"
+#include "http_request.h"
+#include "../../data_structures/queue/queue.h"
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

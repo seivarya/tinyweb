@@ -1,5 +1,5 @@
-#include "../server/server.h"
-#include "../request_parser/http_req.h"
+#include "../../server/server/server.h"
+#include "../../server/http_request/http_request.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -34,8 +34,6 @@ void launch(struct server *server) {
 		char buffer[30000];
 		valread = read(new_socket, buffer, 30000);
 
-		printf("=== BUFFER START ===\n %s\n=== BUFFER END ===\n", buffer);
-
 		struct http_request request = http_request_constructor(buffer); // calling http_request_constructor
 
 		//  TEST: tryin' to send generic response
@@ -54,7 +52,7 @@ void retrieve_page(struct http_request request, int socket) {
 	char *url = strtok((char *)(uri_entry->value), "?");
 	char *variables = strtok(NULL, "\0"); //  INFO: will return (null) if uri is '/'
 
-	strcpy(path, "server/test_response");
+	strcpy(path, "tests/test_response");
 
 	if (strcmp(url, "/test") == 0) {
 		strcat(path, url);

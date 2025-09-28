@@ -1,7 +1,7 @@
 #ifndef HTTP_REQ_H
 #define HTTP_REQ_H
 
-#include "../data_structures/dictionary/dictionary.h"
+#include "../../data_structures/dictionary/dictionary.h"
 
 //  INFO: http methods enum
 enum http_methods {
