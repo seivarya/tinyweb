@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-struct server server_constructor(int domain, int service, int protocol, int port, int backlog, uint32_t interface, void (*launch)(struct server *server)) {
+struct server server_constructor(int domain, int service, int protocol, int port, int backlog, uint32_t interface) {
 
 	printf("=== constructor invoked ===\n");
 
@@ -40,8 +40,6 @@ struct server server_constructor(int domain, int service, int protocol, int port
 		perror("=== failed to listen === \n");
 		exit(1);
 	}
-
-	server.launch = launch;
 
 	return server;
 }

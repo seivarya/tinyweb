@@ -25,8 +25,7 @@ struct server server_constructor(
 	int protocol,
 	int port,
 	int backlog,
-	uint32_t interface,
-	void (*launch)(struct server *server)
+	uint32_t interface
 );
 
 #endif // SERVER_H

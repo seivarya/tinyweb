@@ -8,10 +8,10 @@ struct http_server {
 	struct server server;
 	struct dictionary routes;
 
-	void (*register_routes)(struct server *server, void (*route_function)(struct server *server, struct http_request *request), char *uri, int num_methods, ...);
+	void (*register_routes)(struct http_server *server, void (*route_function)(struct server *server, struct http_request *request), char *uri, int num_methods, ...);
 };
 
 struct http_server http_server_constructor(void);
-void http_server_destructor(struct server *server);
+
 
 #endif
