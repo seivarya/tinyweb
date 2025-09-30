@@ -42,7 +42,6 @@ void register_routes(struct http_server *server, void (*route_function)(struct s
 //  INFO: just a test launch function, to be removed later
 
 void launch(struct server *server) {
-
 	int addrlen = sizeof(server->address);
 	long valread;
 

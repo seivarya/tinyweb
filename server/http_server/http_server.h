@@ -13,5 +13,4 @@ struct http_server {
 
 struct http_server http_server_constructor(void);
 
-
 #endif

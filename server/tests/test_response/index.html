@@ -3,59 +3,69 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>My Simple Web Server</title>
-		<!-- Use the Tailwind CSS CDN for easy styling -->
+		<title>Minimalist Web Server Showcase</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<style>
-		/* Apply a custom font to the entire body */
 		body {
 			font-family: 'Inter', sans-serif;
 		}
 		</style>
 	</head>
-	<body class="bg-gray text-black-800 flex items-center justify-center min-h-screen p-4">
-		<!-- Main container with a nice card-like appearance -->
-		<div class="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full">
-			<!-- Header section with a title and description -->
-			<header class="text-center mb-8">
-				<h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 mb-2">
-					Hello, World!
+	<body class="bg-gray-50 text-gray-800 flex items-center justify-center min-h-screen p-6">
+
+		<div class="bg-white rounded-2xl shadow-lg max-w-3xl w-full p-10">
+
+			<!-- Header -->
+			<header class="text-center mb-10">
+				<h1 class="text-5xl font-extrabold text-green-600 mb-3">
+					My Minimalist Web Server
 				</h1>
-				<p class="text-lg text-gray-600">
-					This page was served by my very own C web server.
+				<p class="text-gray-600 text-lg">
+					Serving static and dynamic content directly from a lightweight C-based server.
 				</p>
 			</header>
-			<!-- Main content section -->
-			<main>
-				<section class="mb-6 border-b pb-6">
+
+			<!-- Main Content -->
+			<main class="space-y-8">
+
+				<!-- Section 1 -->
+				<section class="border-b border-gray-200 pb-6">
 					<h2 class="text-2xl font-semibold text-gray-700 mb-2">
 						About This Server
 					</h2>
-					<p class="text-gray-600">
-						This is a basic HTML file served directly from a server I built myself. The server is responsible for listening for incoming HTTP requests and sending this file back as a response. This demonstrates the core functionality of a web server.
+					<p class="text-gray-600 leading-relaxed">
+						This web server is a minimal, yet fully functional HTTP server written in C. It listens for incoming requests, parses HTTP methods, locates the requested resources, and sends precise HTTP responses back to the client. Unlike typical heavy frameworks, this server demonstrates the core networking principles, threading, and file I/O required for web communication in a compact, efficient package.
 					</p>
 				</section>
-				<section class="mb-6 border-b pb-6">
+
+				<!-- Section 2 -->
+				<section class="border-b border-gray-200 pb-6">
 					<h2 class="text-2xl font-semibold text-gray-700 mb-2">
-						How it Works
+						How It Works
 					</h2>
-					<p class="text-gray-600">
-						When your browser requested this page, it sent an HTTP `GET` request to my server. The server then located this HTML file, prepared an HTTP response with the correct headers (like `Content-Type: text/html`), and sent the data stream back to you. Your browser then rendered the HTML to display this beautiful page.
+					<p class="text-gray-600 leading-relaxed">
+						When your browser requests a page, it sends an HTTP <code class="bg-gray-100 px-1 rounded">GET</code> request to the server. The server parses the request headers, determines which file to serve, and constructs a full HTTP response with the correct headers, including <code class="bg-gray-100 px-1 rounded">Content-Type</code> and <code class="bg-gray-100 px-1 rounded">Content-Length</code>. Once the response is ready, it is transmitted back to the client over TCP, and your browser renders the HTML content seamlessly.
 					</p>
 				</section>
+
+				<!-- Section 3 -->
 				<section>
 					<h2 class="text-2xl font-semibold text-gray-700 mb-2">
-						What's Next?
+						Why Minimalism Matters
 					</h2>
-					<p class="text-gray-600">
-						Now that the basic communication is working, the next step is to add more advanced features! This could include serving more complex pages, handling different types of requests (like `POST`), or even serving dynamic content.
+					<p class="text-gray-600 leading-relaxed">
+						By keeping the server minimal, we gain a deep understanding of the underlying principles of HTTP communication, socket programming, and multithreading. This also ensures that the server remains lightweight, efficient, and easy to extend. Future enhancements could include handling <code class="bg-gray-100 px-1 rounded">POST</code> requests, serving multiple content types, implementing thread pools for concurrency, and integrating dynamic content generation.
 					</p>
 				</section>
+
 			</main>
-			<!-- Footer section -->
-			<footer class="mt-8 text-center text-gray-400 text-sm">
-				<p>&copy; 2025 @shizvank: web.server. All rights reserved.</p>
+
+			<!-- Footer -->
+			<footer class="mt-10 text-center text-gray-400 text-sm">
+				<p>&copy; 2025 @shizvank • Minimalist Web Server. All rights reserved.</p>
 			</footer>
+
 		</div>
+
 	</body>
 </html>
