@@ -16,7 +16,7 @@ struct thread_pool {
 	pthread_cond_t signal; //  INFO: so that we can reduce the thread's impact on system. since our thread will keep checking queue in infinite loop.
 };
 
-struct thead_job {
+struct thread_job {
 	void *(*job)(void *arg);
 	void *arg;
 };
@@ -28,7 +28,9 @@ struct thread_job thread_job_constructor(void *(*job)(void *arg), void *arg);
 
 
 /*
+ 
 INFO: why we need multi-threading? for performace but the reason we need thread pool is coz incase we don't know
 how many jobs we've to execute then the CPU can be overwhelmed resulting in computer crash.
 a thread_pool will define finited number of thread_pool and execute them.
+
 */
