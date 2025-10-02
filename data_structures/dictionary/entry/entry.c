@@ -1,5 +1,9 @@
+// entry.c > implementation of entry constructor and destructor
+
 #include "entry.h"
+
 #include <string.h>
+#include <stdlib.h>
 
 //  INFO: entry constructor
 
@@ -21,4 +25,4 @@ void entry_destructor(struct entry *entry) {
 	free(entry->key);
 	free(entry->value);
 	free(entry);
-}
+} /* ENTRY_C */

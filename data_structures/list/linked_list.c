@@ -1,3 +1,5 @@
+// linked_list.c > implementation of linked_list constructor, destructor and it's public/ private methods
+
 #include "linked_list.h"
 #include <stdlib.h>
 
@@ -28,7 +30,7 @@ struct linked_list linked_list_constructor(void) {
 
 void linked_list_destructor(struct linked_list *linked_list) {
 	for (int i = 0; i < linked_list->length; i++) {
-		linked_list->list_node_remove(linked_list, 0); 
+		linked_list->list_node_remove(linked_list, i); 
 	}
 }
 

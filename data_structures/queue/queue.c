@@ -5,6 +5,7 @@
 void push(struct queue *queue, void *data, int size);
 void pop(struct queue *queue);
 void *peek(struct queue *queue);
+int is_empty(struct queue *queue);
 
 //  INFO: queue constructor
 
@@ -14,6 +15,7 @@ struct queue queue_constructor(void) {
 	queue.push = push;
 	queue.pop = pop; 
 	queue.peek = peek;
+	queue.is_empty = is_empty;
 
 	return queue;
 }
@@ -21,7 +23,9 @@ struct queue queue_constructor(void) {
 //  INFO: queue destructor
 
 void queue_destructor(struct queue *queue) {
-	linked_list_destructor(&queue->list);
+	while(queue->list.length) {
+		queue->pop(queue);
+	}
 }
 
 //  INFO: public methods
@@ -32,6 +36,15 @@ void push(struct queue *queue, void *data, int size) {
 
 void pop(struct queue *queue) {
 	queue->list.list_node_remove(&queue->list, 0);
+}
+
+int is_empty(struct queue *queue) {
+
+	if (queue->list.length <= 0 || !(queue->list.length)) {
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
 void *peek(struct queue *queue) {

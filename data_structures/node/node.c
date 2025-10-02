@@ -1,3 +1,5 @@
+// node.c > implementation of node constructor / node destructor
+
 #include "node.h"
 #include <stdio.h>
 #include <stdlib.h>

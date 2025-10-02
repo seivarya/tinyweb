@@ -1,3 +1,5 @@
+// node.h > definition of struct node and it's methods
+
 #ifndef NODE_H
 #define NODE_H
 

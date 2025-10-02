@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "../queue/queue.h"
 
 int main(void) {
@@ -13,6 +15,12 @@ int main(void) {
 
 	int c = 300;
 	queue.push(&queue, &c, sizeof(c));
+
+	if (queue.is_empty(&queue) == 1) {
+		printf("=== queue is empty ===\n");
+	} else {
+		printf("=== queue is not empty ===\n");
+	}
 
 	printf("=== peeking head ===\n");
 	struct node *head = (struct node *)queue.peek(&queue);
@@ -61,8 +69,17 @@ int main(void) {
 			printf("\n");
 		}
 	}
-
 	queue_destructor(&queue);
+
+	if (queue.is_empty(&queue) == 1) {
+		printf("=== queue is empty ===\n");
+	} else {
+		printf("=== queue is not empty ===\n");
+struct node *head = (struct node *)queue.peek(&queue);
+	printf("head: %d\n", *(int *)head->data);
+
+
+	}
 
 	return 0;
 }

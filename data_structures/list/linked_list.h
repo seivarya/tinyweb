@@ -1,3 +1,5 @@
+// linked_list.h > definition of linked_list struct and it's method
+
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 

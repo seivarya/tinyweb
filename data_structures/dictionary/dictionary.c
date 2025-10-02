@@ -1,4 +1,8 @@
+// dictionary.h > definition of dict constructor, destructor and public/ private methods.
+
 #include "dictionary.h"
+
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -64,4 +68,4 @@ int compare_string_keys(void *entry_fir, void *entry_sec) {
 	} else {
 		return 0;
 	}
-}
+} /* DICTIONARY_C */
