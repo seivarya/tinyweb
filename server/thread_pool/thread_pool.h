@@ -4,6 +4,11 @@
 #include "../../data_structures/queue/queue.h"
 #include <pthread.h>
 
+struct thread_job {
+	void *(*job_exec_func)(void *arg);
+	void *arg;
+};
+
 struct thread_pool {
 
 	int num_threads; //  INFO: number of threads
@@ -14,15 +19,14 @@ struct thread_pool {
 	pthread_t *pool; // INFO:  array of thread of unknown size 
 	pthread_mutex_t lock; //  INFO: this will prevent from 2 processes accessing the same resource at the same time.
 	pthread_cond_t signal; //  INFO: so that we can reduce the thread's impact on system. since our thread will keep checking queue in infinite loop.
+	
+	void (*add_job)(struct thread_pool *thread_pool, struct thread_job thread_job);
 };
 
-struct thread_job {
-	void *(*job)(void *arg);
-	void *arg;
-};
-
+void thread_pool_destructor(struct thread_pool *thread_pool);
 struct thread_pool thread_pool_constructor(int num_threads);
-struct thread_job thread_job_constructor(void *(*job)(void *arg), void *arg);
+
+struct thread_job thread_job_constructor(void *(*job_exec_func)(void *arg), void *arg);
 
 #endif
 

@@ -14,7 +14,7 @@ struct node node_constructor(void *data, int size) {
 	}
 	struct node node;
 
-	node.data = malloc(size);
+	node.data = malloc(size); // allocate the size of data
 	memcpy(node.data, data, size);
 
 	node.next = NULL;
