@@ -4,14 +4,19 @@
 #include "../../data_structures/queue/queue.h"
 #include <pthread.h>
 
-struct thread_job {
+struct thread_job {  //  INFO: job_queue will have thread_job structs and the jobs can be of diff/ type since it's generic
 	void *(*job_exec_func)(void *arg);
 	void *arg;
 };
 
+struct thread_job thread_job_constructor(void *(*job_exec_func)(void *arg), void *arg);
+
+/* === :: ==== ==== :: ==== */
+
 struct thread_pool {
 
 	int num_threads; //  INFO: number of threads
+	
 	short int active; //  INFO: will store only 2 states [active, inactive] 1, 0
 	
 	struct queue job_queue; //  INFO: this'll work based off on FIFO principle
@@ -23,18 +28,7 @@ struct thread_pool {
 	void (*add_job)(struct thread_pool *thread_pool, struct thread_job thread_job);
 };
 
-void thread_pool_destructor(struct thread_pool *thread_pool);
 struct thread_pool thread_pool_constructor(int num_threads);
+void thread_pool_destructor(struct thread_pool *thread_pool);
 
-struct thread_job thread_job_constructor(void *(*job_exec_func)(void *arg), void *arg);
-
-#endif
-
-
-/*
- 
-INFO: why we need multi-threading? for performace but the reason we need thread pool is coz incase we don't know
-how many jobs we've to execute then the CPU can be overwhelmed resulting in computer crash.
-a thread_pool will define finited number of thread_pool and execute them.
-
-*/
+#endif /* THREAD_POOL_H */

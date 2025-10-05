@@ -1,5 +1,7 @@
 #include "../route/route.h"
+#include "../thread_pool/thread_pool.h"
 #include "http_server.h"
+
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -8,7 +10,7 @@
 
 void (register_routes)(struct http_server *server, void (*route_function)(struct server *server, struct http_request *request), char *uri, int num_methods, ...);
 
-void launch(struct server *server);
+void launch(struct http_server *http_server);
 
 struct http_server http_server_constructor() {
 	struct http_server server;
@@ -39,28 +41,19 @@ void register_routes(struct http_server *server, void (*route_function)(struct s
 	server->routes.dict_insert(&server->routes, uri, strlen(uri) + 1, &route, sizeof(route));
 }
 
-//  INFO: just a test launch function, to be removed later
+void launch(struct http_server *http_server) {
 
-void launch(struct server *server) {
-	int addrlen = sizeof(server->address);
-	long valread;
+	struct thread_pool thread_pool = thread_pool_constructor(10); //  FIX: thead default for now
+
+	struct sockaddr *sock_addr = (struct sockaddr *)&http_server->server.address;
+	int addr_len = sizeof(http_server->server.address);
 
 	while(1) {
 		printf("=== launch function triggered === \n");
 		printf("=== waiting ===\n");
 
-		int new_socket = accept(server->socket, (struct sockaddr *)&server->address, (socklen_t *)&addrlen);
+		accept(http_server->server.socket, sock_addr, (socklen_t *)&addr_len);
 
-		char buffer[30000];
-		valread = read(new_socket, buffer, 30000);
-
-		struct http_request request = http_request_constructor(buffer); // calling http_request_constructor
-
-		//  TEST: tryin' to send generic response
-
-		printf("=== request constructor executed successfully ===\n");
-
-		close(new_socket);
 	}
-}
 
+} /* HTTP_SERVER_C */
