@@ -6,11 +6,6 @@
 #include <stdio.h>
 #include <string.h>
 
-//  INFO: function prototypes
-
-void insert_dict(struct dictionary *dict, void *key, int key_size, void *value, int value_size);
-void * search_dict (struct dictionary *dict, void *key);
-
 //  INFO: dictionary constructor
 
 struct dictionary dict_constructor(int (*compare)(void *key_fir, void *key_sec)) {

@@ -1,12 +1,5 @@
 #include "queue.h"
 
-//  INFO: function prototypes
-
-void push(struct queue *queue, void *data, int size);
-void pop(struct queue *queue);
-void *peek(struct queue *queue);
-int is_empty(struct queue *queue);
-
 //  INFO: queue constructor
 
 struct queue queue_constructor(void) {

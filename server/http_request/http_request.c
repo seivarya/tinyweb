@@ -5,16 +5,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//  INFO: function prototypes
-
-void extract_header_fields(struct http_request *request, char *header_fields);
-void extract_request_line_fields(struct http_request *request, char *request_line);
-void extract_body(struct http_request *request, char *body);
-
 //  INFO: http_request constructor
 
 struct http_request http_request_constructor(char *request_string_arg) {
 	struct http_request request;
+
+	printf("=== http_request_constructor invoked ===\n");
 
 	if (!request_string_arg) {
 		printf("=== request string not found ===\n");
@@ -40,9 +36,9 @@ struct http_request http_request_constructor(char *request_string_arg) {
 	char *header_fields = strtok(NULL, "|");
 	char *body = strtok(NULL, "|");
 
-	printf("=== request line before passing > %s ===\n", request_line);
-	printf("=== header fields before passing > %s ===\n", header_fields);
-	printf("=== body before passing > %s ===\n", body);
+	// printf("=== request line before passing > %s ===\n", request_line);
+	// printf("=== header fields before passing > %s ===\n", header_fields);
+	// printf("=== body before passing > %s ===\n", body);
 
 	extract_request_line_fields(&request, request_line);
 	printf("=== request line dictionary populated ===\n");
@@ -91,10 +87,10 @@ void extract_request_line_fields(struct http_request *request, char *request_lin
 		struct entry *fetched_uri = request->request_line.dict_search(&request->request_line, uri_str);
 		char *uri_value = fetched_uri->value;
 
-		printf("=== fetched uri > %s ===\n", uri_value);
+		// printf("=== fetched uri > %s ===\n", uri_value);
 		extract_body(request, uri_value); //  FIX: GET request don't have a body, the variables for the GET request is found into the url itself.
 	} else {
-		printf("=== get request not found > strcmp_status %d ===\n", strcmp(val, "GET"));
+		// printf("=== get request not found > strcmp_status %d ===\n", strcmp(val, "GET"));
 	}
 } 
 
@@ -106,7 +102,7 @@ void extract_header_fields(struct http_request *request, char *header_fields) {
 
 	char *token = strtok(fields, "\n");
 	while (token) {
-		printf("=== token about to be pushed > %s ===\n", token);
+		// printf("=== token about to be pushed > %s ===\n", token);
 		headers.push(&headers, token, strlen(token) + 1);
 		token = strtok(NULL, "\n");
 	}

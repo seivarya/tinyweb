@@ -30,4 +30,12 @@ struct http_request {
 struct http_request http_request_constructor(char * request_string);
 void http_request_destructor(struct http_request *request);
 
+
+//  INFO: function prototypes
+
+void extract_header_fields(struct http_request *request, char *header_fields);
+void extract_request_line_fields(struct http_request *request, char *request_line);
+void extract_body(struct http_request *request, char *body);
+
+
 #endif /* HTTP_REQ_H */

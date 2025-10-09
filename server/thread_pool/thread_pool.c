@@ -2,9 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void add_job(struct thread_pool *thread_pool, struct thread_job thread_job);
-void *generic_thread_func(void *arg);
-
 struct thread_pool thread_pool_constructor(int num_threads) {
 
 	printf("=== thread_pool constructor invoked ===\n");
@@ -21,10 +18,6 @@ struct thread_pool thread_pool_constructor(int num_threads) {
 	pthread_cond_init(&thread_pool.signal, NULL);
 
 	//  ISSUE: you can't use PTHREAD_MUTEX_INITIALIZER because that's for compile time initialization only! we use em outside structs and funcs and the mutex_init() is for runtime init
-
-	for (int i = 0; i < num_threads; i++) {
-		pthread_create(&thread_pool.pool[i], NULL, generic_thread_func, NULL); //  FIX: issue here.
-	}
 
 	thread_pool.add_job = add_job;
 
@@ -49,7 +42,11 @@ void thread_pool_destructor(struct thread_pool *thread_pool) {
 	printf("=== thread_pool destructed successfully ===\n");
 }
 
-// cont
+void thread_pool_start(struct thread_pool *thread_pool) {
+	for (int i = 0; i < thread_pool->num_threads; i++) {
+		pthread_create(&thread_pool->pool[i], NULL, generic_thread_func, &thread_pool); 
+	}
+}
 
 void add_job(struct thread_pool *thread_pool, struct thread_job thread_job) {
 	thread_pool->job_queue.push(&thread_pool->job_queue, &thread_job, sizeof(thread_job));
@@ -67,6 +64,7 @@ void *generic_thread_func(void *arg) {
 			printf("=== job queue is empty, waiting for new jobs to enter/ pushed ===\n");
 			pthread_cond_wait(&thread_pool->signal, &thread_pool->lock);
 		}
+
 		// critical section start
 
 		struct thread_job job = *(struct thread_job *)thread_pool->job_queue.peek(&thread_pool->job_queue);
@@ -83,8 +81,5 @@ void *generic_thread_func(void *arg) {
 			job.job_exec_func(job.arg);
 		}
 	}
-
 	return NULL;
 }
-
-

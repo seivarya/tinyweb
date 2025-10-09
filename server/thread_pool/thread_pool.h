@@ -31,4 +31,10 @@ struct thread_pool {
 struct thread_pool thread_pool_constructor(int num_threads);
 void thread_pool_destructor(struct thread_pool *thread_pool);
 
+void thread_pool_start(struct thread_pool *thread_pool); 
+void add_job(struct thread_pool *thread_pool, struct thread_job thread_job);
+void *generic_thread_func(void *arg);
+
+
+
 #endif /* THREAD_POOL_H */

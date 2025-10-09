@@ -3,15 +3,6 @@
 #include "linked_list.h"
 #include <stdlib.h>
 
-//  INFO: function prototypes
-
-struct node *create_node_list(void *data, int size);
-struct node *iterate_list(int index, struct linked_list *linked_list);
-
-void insert_node(struct linked_list *linked_list, int index, void *data, int size);
-void remove_node(struct linked_list *linked_list, int index);
-void *retrieve_node(struct linked_list *linked_list, int index);
-
 // INFO: linked list contructor
 
 struct linked_list linked_list_constructor(void) {

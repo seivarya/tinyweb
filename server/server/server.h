@@ -16,7 +16,6 @@ struct server {
 	uint32_t interface;
 	int socket;
 	struct sockaddr_in address;
-	void (*launch)(struct server *server);
 };
 
 struct server server_constructor(

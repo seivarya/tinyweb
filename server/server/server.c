@@ -5,7 +5,7 @@
 
 struct server server_constructor(int domain, int service, int protocol, int port, int backlog, uint32_t interface) {
 
-	printf("=== constructor invoked ===\n");
+	printf("=== server constructor invoked ===\n");
 
 	struct server server;
 

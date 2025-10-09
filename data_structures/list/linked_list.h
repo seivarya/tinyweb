@@ -22,4 +22,13 @@ struct linked_list {
 struct linked_list linked_list_constructor(void);
 void linked_list_destructor(struct linked_list *linked_list);
 
+//  INFO: function prototypes
+
+struct node *create_node_list(void *data, int size);
+struct node *iterate_list(int index, struct linked_list *linked_list);
+
+void insert_node(struct linked_list *linked_list, int index, void *data, int size);
+void remove_node(struct linked_list *linked_list, int index);
+void *retrieve_node(struct linked_list *linked_list, int index);
+
 #endif /* LINKED_LIST_H */
