@@ -38,6 +38,26 @@ void register_routes(struct http_server *server, void (*route_function)(struct s
 	server->routes.dict_insert(&server->routes, uri, strlen(uri) + 1, &route, sizeof(route));
 }
 
+char* fetch_page() {
+	FILE *fd;
+	int ch;
+	char *path = "../tests/test_response/index.html";
+
+	char *page;
+	fd = fopen(path, "r");
+
+	while(1) {
+		ch = fgetc(fd);
+		if (ch == EOF) {
+			break;
+		}
+		strcat(page, (char *)ch);
+
+	}
+
+}
+
+
 void launch(struct http_server *http_server) {
 	char *response =
 		"HTTP/1.1 200 OK\r\n"
@@ -117,11 +137,11 @@ void launch(struct http_server *http_server) {
 		"</body>\n"
 		"</html>\n";
 
-	char buffer[300000];
+	char buffer[30000];
 	int new_socket;
 
-	struct thread_pool thread_pool= thread_pool_constructor(5); //  FIX: thead default for now
-	thread_pool_start(&thread_pool);
+	struct thread_pool *thread_pool = thread_pool_constructor(5); //  FIX: thead default for now
+/* 	test_func(&thread_pool); */
 
 	struct sockaddr *sock_addr = (struct sockaddr *)&http_server->server.address;
 	int addr_len = sizeof(http_server->server.address);
@@ -133,7 +153,7 @@ void launch(struct http_server *http_server) {
 
 		new_socket = accept(http_server->server.socket, sock_addr, (socklen_t *)&addr_len);
 
-			read(new_socket, buffer, 300000);
+			read(new_socket, buffer, 30000);
 			write(new_socket, response, strlen(response));
 
 			printf("%s\n", buffer);
