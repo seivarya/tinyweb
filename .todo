@@ -1,0 +1,9 @@
+[ ] - rewrite structures
+	[x] - list
+	[x] - queue
+	[ ] - bst
+	[ ] - dictionary
+
+[ ] - change req. parser 
+[ ] - rewrite server with better err handling
+[ ] - rewrite rest of the stuff
