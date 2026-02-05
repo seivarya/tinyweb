@@ -1,28 +1,29 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "btnode.h"
+#include "bnode.h"
 
-btnode* btnode_construct(void *data, size_t size) {
-	btnode *node = malloc(sizeof(btnode));
+bnode* bnode_construct(void *data, size_t size) {
+	bnode *node = malloc(sizeof(bnode));
 	if (!node) {
-		perror("=== malloc failed: btnode_construct(): sizeof(btnode) ===");
+		perror("=== malloc failed: bnode_construct(): sizeof(bnode) ===");
 		return NULL;
 	}
 
 	node->data = malloc(size);
 	if (!node->data) {
-		perror("=== malloc failed: btnode_construct(): node->data ===");
+		perror("=== malloc failed: bnode_construct(): node->data ===");
 		free(node);
 		return NULL;
 	}
 	memcpy(node->data, data, size);
 	node->next = NULL;
+	node->prev = NULL;
 
 	return node;
 }
 
-void btnode_destruct(btnode* node) {
+void bnode_destruct(bnode* node) {
 	if (!node)
 		return;
 	if (node->data) {
@@ -31,4 +32,4 @@ void btnode_destruct(btnode* node) {
 	}
 	
 	free(node);
-} /* btnode_c */
+} /* bnode_c */
