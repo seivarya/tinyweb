@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "snode/snode.h" 
-#include "slist.h"
+#include <nodes/snode.h>
+#include <structs/slist.h>
 
 /* info: private methods */
 

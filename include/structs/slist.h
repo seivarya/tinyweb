@@ -3,7 +3,7 @@
 #ifndef SLIST_H
 #define SLIST_H
 
-#include "snode/snode.h"
+#include "nodes/snode.h"
 
 typedef struct slist {
 	snode *head;

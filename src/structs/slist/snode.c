@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "snode.h"
+#include <nodes/snode.h>
 
 snode* snode_construct(void *data, size_t size) {
 	snode *node = malloc(sizeof(snode));

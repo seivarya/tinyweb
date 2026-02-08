@@ -1,7 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "qnode/qnode.h"
+#include "nodes/qnode.h"
 
 typedef struct queue {
 	qnode *head;

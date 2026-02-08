@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "bnode/bnode.h"
-#include "bst.h"
+#include <nodes/bnode.h>
+#include <structs/bst.h>
 
 
 // int bst_cmpr(void *a, void *b);
@@ -16,9 +16,9 @@
 // void bst_destruct(bst *tree);
 
 bst* bst_construct(int (*bst_cmpr)(void *a, void *b)) {
-	bst *tree;
+	bst *tree = malloc(sizeof(bst));
 	tree->head = NULL;
-	tree->bst_cmpr = bst_cmpr; // >
+	tree->bst_cmpr = bst_cmpr; 
 	return tree;
 }
 
@@ -63,6 +63,7 @@ void* bst_search(bst *tree, void *data) {
 	if (direction == 0) {
 		return cursor->data; //  INFO: the data is actually a bnode itself. in dict it'll be a node with <entry> wrapper over it.
 	} else {
+		printf("===+ node not found +===\n");
 		return NULL;
 	}
 }

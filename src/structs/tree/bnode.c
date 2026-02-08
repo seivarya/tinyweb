@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "bnode.h"
+#include <nodes/bnode.h>
 
 bnode* bnode_construct(void *data, size_t size) {
 	bnode *node = malloc(sizeof(bnode));

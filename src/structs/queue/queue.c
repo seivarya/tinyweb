@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "qnode/qnode.h"
-#include "queue.h"
+#include <nodes/qnode.h>
+#include <structs/queue.h>
 
 /* info: private methods */
 

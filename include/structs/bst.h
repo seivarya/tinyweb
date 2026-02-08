@@ -3,7 +3,7 @@
 #ifndef BST_H
 #define BST_H
 
-#include "bnode/bnode.h"
+#include "nodes/bnode.h"
 
 typedef struct bst {
 	bnode *head;
@@ -17,6 +17,5 @@ bnode *bst_iterate(bst *tree, bnode *cursor, void *data, int *direction);
 
 bst* bst_construct(int (*bst_cmpr)(void *a, void *b));
 void bst_destruct(bst *tree);
-
 
 #endif

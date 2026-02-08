@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "qnode.h"
+#include <nodes/qnode.h>
 
 qnode* qnode_construct(void *data, size_t size) {
 	qnode *node = malloc(sizeof(qnode));
