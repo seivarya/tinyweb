@@ -27,6 +27,7 @@ LDFLAGS = -fsanitize=undefined,address,leak -lm
 # ======================
 
 SERVER_SRC = src/server/server.c
+PARSER_SRC = src/server/parser.c
 
 # ======================
 #  Tests
@@ -40,7 +41,7 @@ SERVER_TEST = tests/test.c
 
 all: run_server
 
-run_server: $(SERVER_SRC) $(SERVER_TEST)
+run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 # ======================

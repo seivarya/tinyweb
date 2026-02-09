@@ -4,21 +4,32 @@
 #include <nodes/qnode.h>
 #include <structs/queue.h>
 
-/* info: private methods */
+/* info: private methods (rvlib-style validation) */
 
-static inline int _validate_queue(queue *q) {
+static inline int _validate_queue_ptr(queue *q) {
 	if (q == NULL) {
-		fprintf(stderr, "=== error: _validate_queue(): queue doesn't exist or it has been destroyed ===\n");
+		fprintf(stderr, "Error: %s: Queue pointer is NULL.\n", __func__);
 		return 0;
 	}
 	return 1;
 }
 
+static inline void _validate_qnode_construction(queue *q, qnode *node) {
+	if (!node) {
+		/* if node allocation failed, clean up the queue and abort */
+		queue_destruct(q);
+		exit(3);
+	}
+}
+
 static inline int _validate_qindex(queue *q, size_t index) {
-	if (!q || index >= q->length) {
-		fprintf(stderr,
-	  "=== error: _validate_qindex(): index [%zu] out of bounds <length: %zu> ===\n",
-	  index, q->length);
+	if (q == NULL) {
+		fprintf(stderr, "Error: %s: Queue pointer is NULL for index validation.\n", __func__);
+		return 0;
+	}
+	if (index >= q->length) {
+		fprintf(stderr, "Error: %s: Index %zu out of bounds for queue length %zu.\n",
+		  __func__, index, q->length);
 		return 0;
 	}
 	return 1;
@@ -40,7 +51,7 @@ queue* queue_construct(void) {
 }
 
 void queue_destruct(queue *q) {
-	if (!_validate_queue(q))
+	if (!_validate_queue_ptr(q))
 		return;
 
 	/* destroy all nodes */
@@ -55,10 +66,11 @@ void queue_destruct(queue *q) {
 }
 
 void enqueue(queue *q, void *data, size_t size) {
-	if (!_validate_queue(q))
+	if (!_validate_queue_ptr(q))
 		return;
 
 	qnode *new_node = qnode_construct(data, size);
+	_validate_qnode_construction(q, new_node);
 
 	/* attach node to tail */
 	if (q->length == 0) {
@@ -73,8 +85,12 @@ void enqueue(queue *q, void *data, size_t size) {
 }
 
 void dequeue(queue *q) {
-	if (!_validate_queue(q) || q->length == 0)
+	if (!_validate_queue_ptr(q))
 		return;
+	if (q->length == 0) {
+		fprintf(stderr, "Error: %s: Attempted to dequeue from an empty queue.\n", __func__);
+		return;
+	}
 
 	qnode *target = q->head;
 
@@ -90,22 +106,30 @@ void dequeue(queue *q) {
 }
 
 int is_qempty(queue *q) {
-	if (!_validate_queue(q))
+	if (!_validate_queue_ptr(q))
 		return 1;
 
 	return (q->length == 0);
 }
 
 void* get_front(queue *q) {
-	if (!_validate_queue(q) || q->length == 0)
+	if (!_validate_queue_ptr(q))
 		return NULL;
+	if (q->length == 0) {
+		fprintf(stderr, "Error: %s: Attempted to get front from an empty queue.\n", __func__);
+		return NULL;
+	}
 
 	return q->head->data;
 }
 
 void* get_rear(queue *q) {
-	if (!_validate_queue(q) || q->length == 0)
+	if (!_validate_queue_ptr(q))
 		return NULL;
+	if (q->length == 0) {
+		fprintf(stderr, "Error: %s: Attempted to get rear from an empty queue.\n", __func__);
+		return NULL;
+	}
 
 	return q->tail->data;
 } /* queue_c */

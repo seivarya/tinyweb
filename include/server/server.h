@@ -15,7 +15,7 @@ typedef struct server {
 	struct sockaddr_in address;
 } server;
 
-server server_construct(
+server* server_construct(
 	short unsigned int domain,
 	int service,
 	int protocol,
