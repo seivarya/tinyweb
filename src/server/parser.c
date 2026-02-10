@@ -90,19 +90,22 @@ void extract_header(request *req, char *headers) {
 	while(header) {
 		char *key = strtok(header, ":");
 		char *value = strtok(NULL, "\0");
-		printf("key: %s\nvalue: %s\n", key, value);
-		dict_insert(req->headers, key, value);
+		printf("++=========================++\n");
+		printf("(key, value): (%s, %s)\n", key, value);
 
-		dequeue(q);
+		dict_insert(req->headers, key, value);
+		dequeue(q); // inserting key, value in dict and dequening that <pair>
+
 		node = (qnode *)get_front(q);
 
 		if (node) {
 			header = (char *)node->data;
 		} else {
 			header = NULL;
+			break;
 		}
 	}
-
+	printf("++=========================++\n");
 }
 
 void request_destruct(request *req) {
