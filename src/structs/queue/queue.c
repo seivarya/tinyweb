@@ -120,7 +120,7 @@ void* get_front(queue *q) {
 		return NULL;
 	}
 
-	return q->head->data;
+	return q->head;
 }
 
 void* get_rear(queue *q) {
@@ -131,5 +131,5 @@ void* get_rear(queue *q) {
 		return NULL;
 	}
 
-	return q->tail->data;
+	return q->tail;
 } /* queue_c */

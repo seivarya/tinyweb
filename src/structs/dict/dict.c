@@ -5,10 +5,9 @@
 #include <structs/dict.h>
 #include <nodes/entry.h>
 
-/* info: private methods (rvlib-style validation) */
 
-static inline int _validate_dict_ptr(dict *d) {
-	if (d == NULL) {
+static inline int _validate_dict_ptr(dict *dictionary) {
+	if (dictionary == NULL) {
 		fprintf(stderr, "Error: %s: Dictionary pointer is NULL.\n", __func__);
 		return 0;
 	}
@@ -30,29 +29,27 @@ static inline void _validate_entry_construction(entry *node) {
 	}
 }
 
-/* info: public methods */
-
 dict* dict_construct(void) {
-	dict* dict = malloc(sizeof(struct dict));
-	if (!dict) {
+	dict* dictionary = malloc(sizeof(struct dict));
+	if (!dictionary) {
 		fprintf(stderr, "=== error: dict_construct(): malloc failed ===\n");
 		return NULL;
 	}
 
 	for (size_t i = 0; i < HASH_SIZE; i++) {
-		dict->entries[i] = NULL;
+		dictionary->entries[i] = NULL;
 	}
-	return dict;
+	return dictionary;
 }
 
-char* dict_search(dict* dict, const char* key) {
-	if (!_validate_dict_ptr(dict) || !_validate_key(key))
+char* dict_search(dict* dictionary, const char* key) {
+	if (!_validate_dict_ptr(dictionary) || !_validate_key(key))
 		return NULL;
 
 	unsigned int index = hash(key);
-	entry* node = dict->entries[index];
+	entry* node = dictionary->entries[index];
 
-	while(node != NULL) {
+	while (node != NULL) {
 		if (strcmp(node->key, key) == 0) {
 			return node->value;
 		}
@@ -63,8 +60,8 @@ char* dict_search(dict* dict, const char* key) {
 	return NULL;
 }
 
-void dict_insert(dict* dict, const char* key, const char* value) {
-	if (!_validate_dict_ptr(dict) || !_validate_key(key)) {
+void dict_insert(dict* dictionary, const char* key, const char* value) {
+	if (!_validate_dict_ptr(dictionary) || !_validate_key(key)) {
 		return;
 	}
 	if (value == NULL) {
@@ -77,22 +74,22 @@ void dict_insert(dict* dict, const char* key, const char* value) {
 	_validate_entry_construction(node);
 
 	/* insert at head of bucket chain */
-	node->next = dict->entries[index];
-	dict->entries[index] = node;
+	node->next = dictionary->entries[index];
+	dictionary->entries[index] = node;
 }
 
-void dict_remove(dict* dict, const char* key) {
-	if (!_validate_dict_ptr(dict) || !_validate_key(key))
+void dict_remove(dict* dictionary, const char* key) {
+	if (!_validate_dict_ptr(dictionary) || !_validate_key(key))
 		return;
 
 	unsigned int index = hash(key);
-	entry* node = dict->entries[index];
+	entry* node = dictionary->entries[index];
 	entry* prev = NULL;
 
-	while(node != NULL) {
+	while (node != NULL) {
 		if (strcmp(node->key, key) == 0) {
 			if (prev == NULL) {
-				dict->entries[index] = node->next;
+				dictionary->entries[index] = node->next;
 			} else {
 				prev->next = node->next;
 			}
@@ -115,5 +112,5 @@ unsigned int hash(const char *key) {
 	while ((c = (unsigned char)*key++)) {
 		h = ((h << 5) + h) + c;  /* h = h*33 + c */
 	}
-	return h % HASH_SIZE;
+	return (unsigned int)(h % HASH_SIZE);
 }

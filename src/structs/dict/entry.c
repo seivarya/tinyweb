@@ -28,8 +28,8 @@ entry* entry_construct(const char* key, const char* value) {
 	return node;
 }
 
-void entry_destruct(entry *entry) {
-	free(entry->key);
-	free(entry->value);
-	free(entry);
+void entry_destruct(entry *node) {
+	free(node->key);
+	free(node->value);
+	free(node);
 }
