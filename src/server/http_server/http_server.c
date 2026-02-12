@@ -140,7 +140,7 @@ void launch(struct http_server *http_server) {
 	char buffer[30000];
 	int new_socket;
 
-	struct thread_pool *thread_pool = thread_pool_constructor(5); //  FIX: thead default for now
+	// struct thread_pool *thread_pool = thread_pool_constructor(5); //  FIX: thead default for now
 /* 	test_func(&thread_pool); */
 
 	struct sockaddr *sock_addr = (struct sockaddr *)&http_server->server.address;
