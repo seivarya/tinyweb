@@ -29,6 +29,7 @@ LDFLAGS = -fsanitize=undefined,address,leak -lm
 SERVER_SRC = src/server/server.c
 PARSER_SRC = src/server/parser.c
 
+ROUTE_SRC = src/server/route.c
 HTTP_SRC = src/server/http.c
 
 DICT_SRC = src/structs/dict/dict.c
@@ -36,6 +37,8 @@ ENTRY_SRC = src/structs/dict/entry.c
 
 QUEUE_SRC = src/structs/queue/queue.c
 QNODE_SRC = src/structs/queue/qnode.c
+
+
 
 # ======================
 #  Tests
@@ -49,7 +52,7 @@ SERVER_TEST = tests/test.c
 
 all: run_server
 
-run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QNODE_SRC) $(HTTP_SRC)
+run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QNODE_SRC) $(HTTP_SRC) $(ROUTE_SRC)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 # ======================

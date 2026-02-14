@@ -13,7 +13,7 @@ typedef struct http {
 
 http* http_construct(void);
 
-void register_routes(server *srv, void (*func_route)(server *srv, request *req), char *uri, int methods, ...); // for multiple routes within the site
+void register_route(http *srv, char* (*route_func)(http *srv, request *req), char *uri, int count_methods, ...); // for multiple routes within the site
 char* fetch_page(void);
 void launch(server *srv);
 

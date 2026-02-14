@@ -1,16 +1,21 @@
+
+#include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 #include <netinet/in.h>
+#include <pthread.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
 
-#include <server/server.h>
 #include <server/http.h>
 #include <server/parser.h>
+#include <server/route.h>
+#include <server/server.h>
+
 #include <structs/dict.h>
 
 
@@ -115,8 +120,8 @@ void launch(server *http_server) {
 
 	while(1) {
 
-		printf("=== ON PORT: %d ===\n", http_server->port);
-		printf("=== URL: http://127.0.0.1:%d ===\n", http_server->port);
+		printf("=== Listening on port %d ===\n", http_server->port);
+		printf("=== redirect url: http://127.0.0.1:%d ===\n", http_server->port);
 
 		new_socket = accept(http_server->socket, sock_addr, (socklen_t *)&addrlen);
 
@@ -134,4 +139,21 @@ void launch(server *http_server) {
 
 char* fetch_page(void) {
 	return "smth";
+}
+
+void register_route(http *srv, char* (*route_func)(http *srv, request *req), char *uri, int count_methods, ...) {
+
+	if (!srv) return;
+
+	route *rte = route_construct();
+
+	va_list methods;
+	va_start(methods, count_methods);
+	for (int i = 0; i < count_methods; i++) {
+		rte->methods[i] = va_arg(methods, int);
+	}
+	strcpy(rte->uri, uri);
+	rte->route_func = route_func;
+	va_end(methods);
+
 }
