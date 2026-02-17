@@ -8,37 +8,39 @@
 #include <structs/queue.h>
 #include <server/server.h>
 
-typedef void (*thread_func)(void *vargp); // alias <threadfunc>
+typedef void (*thread_func_t)(void *vargp);
 
-typedef struct tpool  {
-	unsigned short int status;
-	unsigned int thread_counts;
-	unsigned int work_counts;
-	pthread_mutex_t mutex;
-	pthread_cond_t signal;
-	queue *job_queue;
-	bool stop;
-} tpool_t;
+struct tpool {
+	queue 			*work_queue;
+	pthread_mutex_t		work_mutex;
+	pthread_cond_t		work_cond;
+	pthread_cond_t 		working_cond;
+	size_t 			working_cnt;
+	size_t 			thread_cnt;
+	bool 			stop;
+};
+
+typedef struct tpool tpool_t;
+
+struct tpool_work {
+	thread_func_t 		func;
+	void 			*vargp;
+	struct tpool_work 	*next;
+};
+
+typedef struct tpool_work tpool_work_t;
 
 
-typedef struct tpool_work {
-	thread_func func;
-	void *vargp;
-	struct tpool_work *next;
-} tpool_work_t;
+tpool_t *tpool_construct(size_t num);
+void tpool_destruct(tpool_t *tm);
 
-tpool_t* tpool_construct(unsigned int thread_count);
-void tpool_destruct(tpool_t *tpool);
-
-bool tpool_add_job(tpool_t *tpool, thread_func func, void *vargp);
-void tpool_wait(tpool_t *tpool);
-
-tpool_work_t* tpool_work_construct(thread_func func, void *vargp);
+tpool_work_t *tpool_work_construct(thread_func_t func, void *vargp);
 void tpool_work_destruct(tpool_work_t *work);
-tpool_work_t* tpool_work_get(tpool_t *tpool);
 
+tpool_work_t *tpool_work_get(tpool_t *tm);
 void* tpool_worker(void *vargp);
 
+bool tpool_add_work(tpool_t *tm, thread_func_t func, void *vargp); // add work to queue
+void tpool_wait(tpool_t *tm); // blocks until all work has been completed
+
 #endif
-
-
