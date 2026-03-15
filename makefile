@@ -36,7 +36,7 @@ DICT_SRC = src/structs/dict/dict.c
 ENTRY_SRC = src/structs/dict/entry.c
 
 QUEUE_SRC = src/structs/queue/queue.c
-QNODE_SRC = src/structs/queue/qnode.c
+QUEUE_NODE_SRC = src/structs/queue/queue_node.c
 
 
 
@@ -52,7 +52,7 @@ SERVER_TEST = tests/test.c
 
 all: run_server
 
-run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QNODE_SRC) $(HTTP_SRC) $(ROUTE_SRC)
+run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QUEUE_NODE_SRC) $(HTTP_SRC) $(ROUTE_SRC)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 # ======================
