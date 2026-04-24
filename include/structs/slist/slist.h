@@ -1,13 +1,12 @@
 /* slist.h: singly linked list header file */
 
+#include <structs/slist/slist_node.h>
+
 #ifndef SLIST_H
 #define SLIST_H
-
-#include <nodes/slist_node.h>
-
 typedef struct slist {
-	slist_node *head;
-	size_t length;
+        slist_node *head;
+        size_t length;
 } slist;
 
 slist *slist_construct(void);

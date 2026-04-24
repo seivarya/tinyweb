@@ -1,98 +1,68 @@
 import requests
+import sys
 
 PORT = 1028
 URL = f"http://127.0.0.1:{PORT}"
 
+
+def execute_request(method, url, **kwargs):
+    print(f"==+ {method.upper()} +==")
+    try:
+        r = requests.request(method, url, timeout=5, **kwargs)
+        print(f"==+ Status: {r.status_code} +==")
+        print(f"==+ Headers: {dict(r.headers)} +==")
+        print(f"==+ Body: {r.text} +==")
+    except requests.ConnectionError:
+        print(f"==+ Error: Connection refused by {url} +==")
+    except requests.Timeout:
+        print(f"==+ Error: Request to {url} timed out +==")
+    except Exception as e:
+        print(f"==+ Error: {str(e)} +==")
+
+
 def main():
     while True:
         try:
-            status = int(input(
-                "Enter 1 for get()\n"
-                    "2 for post()\n"
-                    "3 for put()\n"
-                    "4 for delete()\n"
-                    "5 for patch()\n"
-                    "6 for head()\n"
-                    "7 for options()\n"
-                    "8 to quit\n"
+            status = int(
+                input(
+                    "Enter 1 for get()\n"
+                    "      2 for post()\n"
+                    "      3 for put()\n"
+                    "      4 for delete()\n"
+                    "      5 for patch()\n"
+                    "      6 for head()\n"
+                    "      7 for options()\n"
+                    "      8 to quit\n"
                     "> "
-            ))
+                )
+            )
 
             match status:
                 case 1:
-                    get()
+                    execute_request("get", URL)
                 case 2:
-                    post()
+                    execute_request("post", URL, json={"msg": "hello from POST"})
                 case 3:
-                    put()
+                    execute_request("put", URL, json={"msg": "hello from PUT"})
                 case 4:
-                    delete()
+                    execute_request("delete", URL)
                 case 5:
-                    patch()
+                    execute_request("patch", URL, json={"msg": "hello from PATCH"})
                 case 6:
-                    head()
+                    execute_request("head", URL)
                 case 7:
-                    options()
+                    execute_request("options", URL)
                 case 8:
                     print("Exiting.")
-                    break
+                    sys.exit(0)
                 case _:
                     print("Invalid input.")
 
         except ValueError:
             print("Please enter a valid integer.")
-
-def get():
-    print("==+ GET +==")
-    r = requests.get(URL)
-    print(f"==+ Status: {r.status_code} +==")
-    print(f"==+ Headers: {r.headers} +==")
-    print(f"==+ Body: {r.text} +==")
-
-def post():
-    print("==+ POST +==")
-    payload = {"msg": "hello from POST"}
-    r = requests.post(URL, json=payload)
-    print(f"==+ Status: {r.status_code} +==")
-    print(f"==+ Headers: {r.headers} +==")
-    print(f"==+ Body: {r.text} +==")
-
-def put():
-    print("==+ PUT +==")
-    payload = {"msg": "hello from PUT"}
-    r = requests.put(URL, json=payload)
-    print(f"==+ Status: {r.status_code} +==")
-    print(f"==+ Headers: {r.headers} +==")
-    print(f"==+ Body: {r.text} +==")
-
-def delete():
-    print("==+ DELETE +==")
-    r = requests.delete(URL)
-    print(f"==+ Status: {r.status_code} +==")
-    print(f"==+ Headers: {r.headers} +==")
-    print(f"==+ Body: {r.text} +==")
-
-def patch():
-    print("==+ PATCH +==")
-    payload = {"msg": "hello from PATCH"}
-    r = requests.patch(URL, json=payload)
-    print(f"==+ Status: {r.status_code} +==")
-    print(f"==+ Headers: {r.headers} +==")
-    print(f"==+ Body: {r.text} +==")
-
-def head():
-    print("==+ HEAD +==")
-    r = requests.head(URL)
-    print(f"==+ Status: {r.status_code} +==")
-    print(f"==+ Headers: {r.headers} +==")
-    print(f"==+ Body: {r.text} +==")  # r.text usually empty for HEAD
-
-def options():
-    print("==+ OPTIONS +==")
-    r = requests.options(URL)
-    print(f"==+ Status: {r.status_code} +==")
-    print(f"==+ Headers: {r.headers} +==")
-    print(f"==+ Body: {r.text} +==")
+        except KeyboardInterrupt:
+            print("\nExiting.")
+            sys.exit(0)
 
 
 if __name__ == "__main__":

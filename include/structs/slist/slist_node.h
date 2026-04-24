@@ -1,21 +1,20 @@
 /* slist_node.h: singly linked list node interface */
 
-#ifndef SLIST_NODE_H
-#define SLIST_NODE_H
-
 #include <stdlib.h>
 
+#ifndef SLIST_NODE_H
+#define SLIST_NODE_H
 typedef struct td td;
 
 struct td {
-	char *name;
+        char *name;
 };
 
 typedef struct slist_node slist_node;
 
 struct slist_node {
-	void *data;
-	slist_node *next;
+        void *data;
+        slist_node *next;
 };
 
 slist_node *slist_node_construct(void *data, size_t size);
