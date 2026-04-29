@@ -48,7 +48,7 @@ dict *dict_construct(void) {
         return dictionary;
 }
 
-char *dict_search(dict *dictionary, const char *key) {
+void *dict_search(dict *dictionary, const char *key) {
         if (!_validate_dict_ptr(dictionary) || !_validate_key(key))
                 return NULL;
 
@@ -67,7 +67,7 @@ char *dict_search(dict *dictionary, const char *key) {
         return NULL;
 }
 
-void dict_insert(dict *dictionary, const char *key, const char *value) {
+void dict_insert(dict *dictionary, const char *key, const void *value, size_t size) {
         if (!_validate_dict_ptr(dictionary) || !_validate_key(key)) {
                 return;
         }
@@ -79,7 +79,7 @@ void dict_insert(dict *dictionary, const char *key, const char *value) {
         }
 
         unsigned int index = hash(key);
-        entry *node = entry_construct(key, value);
+        entry *node = entry_construct(key, value, size);
         _validate_entry_construction(node);
 
         /* insert at head of bucket chain */

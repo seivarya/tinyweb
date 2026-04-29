@@ -10,6 +10,9 @@
 
 request *request_construct(char *req_str) {
         request *req = malloc(sizeof(request));
+        req->body = NULL;
+        req->req_line = NULL;
+        req->headers = NULL;
 
         if (!req_str) {
                 fprintf(stderr, "error: request string not found!\n");
@@ -61,11 +64,11 @@ void extract_reqline(request *req, char *reqline) {
 
         req->req_line = dict_construct();
 
-        dict_insert(req->req_line, "method", method);
-        dict_insert(req->req_line, "uri", uri);
-        dict_insert(req->req_line, "version", version);
+        dict_insert(req->req_line, "method", method, strlen(method) + 1);
+        dict_insert(req->req_line, "uri", uri, strlen(uri) + 1);
+        dict_insert(req->req_line, "version", version, strlen(version) + 1);
 
-        char *method_string = dict_search(req->req_line, "method");
+        char *method_string = (char *)dict_search(req->req_line, "method");
         fprintf(stderr, "debug: fetched method_string: %s\n", method_string);
         
         free(fields);
@@ -98,7 +101,7 @@ void extract_header(request *req, char *headers) {
                 char *value = strtok(NULL, "\0");
                 fprintf(stderr, "debug: (key, value): (%s, %s)\n", key, value);
 
-                dict_insert(req->headers, key, value);
+                dict_insert(req->headers, key, value, strlen(value) + 1);
                 dequeue(q); /* inserting key, value in dict and dequeuing that pair */
 
                 node = (queue_node *)get_front(q);

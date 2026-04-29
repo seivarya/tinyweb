@@ -8,17 +8,19 @@
 #include <structs/dict/dict.h>
 
 typedef struct http {
-        server *srv;
-        dict *routes;
-        void (*launch)(struct http *http_server);
+	server *srv;
+	dict *routes;
+	void (*launch)(struct http *http_server);
 } http;
 
-http *http_construct(void);
+http* http_construct(void);
 
 void register_route(http *srv, char *(*route_func)(http *srv, request *req),
-                    char *uri, int count_methods,
-                    ...); /* for multiple routes within the site */
-char *fetch_page(void);
+		char *uri, int count_methods,
+		...); /* for multiple routes within the site */
+char* fetch_page(void);
 void launch(struct http *http_server);
+void handler(void *arg);
+void serve_fallback(int client_sock, const char *uri);
 
 #endif /* http.h */

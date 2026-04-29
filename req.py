@@ -9,33 +9,33 @@ def execute_request(method, url, **kwargs):
     print(f"==+ {method.upper()} +==")
     try:
         r = requests.request(method, url, timeout=5, **kwargs)
-        print(f"==+ Status: {r.status_code} +==")
-        print(f"==+ Headers: {dict(r.headers)} +==")
-        print(f"==+ Body: {r.text} +==")
+        print(f"==+ status: {r.status_code} +==")
+        print(f"==+ headers: {dict(r.headers)} +==")
+        print(f"==+ body: {r.text} +==")
     except requests.ConnectionError:
-        print(f"==+ Error: Connection refused by {url} +==")
+        print(f"==+ error: Connection refused by {url} +==")
     except requests.Timeout:
-        print(f"==+ Error: Request to {url} timed out +==")
+        print(f"==+ error: Request to {url} timed out +==")
     except Exception as e:
-        print(f"==+ Error: {str(e)} +==")
+        print(f"==+ error: {str(e)} +==")
 
 
 def main():
     while True:
         try:
             status = int(
-                input(
-                    "Enter 1 for get()\n"
-                    "      2 for post()\n"
-                    "      3 for put()\n"
-                    "      4 for delete()\n"
-                    "      5 for patch()\n"
-                    "      6 for head()\n"
-                    "      7 for options()\n"
-                    "      8 to quit\n"
-                    "> "
-                )
-            )
+                    input(
+                        "enter 1 for get()\n"
+                        "      2 for post()\n"
+                        "      3 for put()\n"
+                        "      4 for delete()\n"
+                        "      5 for patch()\n"
+                        "      6 for head()\n"
+                        "      7 for options()\n"
+                        "      8 to quit\n"
+                        "> "
+                        )
+                    )
 
             match status:
                 case 1:

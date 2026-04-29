@@ -3,10 +3,12 @@
 #ifndef ROUTE_H
 #define ROUTE_H
 
+#define METHOD_COUNT 9
+
 #include <server/http.h>
 
 typedef struct route {
-        int methods[9];
+        int methods[METHOD_COUNT];
         char *uri;
         char *(*route_func)(http *srv, request *req);
 } route;

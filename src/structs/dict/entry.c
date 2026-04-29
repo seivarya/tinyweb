@@ -6,7 +6,7 @@
 
 #include <structs/dict/entry.h>
 
-entry *entry_construct(const char *key, const char *value) {
+entry *entry_construct(const char *key, const void *value, size_t size) {
         entry *node = malloc(sizeof(entry));
         if (!node) {
                 fprintf(stderr,
@@ -25,8 +25,14 @@ entry *entry_construct(const char *key, const char *value) {
         node->key = malloc(strlen(key) + 1);
         strcpy(node->key, key);
 
-        node->value = malloc(strlen(value) + 1);
-        strcpy(node->value, value);
+        node->value = malloc(size);
+        if (!node->value) {
+                fprintf(stderr, "error: [%s]: malloc failed for node->value\n", __func__);
+                free(node->key);
+                free(node);
+                return NULL;
+        }
+        memcpy(node->value, value, size);
 
         node->next = NULL;
 
