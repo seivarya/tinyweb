@@ -1,3 +1,5 @@
+/* test.c */
+
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -7,5 +9,6 @@
 
 int main(void) {
         http *srvr = http_construct();
-        launch(srvr->srv);
+        srvr->launch(srvr);
+        return 0;
 }

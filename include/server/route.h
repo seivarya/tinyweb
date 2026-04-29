@@ -1,7 +1,10 @@
-#include <server/http.h>
+/* route.h */
 
 #ifndef ROUTE_H
 #define ROUTE_H
+
+#include <server/http.h>
+
 typedef struct route {
         int methods[9];
         char *uri;
@@ -10,4 +13,4 @@ typedef struct route {
 
 route *route_construct(void);
 
-#endif
+#endif /* route.h */

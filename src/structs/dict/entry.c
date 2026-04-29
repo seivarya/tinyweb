@@ -1,3 +1,5 @@
+/* entry.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,16 +10,15 @@ entry *entry_construct(const char *key, const char *value) {
         entry *node = malloc(sizeof(entry));
         if (!node) {
                 fprintf(stderr,
-                        "[entry_construct]: malloc failed for "
-                        "sizeof(stnode)\n[%s]: %s\n",
-                        __func__, __FILE__);
-                free(node);
+                        "error: [%s]: malloc failed for sizeof(entry)\n",
+                        __func__);
                 return NULL;
         }
 
         if (!key || !value) {
-                fprintf(stderr, "[entry_construct]: missing?\n[%s]: %s\n",
-                        __func__, __FILE__);
+                fprintf(stderr, "error: [%s]: missing key or value\n",
+                        __func__);
+                free(node);
                 return NULL;
         }
 
@@ -29,10 +30,13 @@ entry *entry_construct(const char *key, const char *value) {
 
         node->next = NULL;
 
+        fprintf(stderr, "debug: [%s]: entry constructed for key '%s'\n", __func__, key);
         return node;
 }
 
 void entry_destruct(entry *node) {
+        if (!node) return;
+        fprintf(stderr, "debug: [%s]: entry destructed for key '%s'\n", __func__, node->key);
         free(node->key);
         free(node->value);
         free(node);

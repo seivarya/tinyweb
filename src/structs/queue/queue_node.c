@@ -1,3 +1,5 @@
+/* queue_node.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,18 +10,16 @@ queue_node *queue_node_construct(void *data, size_t size) {
         queue_node *node = malloc(sizeof(queue_node));
         if (!node) {
                 fprintf(stderr,
-                        "[queue_node_construct]: malloc failed for "
-                        "sizeof(queue_node)\n[%s]: %s\n",
-                        __func__, __FILE__);
+                        "error: [%s]: malloc failed for sizeof(queue_node)\n",
+                        __func__);
                 return NULL;
         }
 
         node->data = malloc(size);
         if (!node->data) {
                 fprintf(stderr,
-                        "[queue_node_construct]: malloc failed for "
-                        "node->data\n[%s]: %s\n",
-                        __func__, __FILE__);
+                        "error: [%s]: malloc failed for node->data\n",
+                        __func__);
                 free(node);
                 return NULL;
         }
@@ -27,6 +27,7 @@ queue_node *queue_node_construct(void *data, size_t size) {
         memcpy(node->data, data, size);
         node->next = NULL;
 
+        fprintf(stderr, "debug: [%s]: queue node constructed\n", __func__);
         return node;
 }
 
@@ -40,4 +41,5 @@ void queue_node_destruct(queue_node *node) {
         }
 
         free(node);
-} /* queue_node_c */
+        fprintf(stderr, "debug: [%s]: queue node destructed\n", __func__);
+}

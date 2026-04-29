@@ -1,3 +1,5 @@
+/* server.c */
+
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +14,10 @@ server *server_construct(short unsigned int domain, int service, int protocol,
                          uint32_t interface) {
 
         server *srv = malloc(sizeof(server));
+        if (!srv) {
+                fprintf(stderr, "error: [%s]: malloc failed\n", __func__);
+                exit(1);
+        }
 
         srv->domain = domain;
         srv->service = service;
@@ -25,7 +31,7 @@ server *server_construct(short unsigned int domain, int service, int protocol,
         srv->socket = socket(domain, service, protocol);
 
         if (srv->socket < 0) {
-                perror("==+ ERROR: Failed to connect socket +==\n");
+                perror("error: failed to connect socket\n");
                 exit(1);
         }
 
@@ -33,19 +39,20 @@ server *server_construct(short unsigned int domain, int service, int protocol,
         int status = setsockopt(srv->socket, SOL_SOCKET, SO_REUSEADDR, &opt,
                                 sizeof(opt));
         if (status) {
-                printf("TIME_WAIT bypassed\n");
+                fprintf(stderr, "debug: time_wait bypassed\n");
         }
 
         if ((bind(srv->socket, (struct sockaddr *)&srv->address,
                   sizeof(srv->address))) < 0) {
-                perror("=== failed to bind socket ===\n");
+                perror("error: failed to bind socket\n");
                 exit(9);
         }
 
         if (listen(srv->socket, srv->backlog) < 0) {
-                perror("=== failed to listen === \n");
+                perror("error: failed to listen\n");
                 exit(1);
         }
 
+        fprintf(stderr, "debug: [%s]: server constructed on port %d\n", __func__, port);
         return srv;
 }

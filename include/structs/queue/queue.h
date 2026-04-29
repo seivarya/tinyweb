@@ -1,7 +1,10 @@
-#include <structs/queue/queue_node.h>
+/* queue.h */
 
 #ifndef QUEUE_H
 #define QUEUE_H
+
+#include <structs/queue/queue_node.h>
+
 typedef struct queue {
         queue_node *head;
         queue_node *tail;
@@ -18,4 +21,4 @@ int is_qempty(queue *q);
 void *get_front(queue *q);
 void *get_rear(queue *q);
 
-#endif /* queue_h */
+#endif /* queue.h */

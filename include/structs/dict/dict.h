@@ -1,8 +1,12 @@
-#include <structs/dict/entry.h>
+/* dict.h */
 
 #ifndef DICT_H
 #define DICT_H
+
+#include <structs/dict/entry.h>
+
 #define HASH_SIZE 69
+
 typedef struct dict {
         entry *entries[HASH_SIZE];
 } dict;
@@ -14,4 +18,5 @@ void dict_insert(dict *dictionary, const char *key, const char *value);
 void dict_remove(dict *dictionary, const char *key);
 
 unsigned int hash(const char *key);
-#endif
+
+#endif /* dict.h */

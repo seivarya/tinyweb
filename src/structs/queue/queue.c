@@ -1,14 +1,16 @@
+/* queue.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <structs/queue/queue.h>
 #include <structs/queue/queue_node.h>
 
-/* info: private methods (rvlib-style validation) */
+/* private methods */
 
 static inline int _validate_queue_ptr(queue *q) {
         if (q == NULL) {
-                fprintf(stderr, "Error: %s: Queue pointer is NULL.\n",
+                fprintf(stderr, "error: [%s]: queue pointer is null.\n",
                         __func__);
                 return 0;
         }
@@ -19,30 +21,13 @@ static inline void _validate_queue_node_construction(queue *q,
                                                      queue_node *node) {
         if (!node) {
                 /* if node allocation failed, clean up the queue and abort */
+                fprintf(stderr, "error: [%s]: queue node construction failed.\n", __func__);
                 queue_destruct(q);
                 exit(3);
         }
 }
 
-static inline int _validate_qindex(queue *q, size_t index) {
-        if (q == NULL) {
-                fprintf(
-                    stderr,
-                    "Error: %s: Queue pointer is NULL for index validation.\n",
-                    __func__);
-                return 0;
-        }
-        if (index >= q->length) {
-                fprintf(stderr,
-                        "Error: %s: Index %zu out of bounds for queue length "
-                        "%zu.\n",
-                        __func__, index, q->length);
-                return 0;
-        }
-        return 1;
-}
-
-/* info: public methods */
+/* public methods */
 
 queue *queue_construct(void) {
         queue *q = malloc(sizeof(queue));
@@ -50,10 +35,11 @@ queue *queue_construct(void) {
                 q->head = NULL;
                 q->tail = NULL;
                 q->length = 0;
+                fprintf(stderr, "debug: [%s]: queue constructed\n", __func__);
                 return q;
         }
 
-        fprintf(stderr, "=== error: queue_construct(): malloc failed ===\n");
+        fprintf(stderr, "error: [%s]: malloc failed\n", __func__);
         return NULL;
 }
 
@@ -70,6 +56,7 @@ void queue_destruct(queue *q) {
         }
 
         free(q);
+        fprintf(stderr, "debug: [%s]: queue destructed\n", __func__);
 }
 
 void enqueue(queue *q, void *data, size_t size) {
@@ -97,7 +84,7 @@ void dequeue(queue *q) {
         if (q->length == 0) {
                 fprintf(
                     stderr,
-                    "Error: %s: Attempted to dequeue from an empty queue.\n",
+                    "error: [%s]: attempted to dequeue from an empty queue.\n",
                     __func__);
                 return;
         }
@@ -128,7 +115,7 @@ void *get_front(queue *q) {
         if (q->length == 0) {
                 fprintf(
                     stderr,
-                    "Error: %s: Attempted to get front from an empty queue.\n",
+                    "error: [%s]: attempted to get front from an empty queue.\n",
                     __func__);
                 return NULL;
         }
@@ -142,10 +129,10 @@ void *get_rear(queue *q) {
         if (q->length == 0) {
                 fprintf(
                     stderr,
-                    "Error: %s: Attempted to get rear from an empty queue.\n",
+                    "error: [%s]: attempted to get rear from an empty queue.\n",
                     __func__);
                 return NULL;
         }
 
         return q->tail;
-} /* queue_c */
+}

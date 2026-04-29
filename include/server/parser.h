@@ -1,7 +1,10 @@
-#include <structs/dict/dict.h>
+/* parser.h */
 
 #ifndef PARSER_H
 #define PARSER_H
+
+#include <structs/dict/dict.h>
+
 enum methods {
         GET,
         POST,
@@ -27,4 +30,4 @@ void request_destruct(request *req);
 void extract_reqline(request *req, char *reqline);
 void extract_header(request *req, char *headers);
 
-#endif
+#endif /* parser.h */

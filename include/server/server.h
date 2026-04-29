@@ -1,12 +1,15 @@
-#include <netinet/in.h>
-#include <stdint.h>
+/* server.h */
 
 #ifndef SERVER_H
 #define SERVER_H
+
+#include <netinet/in.h>
+#include <stdint.h>
+
 typedef struct server {
         short unsigned int domain;
-        int service;  // socket type
-        int protocol; // 0, IPPROTO_TCP, IPPROTO_UDP
+        int service;  /* socket type */
+        int protocol; /* 0, ipproto_tcp, ipproto_udp */
         short unsigned int port;
         int backlog;
         uint32_t interface;

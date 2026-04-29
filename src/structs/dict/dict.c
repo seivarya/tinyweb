@@ -1,3 +1,5 @@
+/* dict.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +9,7 @@
 
 static inline int _validate_dict_ptr(dict *dictionary) {
         if (dictionary == NULL) {
-                fprintf(stderr, "Error: %s: Dictionary pointer is NULL.\n",
+                fprintf(stderr, "error: [%s]: dictionary pointer is null.\n",
                         __func__);
                 return 0;
         }
@@ -16,7 +18,7 @@ static inline int _validate_dict_ptr(dict *dictionary) {
 
 static inline int _validate_key(const char *key) {
         if (key == NULL || *key == '\0') {
-                fprintf(stderr, "Error: %s: Key is NULL or empty.\n", __func__);
+                fprintf(stderr, "error: [%s]: key is null or empty.\n", __func__);
                 return 0;
         }
         return 1;
@@ -25,8 +27,7 @@ static inline int _validate_key(const char *key) {
 static inline void _validate_entry_construction(entry *node) {
         if (!node) {
                 fprintf(stderr,
-                        "Error: %s: Failed to construct dictionary entry node, "
-                        "aborting.\n",
+                        "error: [%s]: failed to construct dictionary entry node, aborting.\n",
                         __func__);
                 exit(3);
         }
@@ -36,13 +37,14 @@ dict *dict_construct(void) {
         dict *dictionary = malloc(sizeof(struct dict));
         if (!dictionary) {
                 fprintf(stderr,
-                        "=== error: dict_construct(): malloc failed ===\n");
+                        "error: [%s]: malloc failed\n", __func__);
                 return NULL;
         }
 
         for (size_t i = 0; i < HASH_SIZE; i++) {
                 dictionary->entries[i] = NULL;
         }
+        fprintf(stderr, "debug: [%s]: dictionary constructed\n", __func__);
         return dictionary;
 }
 
@@ -60,7 +62,7 @@ char *dict_search(dict *dictionary, const char *key) {
                 node = node->next;
         }
 
-        fprintf(stderr, "Error: %s: Key '%s' not found in dictionary.\n",
+        fprintf(stderr, "error: [%s]: key '%s' not found in dictionary.\n",
                 __func__, key);
         return NULL;
 }
@@ -71,7 +73,7 @@ void dict_insert(dict *dictionary, const char *key, const char *value) {
         }
         if (value == NULL) {
                 fprintf(stderr,
-                        "Error: %s: Value pointer is NULL for key '%s'.\n",
+                        "error: [%s]: value pointer is null for key '%s'.\n",
                         __func__, key);
                 return;
         }
@@ -108,7 +110,7 @@ void dict_remove(dict *dictionary, const char *key) {
         }
 
         fprintf(stderr,
-                "Error: %s: Key '%s' not found in dictionary for removal.\n",
+                "error: [%s]: key '%s' not found in dictionary for removal.\n",
                 __func__, key);
 }
 

@@ -18,7 +18,7 @@ CFLAGS = -g3 -ggdb -O1 \
 	 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	 -fstack-protector-all -D_FORTIFY_SOURCE=2 -fPIC \
 	 -std=c11 -msse -mfpmath=sse \
-	 -Iinclude -Isrc/structures
+	 -Iinclude -Isrc/structures -Isrc/server
 
 LDFLAGS = -fsanitize=undefined,address,leak -lm
 
@@ -38,7 +38,7 @@ ENTRY_SRC = src/structs/dict/entry.c
 QUEUE_SRC = src/structs/queue/queue.c
 QUEUE_NODE_SRC = src/structs/queue/queue_node.c
 
-
+EXECUTOR_SRC = src/server/executor.c
 
 # ======================
 #  Tests
@@ -52,7 +52,7 @@ SERVER_TEST = tests/test.c
 
 all: run_server
 
-run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QUEUE_NODE_SRC) $(HTTP_SRC) $(ROUTE_SRC)
+run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QUEUE_NODE_SRC) $(HTTP_SRC) $(ROUTE_SRC) $(EXECUTOR_SRC)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 # ======================
