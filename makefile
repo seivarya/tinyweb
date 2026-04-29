@@ -1,6 +1,4 @@
-# ======================
-#  Compiler & Flags
-# ======================
+#  compiler & flags
 
 CC = gcc
 
@@ -22,9 +20,7 @@ CFLAGS = -g3 -ggdb -O1 \
 
 LDFLAGS = -fsanitize=undefined,address,leak -lm
 
-# ======================
-#  Source files
-# ======================
+#  source files
 
 SERVER_SRC = src/server/server.c
 PARSER_SRC = src/server/parser.c
@@ -40,27 +36,21 @@ QUEUE_NODE_SRC = src/structs/queue/queue_node.c
 
 EXECUTOR_SRC = src/server/executor.c
 
-# ======================
-#  Tests
-# ======================
+#  tests
 
 SERVER_TEST = tests/test.c
 
-# ======================
-#  Build rules
-# ======================
+#  build rules
 
-all: run_server
+all: server
 
-run_server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QUEUE_NODE_SRC) $(HTTP_SRC) $(ROUTE_SRC) $(EXECUTOR_SRC)
+server: $(SERVER_SRC) $(SERVER_TEST) $(PARSER_SRC) $(DICT_SRC) $(ENTRY_SRC) $(QUEUE_SRC) $(QUEUE_NODE_SRC) $(HTTP_SRC) $(ROUTE_SRC) $(EXECUTOR_SRC)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-# ======================
-#  Cleanup
-# ======================
+#  cleanup
 
 clean:
-	rm run_server 
+	rm server 
 	find . -name '*.o' -delete
 
 .PHONY: all clean

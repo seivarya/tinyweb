@@ -15,7 +15,7 @@ server *server_construct(short unsigned int domain, int service, int protocol,
 
         server *srv = malloc(sizeof(server));
         if (!srv) {
-                fprintf(stderr, "error: [%s]: malloc failed\n", __func__);
+                fprintf(stdout, "[%s]: error malloc failed server.c\n", __func__);
                 exit(1);
         }
 
@@ -31,7 +31,7 @@ server *server_construct(short unsigned int domain, int service, int protocol,
         srv->socket = socket(domain, service, protocol);
 
         if (srv->socket < 0) {
-                perror("error: failed to connect socket\n");
+                fprintf(stdout, "[%s]: error failed to connect socket server.c\n", __func__);
                 exit(1);
         }
 
@@ -39,20 +39,20 @@ server *server_construct(short unsigned int domain, int service, int protocol,
         int status = setsockopt(srv->socket, SOL_SOCKET, SO_REUSEADDR, &opt,
                                 sizeof(opt));
         if (status) {
-                fprintf(stderr, "debug: time_wait bypassed\n");
+                fprintf(stdout, "[%s]: debug time_wait bypassed server.c\n", __func__);
         }
 
         if ((bind(srv->socket, (struct sockaddr *)&srv->address,
                   sizeof(srv->address))) < 0) {
-                perror("error: failed to bind socket\n");
+                fprintf(stdout, "[%s]: error failed to bind socket server.c\n", __func__);
                 exit(9);
         }
 
         if (listen(srv->socket, srv->backlog) < 0) {
-                perror("error: failed to listen\n");
+                fprintf(stdout, "[%s]: error failed to listen server.c\n", __func__);
                 exit(1);
         }
 
-        fprintf(stderr, "debug: [%s]: server constructed on port %d\n", __func__, port);
+        fprintf(stdout, "[%s]: debug server constructed on port %d server.c\n", __func__, port);
         return srv;
 }

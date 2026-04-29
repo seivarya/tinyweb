@@ -79,13 +79,13 @@ executor* exec_create(size_t num) {
 
         executor* exec = malloc(sizeof(executor));
         if (exec == NULL) {
-                fprintf(stderr, "error: [%s]: malloc failed for executor\n", __func__);
+                fprintf(stdout, "[%s]: error malloc failed for executor executor.c\n", __func__);
                 return NULL;
         }
 
         exec->threads = malloc(sizeof(pthread_t) * num);
         if (exec->threads == NULL) {
-                fprintf(stderr, "error: [%s]: malloc failed for threads array\n", __func__);
+                fprintf(stdout, "[%s]: error malloc failed for threads array executor.c\n", __func__);
                 free(exec);
                 return NULL;
         }
@@ -104,7 +104,7 @@ executor* exec_create(size_t num) {
         for (size_t i = 0; i < num; i++) {
                 pthread_t thread;
                 if (pthread_create(&thread, NULL, exec_worker, exec) != 0) {
-                        fprintf(stderr, "error: [%s]: pthread_create failed\n", __func__);
+                        fprintf(stdout, "[%s]: error pthread_create failed executor.c\n", __func__);
                         pthread_mutex_lock(&(exec->mutex));
 
                         exec->stop = true;
@@ -127,7 +127,7 @@ executor* exec_create(size_t num) {
                 exec->threads[i] = thread;
         }
 
-        fprintf(stderr, "debug: [%s]: executor constructed with %zu threads\n", __func__, num);
+        fprintf(stdout, "[%s]: debug executor constructed with %zu threads executor.c\n", __func__, num);
         return exec;
 }
 
@@ -154,7 +154,7 @@ int exec_destroy(executor *exec) {
         free(exec->threads);
         free(exec);
 
-        fprintf(stderr, "debug: [%s]: executor destructed\n", __func__);
+        fprintf(stdout, "[%s]: debug executor destructed executor.c\n", __func__);
         return 0; /* success yay */
 }
 

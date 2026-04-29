@@ -18,9 +18,8 @@ http* http_construct(void);
 void register_route(http *srv, char *(*route_func)(http *srv, request *req),
 		char *uri, int count_methods,
 		...); /* for multiple routes within the site */
-char* fetch_page(void);
 void launch(struct http *http_server);
 void handler(void *arg);
-void serve_fallback(int client_sock, const char *uri);
+char* render_func(const char *status, int file_count, ...);
 
 #endif /* http.h */

@@ -1,112 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Minimal Server</title>
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Minimalist Web Server Showcase</title>
-	<script src="https://cdn.tailwindcss.com"></script>
-	<script>
-		tailwind.config = {
-			theme: {
-				extend: {
-					colors: {
-						tokyo: {
-							bg: '#1a1b26',
-							fg: '#c0caf5',
-							panel: '#24283b',
-							border: '#414868',
-							accent: '#7aa2f7',
-							heading: '#bb9af7',
-							code: '#16161e',
-							codeFg: '#9ece6a'
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							tokyo: {
+								bg: '#1a1b26',
+								fg: '#c0caf5',
+								soft: '#9aa5ce',
+								accent: '#7aa2f7',
+								heading: '#bb9af7',
+								code: '#16161e',
+								codeFg: '#9ece6a'
+							}
 						}
 					}
 				}
 			}
-		}
-	</script>
-	<style>
-		body {
-			font-family: 'Inter', sans-serif;
-		}
-	</style>
-</head>
+		</script>
 
-<body class="bg-tokyo-bg text-tokyo-fg flex items-center justify-center min-h-screen p-6">
+		<style>
+body {
+	font-family: 'Inter', sans-serif;
+}
+		</style>
+	</head>
 
-	<div class="bg-tokyo-panel rounded-2xl shadow-lg max-w-3xl w-full p-10 border border-tokyo-border">
+	<body class="bg-tokyo-bg text-tokyo-fg flex items-center justify-center min-h-screen px-6">
 
-		<!-- Header -->
-		<header class="text-center mb-10">
-			<h1 class="text-5xl font-extrabold text-tokyo-accent mb-3">
-				My Minimalist Web Server
-			</h1>
-			<p class="text-tokyo-fg text-lg opacity-80">
-				Serving static and dynamic content directly from a lightweight C-based server.
-			</p>
-		</header>
+		<div class="max-w-2xl w-full space-y-10">
 
-		<!-- Main Content -->
-		<main class="space-y-8">
+			<!-- Header -->
+			<header class="space-y-3">
+				<h1 class="text-3xl font-medium text-tokyo-heading">
+					minimalist web server
+				</h1>
+				<p class="text-sm text-tokyo-soft leading-relaxed">
+				a compact http server written in c, focused on clarity over abstraction. 
+				it handles raw requests, constructs responses, and serves content directly 
+				without relying on heavy frameworks.
+				</p>
+			</header>
 
-			<!-- Section 1 -->
-			<section class="border-b border-tokyo-border pb-6">
-				<h2 class="text-2xl font-semibold text-tokyo-heading mb-2">
-					About This Server
+			<!-- Section -->
+			<section class="space-y-3">
+				<h2 class="text-lg text-tokyo-accent">
+					core behavior
 				</h2>
-				<p class="text-tokyo-fg opacity-90 leading-relaxed">
-					This web server is a minimal, yet fully functional HTTP server written in C. It
-					listens for incoming requests, parses HTTP methods, locates the requested
-					resources, and sends precise HTTP responses back to the client. Unlike typical
-					heavy frameworks, this server demonstrates the core networking principles,
-					threading, and file I/O required for web communication in a compact, efficient
-					package.
+				<p class="text-sm text-tokyo-soft leading-relaxed">
+				the server listens on a socket, accepts incoming tcp connections, and parses 
+				incoming http requests line by line. based on the requested path, it resolves 
+				files from disk or routes execution logic for dynamic responses.
 				</p>
 			</section>
 
-			<!-- Section 2 -->
-			<section class="border-b border-tokyo-border pb-6">
-				<h2 class="text-2xl font-semibold text-tokyo-heading mb-2">
-					How It Works
+			<!-- Section -->
+			<section class="space-y-3">
+				<h2 class="text-lg text-tokyo-accent">
+					request lifecycle
 				</h2>
-				<p class="text-tokyo-fg opacity-90 leading-relaxed">
-					When your browser requests a page, it sends an HTTP <code
-						class="bg-tokyo-code text-tokyo-codeFg px-1.5 py-0.5 rounded">GET</code> request to the server. The
-					server parses the request headers, determines which file to serve, and
-					constructs a full HTTP response with the correct headers, including <code
-						class="bg-tokyo-code text-tokyo-codeFg px-1.5 py-0.5 rounded">Content-Type</code> and <code
-						class="bg-tokyo-code text-tokyo-codeFg px-1.5 py-0.5 rounded">Content-Length</code>. Once the
-					response is ready, it is transmitted back to the client over TCP, and your
-					browser renders the HTML content seamlessly.
+				<p class="text-sm text-tokyo-soft leading-relaxed">
+				a typical request begins with a 
+				<code class="bg-tokyo-code text-tokyo-codeFg px-1 py-0.5 rounded">GET</code> 
+				call. headers are parsed, the resource is located, and a valid http response 
+				is constructed with correct metadata such as 
+				<code class="bg-tokyo-code text-tokyo-codeFg px-1 py-0.5 rounded">content-type</code> 
+				and 
+				<code class="bg-tokyo-code text-tokyo-codeFg px-1 py-0.5 rounded">content-length</code>.
+				the response is then streamed back to the client.
 				</p>
 			</section>
 
-			<!-- Section 3 -->
-			<section>
-				<h2 class="text-2xl font-semibold text-tokyo-heading mb-2">
-					Why Minimalism Matters
+			<!-- Section -->
+			<section class="space-y-3">
+				<h2 class="text-lg text-tokyo-accent">
+					why this approach
 				</h2>
-				<p class="text-tokyo-fg opacity-90 leading-relaxed">
-					By keeping the server minimal, we gain a deep understanding of the underlying
-					principles of HTTP communication, socket programming, and multithreading. This
-					also ensures that the server remains lightweight, efficient, and easy to extend.
-					Future enhancements could include handling <code
-						class="bg-tokyo-code text-tokyo-codeFg px-1.5 py-0.5 rounded">POST</code> requests, serving multiple
-					content types, implementing thread pools for concurrency, and integrating
-					dynamic content generation.
+				<p class="text-sm text-tokyo-soft leading-relaxed">
+				stripping away abstraction exposes how the web actually works — sockets, 
+				byte streams, and protocol structure. this makes debugging easier and gives 
+				full control over performance and behavior.
 				</p>
 			</section>
 
-		</main>
+			<!-- Section -->
+			<section class="space-y-3">
+				<h2 class="text-lg text-tokyo-accent">
+					possible extensions
+				</h2>
+				<p class="text-sm text-tokyo-soft leading-relaxed">
+				support for 
+				<code class="bg-tokyo-code text-tokyo-codeFg px-1 py-0.5 rounded">POST</code>, 
+				routing layers, thread pools, mime-type expansion, logging, and basic caching 
+				can be added without changing the core structure.
+				</p>
+			</section>
 
-		<!-- Footer -->
-		<footer class="mt-10 text-center text-tokyo-fg opacity-50 text-sm">
-			<p>&copy; 2025 @shizvank • Minimalist Web Server. All rights reserved.</p>
-		</footer>
+			<!-- Footer -->
+			<footer class="pt-4 text-xs text-tokyo-soft opacity-60">
+				<p>© 2026 seivarya — im retarded.</p>
+			</footer>
 
-	</div>
+		</div>
 
-</body>
-
+	</body>
 </html>

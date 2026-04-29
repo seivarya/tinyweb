@@ -18,7 +18,7 @@
 #include <server/executor.h>
 #include <structs/dict/dict.h>
 
-#define THREAD_CNT 2
+#define THREAD_CNT 10
 
 // access modifier kind of thing
 
@@ -31,7 +31,7 @@ http *http_construct(void) {
 	http *http_server = malloc(sizeof(http));
 
 	if (!http_server) {
-		fprintf(stderr, "error: [%s]: malloc failed\n", __func__);
+		fprintf(stdout, "[%s]: error malloc failed http.c\n", __func__);
 		return NULL;
 	}
 
@@ -40,11 +40,10 @@ http *http_construct(void) {
 	http_server->routes = dict_construct();
 	http_server->launch = launch;
 
-	fprintf(stderr, "debug: [%s]: http server constructed\n", __func__);
+	fprintf(stdout, "[%s]: debug http server constructed http.c\n", __func__);
 	return http_server;
 }
 
-char *fetch_page(void) { return "[success]: fetch-page"; }
 
 void register_route(http *srv, char *(*route_func)(http *srv, request *req),
 		char *uri, int count_methods, ...) {
@@ -65,84 +64,24 @@ void register_route(http *srv, char *(*route_func)(http *srv, request *req),
 
 	dict_insert(srv->routes, uri, rte, sizeof(route));
 
-	fprintf(stderr, "debug: [%s]: route registered for uri '%s'\n", __func__, uri);
+	fprintf(stdout, "[%s]: debug route registered for uri '%s' http.c\n", __func__, uri);
 }
 
-void serve_fallback(int client_sock, const char *uri) {
-	char *filepath = NULL;
-	char *content_type = "text/html";
-	int is_404 = 0;
-
-	if (uri && strcmp(uri, "/assets/404.webp") == 0) {
-		filepath = "files/assets/404.webp";
-		content_type = "image/webp";
-	} else if (uri && strcmp(uri, "/") == 0) {
-		filepath = "files/index.html";
-	} else {
-		filepath = "files/error.html";
-		is_404 = 1;
-	}
-
-	FILE *fp = fopen(filepath, "rb");
-	if (!fp) {
-		char *not_found = "HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n404 Route Not Found";
-		if (!write(client_sock, not_found, strlen(not_found))) {
-			// err msg
-		}
-		return;
-	}
-
-	fseek(fp, 0, SEEK_END);
-	size_t file_size = (size_t)ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-
-	char *file_buf = malloc(file_size);
-	if (!file_buf) {
-		fclose(fp);
-		return;
-	}
-
-	size_t read_sz = fread(file_buf, 1, file_size, fp);
-	if (!read_sz) {
-		// errmsg
-	}
-	fclose(fp);
-
-	char header[1024];
-	sprintf(header,
-			"HTTP/1.1 %s\r\n"
-			"Content-Type: %s\r\n"
-			"Content-Length: %zu\r\n"
-			"Connection: close\r\n"
-			"\r\n",
-			is_404 ? "404 Not Found" : "200 OK",
-			content_type,
-			file_size);
-
-	if (!write(client_sock, header, strlen(header))) {
-		// err msg
-	}
-	if (!write(client_sock, file_buf, file_size)) {
-		// err msg
-	}
-	
-	free(file_buf);
-}
 
 void handler(void *arg) {
 	if (!arg) return;
-	printf("[handler]: handler invoked\n");
+
 	_client cnt = *(_client *)arg;
 	free(arg);
 	size_t MAX_BUFFER = 16 * 1024 * 1024; // 16 MB limit
 	char *reqstr = malloc(MAX_BUFFER);
 	if (!reqstr) {
-		fprintf(stderr, "error: failed to allocate request buffer\n");
+		fprintf(stdout, "[%s]: error failed to allocate request buffer http.c\n", __func__);
 		close(cnt.client);
 		return;
 	}
-			       
-	printf("1:[handler]: handler invoked\n");
+
+
 	ssize_t bytes_read = read(cnt.client, reqstr, MAX_BUFFER - 1);
 	if (bytes_read <= 0) {
 		free(reqstr);
@@ -151,20 +90,33 @@ void handler(void *arg) {
 	}
 	reqstr[bytes_read] = '\0';
 
-	printf("1.5:[handler]: handler invoked\n");
+
 
 	request *req = request_construct(reqstr);
 	free(reqstr); // req string is safely copied inside parser
 
-	printf("2:[handler]: handler invoked\n");
+
 	char *uri = (char *)dict_search(req->req_line, "uri");
-	printf("3:[handler]: handler invoked\n");
-	printf("4:[handler]: searching for %s\n", uri);  
+
+
 	route *rte = (route *)dict_search(cnt.server->routes, uri);
 
-	printf("4:[handler]: handler invoked\n");
+
 	if (!rte) {
-		serve_fallback(cnt.client, uri); // serve error page
+		char *response;
+		if (uri && strcmp(uri, "/") == 0) {
+			response = render_func("200 OK", 1, "files/index.html");
+		} else {
+			response = render_func("404 Not Found", 1, "files/error.html");
+		}
+
+		if (response) {
+			if (write(cnt.client, response, strlen(response)) < 0) {
+				fprintf(stdout, "[%s]: error failed to write fallback response http.c\n", __func__);
+			}
+			free(response);
+		}
+
 		request_destruct(req);
 		close(cnt.client);
 		return;
@@ -175,9 +127,7 @@ void handler(void *arg) {
 	if (!response) {
 		FILE *fp = fopen("files/index.html", "r");
 		if (!fp) {
-			fprintf(stderr,
-					"error: [%s]: failed to open index.html\n",
-					__func__);
+			fprintf(stdout, "[%s]: error failed to open index.html http.c\n", __func__);
 			exit(1);
 		}
 
@@ -187,25 +137,21 @@ void handler(void *arg) {
 
 		char *file_buf = malloc(file_size + 1);
 		if (!file_buf) {
-			fprintf(stderr, "error: [%s]: malloc failed\n", __func__);
+			fprintf(stdout, "[%s]: error malloc failed http.c\n", __func__);
 			fclose(fp);
 			exit(1);
 		}
 
 		size_t read_sz = fread(file_buf, 1, file_size, fp);
 		if (read_sz != file_size) {
-			fprintf(stderr,
-					"error: [%s]: failed to read complete file\n",
-					__func__);
+			fprintf(stdout, "[%s]: error failed to read complete file http.c\n", __func__);
 		}
 		file_buf[file_size] = '\0';
 		fclose(fp);
 
 		response = malloc(file_size + 1024);
 		if (!response) {
-			fprintf(stderr,
-					"error: [%s]: malloc failed for response\n",
-					__func__);
+			fprintf(stdout, "[%s]: error malloc failed for response http.c\n", __func__);
 			free(file_buf);
 			exit(1);
 		}
@@ -222,12 +168,12 @@ void handler(void *arg) {
 		free(file_buf);
 
 	}
-	printf("5:[handler]: handler invoked\n");
-	
+
+
 	if (write(cnt.client, response, strlen(response)) < 0) {
-		fprintf(stderr, "error: failed to write response\n");
+		fprintf(stdout, "[%s]: error failed to write response http.c\n", __func__);
 	}
-	printf("response sent: %s\n", response);
+
 
 	request_destruct(req);
 	close(cnt.client);
@@ -246,55 +192,99 @@ void launch(struct http *http_server) {
 	while (1) {
 		_client *cnt = malloc(sizeof(_client));
 
-		printf("[launch]: 0:about to add work\n");
+
 		cnt->client = (int)accept(http_server->srv->socket, address, &address_length);
-		printf("[launch]: 1:about to add work\n");
+
 		cnt->server = http_server;
-		printf("[launch]: about to add work\n");
+
 
 		if (exec_add_work(exec, handler, cnt)) {
-			printf("[launch]: work added\n");
+
 		}
 
 	}
 
 }
 
-// void launch(struct http *http_server) {
-// 	executor *exec = exec_create(THREAD_CNT);
-// 	if (!exec) return;
-//
-//
-// 	//
-// 	char buffer[30000];
-// 	int new_socket;
-//
-// 	struct sockaddr *sock_addr =
-// 		(struct sockaddr *)&http_server->srv->address;
-// 	int addrlen = sizeof(http_server->srv->address);
-//
-// 	fprintf(stderr, "debug: [%s]: entering server loop\n", __func__);
-//
-// 	while (1) {
-//
-// 		printf("=== listening on port %d ===\n", http_server->srv->port);
-// 		printf("=== redirect url: http://127.0.0.1:%d ===\n",
-// 				http_server->srv->port);
-//
-// 		new_socket = accept(http_server->srv->socket, sock_addr,
-// 				(socklen_t *)&addrlen);
-//
-// 		ssize_t rdstatus = read(new_socket, buffer, 30000);
-// 		request *test = request_construct(buffer);
-// 		if (!test)
-// 			exit(3);
-// 		ssize_t wrtstatus =
-// 			write(new_socket, response, strlen(response) + 1);
-//
-// 		fprintf(stderr, "debug: read status: %zu | write status: %zu\n",
-// 				rdstatus, wrtstatus);
-//
-// 		request_destruct(test);
-// 		close(new_socket);
-// 	}
-// }
+char* render_func(const char *status, int file_count, ...) {
+	if (file_count <= 0) return NULL;
+
+	va_list args;
+	va_start(args, file_count);
+
+	size_t total_size = 0;
+	char **buffers = malloc(sizeof(char*) * (size_t)file_count);
+	size_t *sizes = malloc(sizeof(size_t) * (size_t)file_count);
+
+	if (!buffers || !sizes) {
+		if (buffers) free(buffers);
+		if (sizes) free(sizes);
+		va_end(args);
+		return NULL;
+	}
+
+	for (int i = 0; i < file_count; i++) {
+		char *path = va_arg(args, char*);
+		FILE *fp = fopen(path, "r");
+		if (!fp) {
+			fprintf(stdout, "[%s]: error failed to open %s http.c\n", __func__, path);
+			buffers[i] = NULL;
+			sizes[i] = 0;
+			continue;
+		}
+		fseek(fp, 0, SEEK_END);
+		sizes[i] = (size_t)ftell(fp);
+		fseek(fp, 0, SEEK_SET);
+
+		buffers[i] = malloc(sizes[i] + 1);
+		if (buffers[i]) {
+			size_t read_sz = fread(buffers[i], 1, sizes[i], fp);
+			buffers[i][read_sz] = '\0';
+			total_size += read_sz;
+		}
+		fclose(fp);
+	}
+	va_end(args);
+
+	char *response = malloc(total_size + 1024);
+	if (!response) {
+		for (int i = 0; i < file_count; i++) if (buffers[i]) free(buffers[i]);
+		free(buffers);
+		free(sizes);
+		return NULL;
+	}
+
+	char *body_ptr = malloc(total_size + 1);
+	if (!body_ptr) {
+		free(response);
+		for (int i = 0; i < file_count; i++) if (buffers[i]) free(buffers[i]);
+		free(buffers);
+		free(sizes);
+		return NULL;
+	}
+
+	size_t offset = 0;
+	for (int i = 0; i < file_count; i++) {
+		if (buffers[i]) {
+			memcpy(body_ptr + offset, buffers[i], sizes[i]);
+			offset += sizes[i];
+			free(buffers[i]);
+		}
+	}
+	body_ptr[offset] = '\0';
+	free(buffers);
+	free(sizes);
+
+	sprintf(response,
+			"HTTP/1.1 %s\r\n"
+			"Content-Type: text/html; charset=UTF-8\r\n"
+			"Content-Length: %zu\r\n"
+			"Connection: close\r\n"
+			"\r\n"
+			"%s",
+			status ? status : "200 OK",
+			total_size, body_ptr);
+	free(body_ptr);
+	return response;
+}
+

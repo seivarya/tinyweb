@@ -15,7 +15,7 @@ request *request_construct(char *req_str) {
         req->headers = NULL;
 
         if (!req_str) {
-                fprintf(stderr, "error: request string not found!\n");
+                fprintf(stdout, "[%s]: error request string not found parser.c\n", __func__);
                 free(req);
                 return NULL;
         }
@@ -35,14 +35,14 @@ request *request_construct(char *req_str) {
         char *headers = strtok(NULL, "|");
         char *body = strtok(NULL, "|");
         
-        fprintf(stderr, "debug: request line before passing > %s\n", req_line);
-        fprintf(stderr, "debug: header fields before passing > %s\n", headers);
-        fprintf(stderr, "debug: body before passing > %s\n", body);
+        fprintf(stdout, "[%s]: debug request line before passing > %s parser.c\n", __func__, req_line);
+        fprintf(stdout, "[%s]: debug header fields before passing > %s parser.c\n", __func__, headers);
+        fprintf(stdout, "[%s]: debug body before passing > %s parser.c\n", __func__, body);
 
         extract_reqline(req, req_line);
         extract_header(req, headers);
 
-        fprintf(stderr, "debug: [%s]: request constructed\n", __func__);
+        fprintf(stdout, "[%s]: debug request constructed parser.c\n", __func__);
         free(reqstr);
         return req;
 }
@@ -57,10 +57,10 @@ void extract_reqline(request *req, char *reqline) {
         uri = strtok(NULL, " ");
         version = strtok(NULL, "\0");
         
-        fprintf(stderr, "debug: extract_reqline invoked\n");
-        fprintf(stderr, "debug: method: %s\n", method);
-        fprintf(stderr, "debug: uri: %s\n", uri);
-        fprintf(stderr, "debug: version: %s\n", version);
+        fprintf(stdout, "[%s]: debug extract_reqline invoked parser.c\n", __func__);
+        fprintf(stdout, "[%s]: debug method: %s parser.c\n", __func__, method);
+        fprintf(stdout, "[%s]: debug uri: %s parser.c\n", __func__, uri);
+        fprintf(stdout, "[%s]: debug version: %s parser.c\n", __func__, version);
 
         req->req_line = dict_construct();
 
@@ -69,7 +69,7 @@ void extract_reqline(request *req, char *reqline) {
         dict_insert(req->req_line, "version", version, strlen(version) + 1);
 
         char *method_string = (char *)dict_search(req->req_line, "method");
-        fprintf(stderr, "debug: fetched method_string: %s\n", method_string);
+        fprintf(stdout, "[%s]: debug fetched method_string: %s parser.c\n", __func__, method_string);
         
         free(fields);
 }
@@ -99,7 +99,7 @@ void extract_header(request *req, char *headers) {
         while (header) {
                 char *key = strtok(header, ":");
                 char *value = strtok(NULL, "\0");
-                fprintf(stderr, "debug: (key, value): (%s, %s)\n", key, value);
+                fprintf(stdout, "[%s]: debug (key, value): (%s, %s) parser.c\n", __func__, key, value);
 
                 dict_insert(req->headers, key, value, strlen(value) + 1);
                 dequeue(q); /* inserting key, value in dict and dequeuing that pair */
@@ -119,7 +119,7 @@ void extract_header(request *req, char *headers) {
 
 void request_destruct(request *req) {
         if (!req) return;
-        fprintf(stderr, "debug: [%s]: request destructed\n", __func__);
+        fprintf(stdout, "[%s]: debug request destructed parser.c\n", __func__);
         /* you would also free req->req_line, req->headers here */
         free(req);
 }
