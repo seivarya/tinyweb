@@ -9,6 +9,7 @@
 
 int main(void) {
         http *srvr = http_construct();
+        register_static_dir(srvr, "docs");
         srvr->launch(srvr);
         return 0;
 }

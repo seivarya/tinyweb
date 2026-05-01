@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>structs api - tinyweb</title>
+    <style>
+      :root {
+        --bg-primary: #12131b;
+        --bg-secondary: #0f1016;
+        --text-main: #c0caf5;
+        --text-muted: #9aa5ce;
+        --accent: #bb9af7;
+        --border: #292e42;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: monospace;
+        background-color: var(--bg-primary);
+        color: var(--text-main);
+        line-height: 1.6;
+        text-transform: lowercase;
+        padding: 40px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+        margin-bottom: 40px;
+      }
+      .brand {
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 1.2rem;
+      }
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        margin-left: 20px;
+      }
+      .nav-links a:hover {
+        color: var(--text-main);
+      }
+      h1 {
+        color: var(--accent);
+        margin-bottom: 10px;
+        font-weight: normal;
+        font-size: 1.8rem;
+      }
+      h3 {
+        color: var(--text-main);
+        margin-bottom: 5px;
+        font-weight: normal;
+        font-size: 1.1rem;
+      }
+      p {
+        color: var(--text-muted);
+        margin-bottom: 30px;
+      }
+      .method {
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="brand">tinyweb.</a>
+      <div class="nav-links">
+        <a href="/">home</a>
+        <a href="/api/server/index.html">server</a>
+        <a href="/api/structs/index.html">structs</a>
+      </div>
+    </nav>
+    <header>
+      <h1>data structures api</h1>
+      <p>the custom memory-managed foundations built from scratch.</p>
+    </header>
+    <div>
+      <div class="method">
+        <h3>
+          dict_insert(dict *dictionary, const char *key, const void *value,
+          size_t size)
+        </h3>
+        <p>
+          hashes a string key and inserts a memory-safe copy of the payload into
+          the dictionary. automatically handles hash collisions via linked
+          bucket chains.
+        </p>
+      </div>
+      <div class="method">
+        <h3>void *dict_search(dict *dictionary, const char *key)</h3>
+        <p>
+          retrieves a pointer to the value stored in the dictionary. heavily
+          utilized for blazing fast http header lookups.
+        </p>
+      </div>
+      <div class="method">
+        <h3>void enqueue(queue *q, void *data, size_t size)</h3>
+        <p>
+          thread-safe operation to push items to the rear of the queue. used by
+          the executor to manage pending socket connections.
+        </p>
+      </div>
+      <div class="method">
+        <h3>void bst_insert(bst *tree, void *data, size_t size)</h3>
+        <p>
+          inserts data into a binary search tree using a custom comparator.
+          dynamically allocates nodes and gracefully navigates left or right
+          branches.
+        </p>
+      </div>
+      <div class="method">
+        <h3>
+          void slist_insert(slist *list, size_t index, void *data, size_t size)
+        </h3>
+        <p>
+          injects a new node into a singly linked list at a specific index.
+          guarantees o(n) traversal insertion with rigorous bounds checking.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

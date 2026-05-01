@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tinyweb documentation</title>
+    <style>
+      :root {
+        --bg-primary: #12131b;
+        --bg-secondary: #0f1016;
+        --text-main: #c0caf5;
+        --text-muted: #9aa5ce;
+        --accent: #bb9af7;
+        --border: #292e42;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: monospace;
+        background-color: var(--bg-primary);
+        color: var(--text-main);
+        line-height: 1.6;
+        text-transform: lowercase;
+        padding: 40px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+        margin-bottom: 40px;
+      }
+      .brand {
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 1.2rem;
+      }
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        margin-left: 20px;
+      }
+      .nav-links a:hover {
+        color: var(--text-main);
+      }
+      h1 {
+        color: var(--accent);
+        margin-bottom: 10px;
+        font-weight: normal;
+        font-size: 1.8rem;
+      }
+      h2 {
+        color: var(--text-main);
+        margin-bottom: 10px;
+        font-weight: normal;
+        font-size: 1.2rem;
+      }
+      p {
+        color: var(--text-muted);
+        margin-bottom: 20px;
+      }
+      .card {
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border);
+        padding: 20px;
+        margin-bottom: 20px;
+        display: block;
+        text-decoration: none;
+      }
+      .card:hover {
+        border-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="brand">tinyweb.</a>
+      <div class="nav-links">
+        <a href="/">home</a>
+        <a href="/api/server/index.html">server</a>
+        <a href="/api/structs/index.html">structs</a>
+      </div>
+    </nav>
+    <header>
+      <h1>tinyweb documentation</h1>
+      <p>
+        a lightning-fast, multi-threaded http server engine built entirely from
+        scratch in c. zero external dependencies, purely posix compliant.
+      </p>
+    </header>
+    <div>
+      <a href="/api/server/index.html" class="card">
+        <h2>server engine core</h2>
+        <p>
+          explore the multithreaded architecture, http parser, and dynamic
+          routing capabilities.
+        </p>
+      </a>
+      <a href="/api/structs/index.html" class="card">
+        <h2>data structures</h2>
+        <p>
+          discover the custom-built memory-safe data structures powering the
+          entire backend.
+        </p>
+      </a>
+    </div>
+  </body>
+</html>
