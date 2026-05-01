@@ -44,6 +44,22 @@ dict *dict_construct(void) {
         return dictionary;
 }
 
+void dict_destruct(dict *dictionary) {
+        if (!_validate_dict_ptr(dictionary))
+                return;
+
+        for (size_t i = 0; i < HASH_SIZE; i++) {
+                entry *node = dictionary->entries[i];
+                while (node != NULL) {
+                        entry *next = node->next;
+                        entry_destruct(node);
+                        node = next;
+                }
+        }
+        free(dictionary);
+        fprintf(stdout, "[%s]: debug dictionary destructed dict.c\n", __func__);
+}
+
 void *dict_search(dict *dictionary, const char *key) {
         if (!_validate_dict_ptr(dictionary) || !_validate_key(key))
                 return NULL;

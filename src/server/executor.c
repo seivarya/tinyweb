@@ -8,7 +8,10 @@
 #include <stdlib.h>
 
 void* exec_worker(void *arg) {
-        if (!arg) return NULL;
+        if (!arg) {
+                fprintf(stdout, "[%s]: error invalid arguments executor.c\n", __func__);
+                return NULL;
+        }
         executor* exec = arg;
         
         while (1) {
@@ -53,7 +56,10 @@ void* exec_worker(void *arg) {
 }
 
 bool exec_add_work(executor *exec, exec_func func, void *arg) {
-        if (!exec || !func) return false;
+        if (!exec || !func) {
+                fprintf(stdout, "[%s]: error invalid arguments executor.c\n", __func__);
+                return false;
+        }
         pthread_mutex_lock(&(exec->mutex));
 
         if (exec->stop) {
@@ -132,7 +138,10 @@ executor* exec_create(size_t num) {
 }
 
 int exec_destroy(executor *exec) {
-        if (!exec) return 1;
+        if (!exec) {
+                fprintf(stdout, "[%s]: error invalid arguments executor.c\n", __func__);
+                return 1;
+        }
 
         pthread_mutex_lock(&(exec->mutex));
 
@@ -159,7 +168,10 @@ int exec_destroy(executor *exec) {
 }
 
 int exec_wait(executor *exec) {
-        if (!exec) return 1;
+        if (!exec) {
+                fprintf(stdout, "[%s]: error invalid arguments executor.c\n", __func__);
+                return 1;
+        }
 
         pthread_mutex_lock(&(exec->mutex));
         while (exec->pending_count > 0 || exec->working_count > 0) { /* while work exists */
@@ -171,7 +183,10 @@ int exec_wait(executor *exec) {
 }
 
 exec_work* exec_work_create(exec_func func, void *arg) {
-        if (!func) return NULL;
+        if (!func) {
+                fprintf(stdout, "[%s]: error invalid arguments executor.c\n", __func__);
+                return NULL;
+        }
 
         exec_work* work = malloc(sizeof(exec_work));
         if (!work) return NULL;
@@ -183,7 +198,10 @@ exec_work* exec_work_create(exec_func func, void *arg) {
 }
 
 int exec_work_destroy(exec_work *work) {
-        if (work == NULL) return 1;
+        if (work == NULL) {
+                fprintf(stdout, "[%s]: error invalid arguments executor.c\n", __func__);
+                return 1;
+        }
         free(work);
         return 0;
 }

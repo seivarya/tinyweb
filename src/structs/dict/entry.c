@@ -38,7 +38,10 @@ entry *entry_construct(const char *key, const void *value, size_t size) {
 }
 
 void entry_destruct(entry *node) {
-        if (!node) return;
+        if (!node) {
+                fprintf(stdout, "[%s]: error invalid arguments entry.c\n", __func__);
+                return;
+        }
         fprintf(stdout, "[%s]: debug entry destructed for key '%s' entry.c\n", __func__, node->key);
         free(node->key);
         free(node->value);

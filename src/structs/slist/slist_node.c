@@ -7,6 +7,10 @@
 #include <structs/slist/slist_node.h>
 
 slist_node *slist_node_construct(void *data, size_t size) {
+        if (!data) {
+                fprintf(stdout, "[%s]: error invalid arguments slist_node.c\n", __func__);
+                return NULL;
+        }
         slist_node *node = malloc(sizeof(slist_node));
         if (!node) {
                 fprintf(stderr,
@@ -33,8 +37,10 @@ slist_node *slist_node_construct(void *data, size_t size) {
 }
 
 void slist_node_destruct(slist_node *node) {
-        if (!node)
+        if (!node) {
+                fprintf(stdout, "[%s]: error invalid arguments slist_node.c\n", __func__);
                 return;
+        }
 
         if (node->data) {
                 free(node->data);

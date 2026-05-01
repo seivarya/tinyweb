@@ -87,6 +87,10 @@ void slist_destruct(slist *list) {
 void slist_insert(slist *list, size_t index, void *data, size_t size) {
         if (!_validate_slist_ptr(list))
                 return;
+        if (!data) {
+                fprintf(stdout, "[%s]: error invalid arguments slist.c\n", __func__);
+                return;
+        }
 
         if (index > list->length) {
                 fprintf(stderr,

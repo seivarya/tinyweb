@@ -20,6 +20,8 @@
 
 #define THREAD_CNT 10
 
+const char *ERR_500_RESPONSE = "HTTP/1.1 500 Internal Server Error\r\nContent-Length: 21\r\nConnection: close\r\n\r\nInternal Server Error";
+
 // access modifier kind of thing
 
 typedef struct _client{
@@ -48,8 +50,10 @@ http *http_construct(void) {
 void register_route(http *srv, char *(*route_func)(http *srv, request *req),
 		char *uri, int count_methods, ...) {
 
-	if (!srv)
+	if (!srv || !route_func || !uri) {
+		fprintf(stdout, "[%s]: error invalid arguments http.c\n", __func__);
 		return;
+	}
 
 	route *rte = route_construct();
 
@@ -69,31 +73,39 @@ void register_route(http *srv, char *(*route_func)(http *srv, request *req),
 
 
 void handler(void *arg) {
-	if (!arg) return;
+	if (!arg) {
+		fprintf(stdout, "[%s]: error invalid arguments http.c\n", __func__);
+		return;
+	}
 
 	_client cnt = *(_client *)arg;
 	free(arg);
-	size_t MAX_BUFFER = 16 * 1024 * 1024; // 16 MB limit
-	char *reqstr = malloc(MAX_BUFFER);
-	if (!reqstr) {
-		fprintf(stdout, "[%s]: error failed to allocate request buffer http.c\n", __func__);
-		close(cnt.client);
-		return;
-	}
+	int keep_alive = 1;
 
+	while (keep_alive) {
+		size_t MAX_BUFFER = 8192; // 8 KB limit
+		char *reqstr = malloc(MAX_BUFFER);
+		if (!reqstr) {
+			fprintf(stdout, "[%s]: error failed to allocate request buffer http.c\n", __func__);
+			break;
+		}
 
-	ssize_t bytes_read = read(cnt.client, reqstr, MAX_BUFFER - 1);
-	if (bytes_read <= 0) {
-		free(reqstr);
-		close(cnt.client);
-		return;
-	}
-	reqstr[bytes_read] = '\0';
+		ssize_t bytes_read = read(cnt.client, reqstr, MAX_BUFFER - 1);
+		if (bytes_read <= 0) {
+			free(reqstr);
+			break;
+		}
+		reqstr[bytes_read] = '\0';
 
+		request *req = request_construct(reqstr);
+		free(reqstr); // req string is safely copied inside parser
 
-
-	request *req = request_construct(reqstr);
-	free(reqstr); // req string is safely copied inside parser
+		if (req && req->headers) {
+			char *conn_hdr = (char *)dict_search(req->headers, "Connection");
+			if (conn_hdr && (strcmp(conn_hdr, "close") == 0 || strcmp(conn_hdr, "Close") == 0)) {
+				keep_alive = 0;
+			}
+		}
 
 
 	char *uri = (char *)dict_search(req->req_line, "uri");
@@ -118,8 +130,8 @@ void handler(void *arg) {
 		}
 
 		request_destruct(req);
-		close(cnt.client);
-		return;
+		if (!keep_alive) break;
+		continue;
 	}
 
 	char* response = rte->route_func(cnt.server, req);
@@ -128,7 +140,9 @@ void handler(void *arg) {
 		FILE *fp = fopen("files/index.html", "r");
 		if (!fp) {
 			fprintf(stdout, "[%s]: error failed to open index.html http.c\n", __func__);
-			exit(1);
+			if (write(cnt.client, ERR_500_RESPONSE, strlen(ERR_500_RESPONSE)) < 0) {}
+			request_destruct(req);
+			break;
 		}
 
 		fseek(fp, 0, SEEK_END);
@@ -139,7 +153,9 @@ void handler(void *arg) {
 		if (!file_buf) {
 			fprintf(stdout, "[%s]: error malloc failed http.c\n", __func__);
 			fclose(fp);
-			exit(1);
+			if (write(cnt.client, ERR_500_RESPONSE, strlen(ERR_500_RESPONSE)) < 0) {}
+			request_destruct(req);
+			break;
 		}
 
 		size_t read_sz = fread(file_buf, 1, file_size, fp);
@@ -153,34 +169,40 @@ void handler(void *arg) {
 		if (!response) {
 			fprintf(stdout, "[%s]: error malloc failed for response http.c\n", __func__);
 			free(file_buf);
-			exit(1);
+			if (write(cnt.client, ERR_500_RESPONSE, strlen(ERR_500_RESPONSE)) < 0) {}
+			request_destruct(req);
+			break;
 		}
 
 		sprintf(response,
 				"HTTP/1.1 200 OK\r\n"
 				"Content-Type: text/html; charset=UTF-8\r\n"
-				"Content-Length: %ld\r\n"
-				"Connection: close\r\n"
+				"Content-Length: %zu\r\n"
+				"Connection: %s\r\n"
 				"\r\n"
 				"%s",
-				file_size, file_buf);
+				file_size, keep_alive ? "keep-alive" : "close", file_buf);
 
 		free(file_buf);
 
 	}
 
+		if (write(cnt.client, response, strlen(response)) < 0) {
+			fprintf(stdout, "[%s]: error failed to write response http.c\n", __func__);
+			keep_alive = 0;
+		}
 
-	if (write(cnt.client, response, strlen(response)) < 0) {
-		fprintf(stdout, "[%s]: error failed to write response http.c\n", __func__);
+		if (response) free(response);
+		request_destruct(req);
 	}
-
-
-	request_destruct(req);
 	close(cnt.client);
 }
 
 void launch(struct http *http_server) {
-	if (!http_server) return;
+	if (!http_server) {
+		fprintf(stdout, "[%s]: error invalid arguments http.c\n", __func__);
+		return;
+	}
 	executor *exec = exec_create(THREAD_CNT);
 	if (!exec) return;
 
@@ -207,7 +229,10 @@ void launch(struct http *http_server) {
 }
 
 char* render_func(const char *status, int file_count, ...) {
-	if (file_count <= 0) return NULL;
+	if (file_count <= 0) {
+		fprintf(stdout, "[%s]: error invalid file_count http.c\n", __func__);
+		return NULL;
+	}
 
 	va_list args;
 	va_start(args, file_count);
@@ -279,7 +304,7 @@ char* render_func(const char *status, int file_count, ...) {
 			"HTTP/1.1 %s\r\n"
 			"Content-Type: text/html; charset=UTF-8\r\n"
 			"Content-Length: %zu\r\n"
-			"Connection: close\r\n"
+			"Connection: keep-alive\r\n"
 			"\r\n"
 			"%s",
 			status ? status : "200 OK",
