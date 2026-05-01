@@ -14,7 +14,7 @@ void bst_insert(bst *tree, void *data, size_t size);
 void *bst_search(bst *tree, void *data);
 bst_node *bst_iterate(bst *tree, bst_node *cursor, void *data, int *direction);
 
-bst *bst_construct(int (*bst_cmpr)(void *a, void *b));
+bst *bst_construct(int (*cmpr_func)(void *a, void *b));
 void bst_destruct(bst *tree);
 
 #endif

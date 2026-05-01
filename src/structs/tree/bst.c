@@ -22,6 +22,7 @@ static inline int _validate_bst_ptr(bst *tree) {
 }
 
 static inline void _validate_bst_node_construction(bst *tree, bst_node *node) {
+        (void)tree;
         if (!node) {
                 fprintf(stderr,
                         "Error: %s: Failed to construct BST node, aborting.\n",
@@ -44,7 +45,7 @@ static inline int _validate_bst_nonempty(bst *tree) {
 
 /* info: public methods */
 
-bst *bst_construct(int (*bst_cmpr)(void *a, void *b)) {
+bst *bst_construct(int (*cmpr_func)(void *a, void *b)) {
         bst *tree = malloc(sizeof(bst));
         if (!tree) {
                 fprintf(stderr,
@@ -52,24 +53,31 @@ bst *bst_construct(int (*bst_cmpr)(void *a, void *b)) {
                 return NULL;
         }
         tree->head = NULL;
-        tree->bst_cmpr = bst_cmpr;
+        tree->bst_cmpr = cmpr_func;
         return tree;
+}
+
+static void _bst_destroy_nodes(bst_node *node) {
+        if (!node) return;
+        _bst_destroy_nodes(node->prev);
+        _bst_destroy_nodes(node->next);
+        bst_node_destruct(node);
 }
 
 void bst_destruct(bst *tree) {
         if (!_validate_bst_ptr(tree))
                 return;
 
-        /* WARNING: this only frees the head node; a full tree traversal
-         * should be implemented to avoid leaks if the tree owns its nodes. */
-        free(tree->head);
+        _bst_destroy_nodes(tree->head);
         free(tree);
 }
 
 bst_node *bst_iterate(bst *tree, bst_node *cursor, void *data, int *direction) {
         if (!_validate_bst_ptr(tree) || cursor == NULL || data == NULL ||
-            direction == NULL)
+            direction == NULL) {
+                fprintf(stdout, "[%s]: error invalid arguments bst.c\n", __func__);
                 return NULL;
+        }
 
         int iterfst = 0;
         if (iterfst == 0) {
@@ -81,10 +89,10 @@ bst_node *bst_iterate(bst *tree, bst_node *cursor, void *data, int *direction) {
                 if (cursor->next) {
                         return bst_iterate(tree, cursor->next, data, direction);
                 } else {
-                        *direction = -1;
+                        *direction = 1;
                         return cursor;
                 }
-        } else if (tree->bst_cmpr(cursor->data, data) == -1) {
+        } else if (tree->bst_cmpr(cursor->data, data) == 1) {
                 if (cursor->prev) {
                         return bst_iterate(tree, cursor->prev, data, direction);
                 } else {
@@ -98,8 +106,11 @@ bst_node *bst_iterate(bst *tree, bst_node *cursor, void *data, int *direction) {
 }
 
 void *bst_search(bst *tree, void *data) {
-        if (!_validate_bst_nonempty(tree) || data == NULL)
+        if (!_validate_bst_nonempty(tree)) return NULL;
+        if (data == NULL) {
+                fprintf(stdout, "[%s]: error invalid arguments bst.c\n", __func__);
                 return NULL;
+        }
 
         if (tree->head->data == data) {
                 return data;
@@ -122,8 +133,11 @@ void *bst_search(bst *tree, void *data) {
 }
 
 void bst_insert(bst *tree, void *data, size_t size) {
-        if (!_validate_bst_ptr(tree) || data == NULL)
+        if (!_validate_bst_ptr(tree)) return;
+        if (data == NULL) {
+                fprintf(stdout, "[%s]: error invalid arguments bst.c\n", __func__);
                 return;
+        }
 
         bst_node *node_to_insert = bst_node_construct(data, size);
         _validate_bst_node_construction(tree, node_to_insert);

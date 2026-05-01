@@ -7,6 +7,10 @@
 #include <structs/queue/queue_node.h>
 
 queue_node *queue_node_construct(void *data, size_t size) {
+        if (!data) {
+                fprintf(stdout, "[%s]: error invalid arguments queue_node.c\n", __func__);
+                return NULL;
+        }
         queue_node *node = malloc(sizeof(queue_node));
         if (!node) {
                 fprintf(stdout, "[%s]: error malloc failed for sizeof(queue_node) queue_node.c\n", __func__);
@@ -28,8 +32,10 @@ queue_node *queue_node_construct(void *data, size_t size) {
 }
 
 void queue_node_destruct(queue_node *node) {
-        if (!node)
+        if (!node) {
+                fprintf(stdout, "[%s]: error invalid arguments queue_node.c\n", __func__);
                 return;
+        }
 
         if (node->data) {
                 free(node->data);

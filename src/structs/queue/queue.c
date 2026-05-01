@@ -61,6 +61,10 @@ void queue_destruct(queue *q) {
 void enqueue(queue *q, void *data, size_t size) {
         if (!_validate_queue_ptr(q))
                 return;
+        if (!data) {
+                fprintf(stdout, "[%s]: error invalid arguments queue.c\n", __func__);
+                return;
+        }
 
         queue_node *new_node = queue_node_construct(data, size);
         _validate_queue_node_construction(q, new_node);

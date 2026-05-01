@@ -13,6 +13,7 @@ typedef struct dict {
 } dict;
 
 dict *dict_construct(void);
+void dict_destruct(dict *dictionary);
 
 void *dict_search(dict *dictionary, const char *key);
 void dict_insert(dict *dictionary, const char *key, const void *value, size_t size);

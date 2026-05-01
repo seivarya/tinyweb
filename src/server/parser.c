@@ -48,6 +48,10 @@ request *request_construct(char *req_str) {
 }
 
 void extract_reqline(request *req, char *reqline) {
+        if (!req || !reqline) {
+                fprintf(stdout, "[%s]: error invalid arguments parser.c\n", __func__);
+                return;
+        }
         char *uri, *version, *method;
 
         char *fields = malloc(strlen(reqline) + 1);
@@ -75,6 +79,10 @@ void extract_reqline(request *req, char *reqline) {
 }
 
 void extract_header(request *req, char *headers) {
+        if (!req || !headers) {
+                fprintf(stdout, "[%s]: error invalid arguments parser.c\n", __func__);
+                return;
+        }
         char *fields = malloc(strlen(headers) + 1);
         memcpy(fields, headers, strlen(headers) + 1);
 
@@ -99,9 +107,15 @@ void extract_header(request *req, char *headers) {
         while (header) {
                 char *key = strtok(header, ":");
                 char *value = strtok(NULL, "\0");
-                fprintf(stdout, "[%s]: debug (key, value): (%s, %s) parser.c\n", __func__, key, value);
+                
+                if (key && value) {
+                        if (value[0] == ' ') value++; /* Trim leading space */
+                        fprintf(stdout, "[%s]: debug (key, value): (%s, %s) parser.c\n", __func__, key, value);
+                        dict_insert(req->headers, key, value, strlen(value) + 1);
+                } else {
+                        fprintf(stdout, "[%s]: error malformed header parser.c\n", __func__);
+                }
 
-                dict_insert(req->headers, key, value, strlen(value) + 1);
                 dequeue(q); /* inserting key, value in dict and dequeuing that pair */
 
                 node = (queue_node *)get_front(q);
@@ -118,8 +132,12 @@ void extract_header(request *req, char *headers) {
 }
 
 void request_destruct(request *req) {
-        if (!req) return;
+        if (!req) {
+                fprintf(stdout, "[%s]: error invalid arguments parser.c\n", __func__);
+                return;
+        }
+        if (req->req_line) dict_destruct(req->req_line);
+        if (req->headers) dict_destruct(req->headers);
         fprintf(stdout, "[%s]: debug request destructed parser.c\n", __func__);
-        /* you would also free req->req_line, req->headers here */
         free(req);
 }

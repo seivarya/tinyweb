@@ -5,6 +5,10 @@
 #include <structs/tree/bst_node.h>
 
 bst_node *bst_node_construct(void *data, size_t size) {
+        if (!data) {
+                fprintf(stdout, "[%s]: error invalid arguments bst_node.c\n", __func__);
+                return NULL;
+        }
         bst_node *node = malloc(sizeof(bst_node));
         if (!node) {
                 fprintf(stderr,
@@ -31,8 +35,10 @@ bst_node *bst_node_construct(void *data, size_t size) {
 }
 
 void bst_node_destruct(bst_node *node) {
-        if (!node)
+        if (!node) {
+                fprintf(stdout, "[%s]: error invalid arguments bst_node.c\n", __func__);
                 return;
+        }
         if (node->data) {
                 free(node->data);
                 node->data = NULL;
