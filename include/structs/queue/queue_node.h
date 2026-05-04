@@ -8,8 +8,8 @@
 typedef struct queue_node queue_node;
 
 struct queue_node {
-        void *data;
-        queue_node *next;
+	void *data;
+	queue_node *next;
 };
 
 queue_node *queue_node_construct(void *data, size_t size);

@@ -9,7 +9,7 @@
 
 static inline int _validate_dict_ptr(dict *dictionary) {
         if (dictionary == NULL) {
-                fprintf(stdout, "[%s]: error dictionary pointer is null dict.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: dictionary pointer is null\n", __func__);
                 return 0;
         }
         return 1;
@@ -17,7 +17,7 @@ static inline int _validate_dict_ptr(dict *dictionary) {
 
 static inline int _validate_key(const char *key) {
         if (key == NULL || *key == '\0') {
-                fprintf(stdout, "[%s]: error key is null or empty dict.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: key is null or empty\n", __func__);
                 return 0;
         }
         return 1;
@@ -25,7 +25,7 @@ static inline int _validate_key(const char *key) {
 
 static inline void _validate_entry_construction(entry *node) {
         if (!node) {
-                fprintf(stdout, "[%s]: error failed to construct dictionary entry node aborting dict.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: failed to construct dict entry, aborting\n", __func__);
                 exit(3);
         }
 }
@@ -33,14 +33,14 @@ static inline void _validate_entry_construction(entry *node) {
 dict *dict_construct(void) {
         dict *dictionary = malloc(sizeof(struct dict));
         if (!dictionary) {
-                fprintf(stdout, "[%s]: error malloc failed dict.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for dict struct\n", __func__);
                 return NULL;
         }
 
         for (size_t i = 0; i < HASH_SIZE; i++) {
                 dictionary->entries[i] = NULL;
         }
-        fprintf(stdout, "[%s]: debug dictionary constructed dict.c\n", __func__);
+        fprintf(stdout, "[DEBUG]: %s :: dictionary constructed\n", __func__);
         return dictionary;
 }
 
@@ -57,7 +57,7 @@ void dict_destruct(dict *dictionary) {
                 }
         }
         free(dictionary);
-        fprintf(stdout, "[%s]: debug dictionary destructed dict.c\n", __func__);
+        fprintf(stdout, "[DEBUG]: %s :: dictionary destructed\n", __func__);
 }
 
 void *dict_search(dict *dictionary, const char *key) {
@@ -74,11 +74,11 @@ void *dict_search(dict *dictionary, const char *key) {
                 node = node->next;
         }
 
-        fprintf(stdout, "[%s]: error key '%s' not found in dictionary dict.c\n", __func__, key);
         return NULL;
 }
 
-void dict_insert(dict *dictionary, const char *key, const void *value, size_t size) {
+void dict_insert(dict *dictionary, const char *key, const void *value,
+                 size_t size) {
         if (!_validate_dict_ptr(dictionary) || !_validate_key(key)) {
                 return;
         }
@@ -118,7 +118,7 @@ void dict_remove(dict *dictionary, const char *key) {
                 node = node->next;
         }
 
-        fprintf(stdout, "[%s]: error key '%s' not found in dictionary for removal dict.c\n", __func__, key);
+        fprintf(stderr, "[ERROR]: %s :: key '%s' not found for removal\n", __func__, key);
 }
 
 unsigned int hash(const char *key) {

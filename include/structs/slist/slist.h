@@ -5,8 +5,8 @@
 #ifndef SLIST_H
 #define SLIST_H
 typedef struct slist {
-        slist_node *head;
-        size_t length;
+	slist_node *head;
+	size_t length;
 } slist;
 
 slist *slist_construct(void);

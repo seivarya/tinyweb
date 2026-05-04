@@ -10,12 +10,11 @@
 
 static inline int _validate_bst_ptr(bst *tree) {
         if (tree == NULL) {
-                fprintf(stderr, "Error: %s: BST pointer is NULL.\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: bst pointer is null\n", __func__);
                 return 0;
         }
         if (tree->bst_cmpr == NULL) {
-                fprintf(stderr, "Error: %s: BST compare function is NULL.\n",
-                        __func__);
+                fprintf(stderr, "[ERROR]: %s :: bst comparator function is null\n", __func__);
                 return 0;
         }
         return 1;
@@ -24,11 +23,7 @@ static inline int _validate_bst_ptr(bst *tree) {
 static inline void _validate_bst_node_construction(bst *tree, bst_node *node) {
         (void)tree;
         if (!node) {
-                fprintf(stderr,
-                        "Error: %s: Failed to construct BST node, aborting.\n",
-                        __func__);
-                /* tree may be partially built at this point; caller must decide
-                 * how to recover */
+                fprintf(stderr, "[ERROR]: %s :: bst node construction failed, aborting\n", __func__);
                 exit(3);
         }
 }
@@ -37,7 +32,7 @@ static inline int _validate_bst_nonempty(bst *tree) {
         if (!_validate_bst_ptr(tree))
                 return 0;
         if (tree->head == NULL) {
-                fprintf(stderr, "Error: %s: BST is empty.\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: bst is empty\n", __func__);
                 return 0;
         }
         return 1;
@@ -48,8 +43,7 @@ static inline int _validate_bst_nonempty(bst *tree) {
 bst *bst_construct(int (*cmpr_func)(void *a, void *b)) {
         bst *tree = malloc(sizeof(bst));
         if (!tree) {
-                fprintf(stderr,
-                        "=== error: bst_construct(): malloc failed ===\n");
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for bst struct\n", __func__);
                 return NULL;
         }
         tree->head = NULL;
@@ -75,7 +69,7 @@ void bst_destruct(bst *tree) {
 bst_node *bst_iterate(bst *tree, bst_node *cursor, void *data, int *direction) {
         if (!_validate_bst_ptr(tree) || cursor == NULL || data == NULL ||
             direction == NULL) {
-                fprintf(stdout, "[%s]: error invalid arguments bst.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: invalid arguments to bst_iterate\n", __func__);
                 return NULL;
         }
 
@@ -122,12 +116,9 @@ void *bst_search(bst *tree, void *data) {
                 return NULL;
 
         if (direction == 0) {
-                /* INFO: the data is actually a bst_node itself. in dict it'll
-                 * be a node with <entry> wrapper over it. */
                 return cursor->data;
         } else {
-                fprintf(stderr, "Error: %s: node not found in BST.\n",
-                        __func__);
+                fprintf(stderr, "[ERROR]: %s :: node not found in bst\n", __func__);
                 return NULL;
         }
 }
@@ -135,7 +126,7 @@ void *bst_search(bst *tree, void *data) {
 void bst_insert(bst *tree, void *data, size_t size) {
         if (!_validate_bst_ptr(tree)) return;
         if (data == NULL) {
-                fprintf(stdout, "[%s]: error invalid arguments bst.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null data pointer\n", __func__);
                 return;
         }
 
@@ -157,8 +148,7 @@ void bst_insert(bst *tree, void *data, size_t size) {
         } else if (direction == -1) {
                 cursor->prev = node_to_insert;
         } else {
-                fprintf(stderr, "Error: %s: node already exists in BST.\n",
-                        __func__);
+                fprintf(stderr, "[ERROR]: %s :: duplicate node, already exists in bst\n", __func__);
                 return;
         }
 }

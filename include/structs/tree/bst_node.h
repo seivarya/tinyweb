@@ -7,9 +7,9 @@
 typedef struct bst_node bst_node;
 
 struct bst_node {
-        void *data;
-        bst_node *next;
-        bst_node *prev;
+	void *data;
+	bst_node *next;
+	bst_node *prev;
 };
 
 bst_node *bst_node_construct(void *data, size_t size);

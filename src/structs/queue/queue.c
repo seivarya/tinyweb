@@ -10,7 +10,7 @@
 
 static inline int _validate_queue_ptr(queue *q) {
         if (q == NULL) {
-                fprintf(stdout, "[%s]: error queue pointer is null queue.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: queue pointer is null\n", __func__);
                 return 0;
         }
         return 1;
@@ -20,7 +20,7 @@ static inline void _validate_queue_node_construction(queue *q,
                                                      queue_node *node) {
         if (!node) {
                 /* if node allocation failed, clean up the queue and abort */
-                fprintf(stdout, "[%s]: error queue node construction failed queue.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: queue node construction failed, aborting\n", __func__);
                 queue_destruct(q);
                 exit(3);
         }
@@ -34,11 +34,11 @@ queue *queue_construct(void) {
                 q->head = NULL;
                 q->tail = NULL;
                 q->length = 0;
-                fprintf(stdout, "[%s]: debug queue constructed queue.c\n", __func__);
+                fprintf(stdout, "[DEBUG]: %s :: queue constructed\n", __func__);
                 return q;
         }
 
-        fprintf(stdout, "[%s]: error malloc failed queue.c\n", __func__);
+        fprintf(stderr, "[ERROR]: %s :: malloc failed for queue struct\n", __func__);
         return NULL;
 }
 
@@ -55,14 +55,14 @@ void queue_destruct(queue *q) {
         }
 
         free(q);
-        fprintf(stdout, "[%s]: debug queue destructed queue.c\n", __func__);
+        fprintf(stdout, "[DEBUG]: %s :: queue destructed\n", __func__);
 }
 
 void enqueue(queue *q, void *data, size_t size) {
         if (!_validate_queue_ptr(q))
                 return;
         if (!data) {
-                fprintf(stdout, "[%s]: error invalid arguments queue.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null data pointer\n", __func__);
                 return;
         }
 
@@ -85,7 +85,7 @@ void dequeue(queue *q) {
         if (!_validate_queue_ptr(q))
                 return;
         if (q->length == 0) {
-                fprintf(stdout, "[%s]: error attempted to dequeue from an empty queue queue.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: attempted dequeue on empty queue\n", __func__);
                 return;
         }
 
@@ -113,7 +113,7 @@ void *get_front(queue *q) {
         if (!_validate_queue_ptr(q))
                 return NULL;
         if (q->length == 0) {
-                fprintf(stdout, "[%s]: error attempted to get front from an empty queue queue.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: attempted get_front on empty queue\n", __func__);
                 return NULL;
         }
 
@@ -124,7 +124,7 @@ void *get_rear(queue *q) {
         if (!_validate_queue_ptr(q))
                 return NULL;
         if (q->length == 0) {
-                fprintf(stdout, "[%s]: error attempted to get rear from an empty queue queue.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: attempted get_rear on empty queue\n", __func__);
                 return NULL;
         }
 

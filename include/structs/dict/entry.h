@@ -8,9 +8,9 @@
 typedef struct entry entry;
 
 struct entry {
-        char *key;
-        void *value;
-        entry *next;
+	char *key;
+	void *value;
+	entry *next;
 };
 
 entry *entry_construct(const char *key, const void *value, size_t size);
