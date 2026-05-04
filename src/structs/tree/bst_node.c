@@ -6,24 +6,18 @@
 
 bst_node *bst_node_construct(void *data, size_t size) {
         if (!data) {
-                fprintf(stdout, "[%s]: error invalid arguments bst_node.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null data pointer\n", __func__);
                 return NULL;
         }
         bst_node *node = malloc(sizeof(bst_node));
         if (!node) {
-                fprintf(stderr,
-                        "[bst_node_construct]: malloc failed for "
-                        "sizeof(bst_node)\n[%s]: %s\n",
-                        __func__, __FILE__);
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for bst_node struct\n", __func__);
                 return NULL;
         }
 
         node->data = malloc(size);
         if (!node->data) {
-                fprintf(stderr,
-                        "[bst_node_construct]: malloc failed for "
-                        "node->data\n[%s]: %s\n",
-                        __func__, __FILE__);
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for node data\n", __func__);
                 free(node);
                 return NULL;
         }
@@ -36,7 +30,7 @@ bst_node *bst_node_construct(void *data, size_t size) {
 
 void bst_node_destruct(bst_node *node) {
         if (!node) {
-                fprintf(stdout, "[%s]: error invalid arguments bst_node.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null node pointer\n", __func__);
                 return;
         }
         if (node->data) {

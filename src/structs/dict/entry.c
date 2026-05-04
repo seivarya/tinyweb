@@ -9,12 +9,12 @@
 entry *entry_construct(const char *key, const void *value, size_t size) {
         entry *node = malloc(sizeof(entry));
         if (!node) {
-                fprintf(stdout, "[%s]: error malloc failed for sizeof(entry) entry.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for entry struct\n", __func__);
                 return NULL;
         }
 
         if (!key || !value) {
-                fprintf(stdout, "[%s]: error missing key or value entry.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: missing key or value\n", __func__);
                 free(node);
                 return NULL;
         }
@@ -24,7 +24,7 @@ entry *entry_construct(const char *key, const void *value, size_t size) {
 
         node->value = malloc(size);
         if (!node->value) {
-                fprintf(stdout, "[%s]: error malloc failed for node->value entry.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for entry value\n", __func__);
                 free(node->key);
                 free(node);
                 return NULL;
@@ -33,16 +33,16 @@ entry *entry_construct(const char *key, const void *value, size_t size) {
 
         node->next = NULL;
 
-        fprintf(stdout, "[%s]: debug entry constructed for key '%s' entry.c\n", __func__, key);
+        fprintf(stdout, "[DEBUG]: %s :: entry constructed for key '%s'\n", __func__, key);
         return node;
 }
 
 void entry_destruct(entry *node) {
         if (!node) {
-                fprintf(stdout, "[%s]: error invalid arguments entry.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null entry pointer\n", __func__);
                 return;
         }
-        fprintf(stdout, "[%s]: debug entry destructed for key '%s' entry.c\n", __func__, node->key);
+        fprintf(stdout, "[DEBUG]: %s :: entry destructed for key '%s'\n", __func__, node->key);
         free(node->key);
         free(node->value);
         free(node);

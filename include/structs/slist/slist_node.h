@@ -7,14 +7,14 @@
 typedef struct td td;
 
 struct td {
-        char *name;
+	char *name;
 };
 
 typedef struct slist_node slist_node;
 
 struct slist_node {
-        void *data;
-        slist_node *next;
+	void *data;
+	slist_node *next;
 };
 
 slist_node *slist_node_construct(void *data, size_t size);

@@ -5,8 +5,8 @@
 #ifndef BST_H
 #define BST_H
 typedef struct bst {
-        bst_node *head;
-        int (*bst_cmpr)(void *a, void *b);
+	bst_node *head;
+	int (*bst_cmpr)(void *a, void *b);
 } bst;
 
 int bst_cmpr(void *a, void *b);

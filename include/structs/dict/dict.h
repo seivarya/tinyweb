@@ -9,7 +9,7 @@
 #define HASH_SIZE 69
 
 typedef struct dict {
-        entry *entries[HASH_SIZE];
+	entry *entries[HASH_SIZE];
 } dict;
 
 dict *dict_construct(void);

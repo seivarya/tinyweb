@@ -11,10 +11,12 @@ typedef struct http {
 	server *srv;
 	dict *routes;
 	char static_dir[256];
+	unsigned short port;
+	size_t thread_cnt;
 	void (*launch)(struct http *http_server);
 } http;
 
-http* http_construct(void);
+http *http_construct(unsigned short port, size_t thread_cnt);
 void register_static_dir(http *srv, const char *dir_path);
 
 void register_route(http *srv, char *(*route_func)(http *srv, request *req),

@@ -10,9 +10,7 @@
 
 static inline int _validate_slist_ptr(slist *list) {
         if (list == NULL) {
-                fprintf(stderr,
-                        "Error: %s: Singly linked list pointer is NULL.\n",
-                        __func__);
+                fprintf(stderr, "[ERROR]: %s :: slist pointer is null\n", __func__);
                 return 0;
         }
         return 1;
@@ -29,17 +27,11 @@ static inline void _validate_slist_node_construction(slist *list,
 
 static inline int _validate_sindex(slist *list, size_t index) {
         if (list == NULL) {
-                fprintf(stderr,
-                        "Error: %s: Singly linked list pointer is NULL for "
-                        "index validation.\n",
-                        __func__);
+                fprintf(stderr, "[ERROR]: %s :: slist pointer is null\n", __func__);
                 return 0;
         }
         if (index >= list->length) {
-                fprintf(
-                    stderr,
-                    "Error: %s: Index %zu out of bounds for list length %zu.\n",
-                    __func__, index, list->length);
+                fprintf(stderr, "[ERROR]: %s :: index %zu out of bounds (length %zu)\n", __func__, index, list->length);
                 return 0;
         }
         return 1;
@@ -65,7 +57,7 @@ slist *slist_construct(void) {
                 list->length = 0;
                 return list;
         }
-        fprintf(stderr, "=== error: slist_construct(): malloc failed ===\n");
+        fprintf(stderr, "[ERROR]: %s :: malloc failed for slist struct\n", __func__);
         return NULL;
 }
 
@@ -88,14 +80,12 @@ void slist_insert(slist *list, size_t index, void *data, size_t size) {
         if (!_validate_slist_ptr(list))
                 return;
         if (!data) {
-                fprintf(stdout, "[%s]: error invalid arguments slist.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null data pointer\n", __func__);
                 return;
         }
 
         if (index > list->length) {
-                fprintf(stderr,
-                        "Error: %s: Index %zu is out of bounds (length %zu).\n",
-                        __func__, index, list->length);
+                fprintf(stderr, "[ERROR]: %s :: index %zu out of bounds (length %zu)\n", __func__, index, list->length);
                 return;
         }
 
@@ -147,8 +137,7 @@ void *slist_fetch_data(slist *list, size_t index) {
 
         slist_node *node = _slist_iterate(list, index);
         if (!node) {
-                fprintf(stderr, "Error: %s: Node not found at index %zu.\n",
-                        __func__, index);
+                fprintf(stderr, "[ERROR]: %s :: node not found at index %zu\n", __func__, index);
                 return NULL;
         }
         return node->data;

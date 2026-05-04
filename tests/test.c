@@ -8,7 +8,7 @@
 #include <server/server.h>
 
 int main(void) {
-        http *srvr = http_construct();
+        http *srvr = http_construct(1028, 10);
         register_static_dir(srvr, "docs");
         srvr->launch(srvr);
         return 0;

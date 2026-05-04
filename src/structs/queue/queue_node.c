@@ -8,18 +8,18 @@
 
 queue_node *queue_node_construct(void *data, size_t size) {
         if (!data) {
-                fprintf(stdout, "[%s]: error invalid arguments queue_node.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null data pointer\n", __func__);
                 return NULL;
         }
         queue_node *node = malloc(sizeof(queue_node));
         if (!node) {
-                fprintf(stdout, "[%s]: error malloc failed for sizeof(queue_node) queue_node.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for queue_node struct\n", __func__);
                 return NULL;
         }
 
         node->data = malloc(size);
         if (!node->data) {
-                fprintf(stdout, "[%s]: error malloc failed for node->data queue_node.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: malloc failed for node data\n", __func__);
                 free(node);
                 return NULL;
         }
@@ -27,13 +27,13 @@ queue_node *queue_node_construct(void *data, size_t size) {
         memcpy(node->data, data, size);
         node->next = NULL;
 
-        fprintf(stdout, "[%s]: debug queue node constructed queue_node.c\n", __func__);
+        fprintf(stdout, "[DEBUG]: %s :: queue node constructed\n", __func__);
         return node;
 }
 
 void queue_node_destruct(queue_node *node) {
         if (!node) {
-                fprintf(stdout, "[%s]: error invalid arguments queue_node.c\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: null node pointer\n", __func__);
                 return;
         }
 
@@ -43,5 +43,5 @@ void queue_node_destruct(queue_node *node) {
         }
 
         free(node);
-        fprintf(stdout, "[%s]: debug queue node destructed queue_node.c\n", __func__);
-}
+        fprintf(stdout, "[DEBUG]: %s :: queue node destructed\n", __func__);
+}                
