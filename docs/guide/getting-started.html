@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>getting started — tinyweb</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="wrap">
+<nav class="crumb"><a href="/">tinyweb</a> / <a href="/guide/getting-started.html">guide</a> / getting started</nav>
+<h1>getting started</h1>
+
+<p>Build the demo server and serve this documentation tree from <strong>docs/</strong>.</p>
+
+<h2>build</h2>
+<pre class="sig">make server</pre>
+<p>Produces <strong>server</strong> from <strong>tests/test.c</strong> and core sources. Requires gcc, pthread, POSIX sockets (Linux, macOS, or WSL).</p>
+
+<h2>run</h2>
+<pre class="sig">./server</pre>
+<p>Listens on <strong>http://127.0.0.1:1028</strong>. Static root is <strong>docs</strong> in test.c.</p>
+
+<h2>urls</h2>
+<ul class="list plain">
+<li><span>/</span> — index.html</li>
+<li><span>/guide/architecture.html</span> — nested guide page</li>
+<li><span>/api/http/register-route.html</span> — nested API page</li>
+<li><span>/css/style.css</span> — stylesheet</li>
+</ul>
+
+<p class="note">Paths map as <strong>docs</strong> + URI. Stylesheet href is <strong>/css/style.css</strong> (not /docs/css/…).</p>
+
+<h2>typography</h2>
+<p>Docs use <strong>SauceCodePro NFM</strong> via <code>font-family</code> local names. Install the font on your system for the intended look; otherwise the browser falls back to system monospace.</p>
+
+<footer>tinyweb · static docs</footer>
+</main>
+</body>
+</html>

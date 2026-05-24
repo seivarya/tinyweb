@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>render_func — tinyweb</title>
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	<body>
+		<main class="wrap">
+			<nav class="crumb"><a href="/">tinyweb</a> / <a href="/api/index.html">api</a> / <a href="/api/http/index.html">http</a> / render_func</nav>
+			<h1>render_func</h1>
+			<pre class="sig">char *render_func(const char *status, int file_count, ...);</pre>
+			<p>Concatenates HTML files and builds a complete HTTP/1.1 response.</p>
+			<h2>parameters</h2><dl>
+				<dt>status</dt><dd>Status text after "HTTP/1.1 " (e.g. "200 OK").</dd>
+				<dt>file_count</dt><dd>Number of file path arguments.</dd>
+				<dt>...</dt><dd>char * paths to read and stitch as body.</dd>
+			</dl>
+
+			<h2>returns</h2>
+			<p>Malloc'd response string; caller must free.</p>
+			<p class="note">Always sets Content-Type text/html and Connection keep-alive.</p>
+
+			<footer>tinyweb · static docs</footer>
+		</main>
+	</body>
+</html>

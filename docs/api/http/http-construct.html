@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>http_construct — tinyweb</title>
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	<body>
+		<main class="wrap">
+			<nav class="crumb"><a href="/">tinyweb</a> / <a href="/api/index.html">api</a> / <a href="/api/http/index.html">http</a> / http_construct</nav>
+			<h1>http_construct</h1>
+			<pre class="sig">http *http_construct(unsigned short port, size_t thread_cnt);</pre>
+			<p>Builds the HTTP server: underlying server socket, route dict, default static_dir "frontend".</p>
+			<h2>parameters</h2><dl>
+				<dt>port</dt><dd>Listen port.</dd>
+				<dt>thread_cnt</dt><dd>Worker threads for executor (floored to 10 in exec_create).</dd>
+			</dl>
+
+			<h2>returns</h2>
+			<p>http pointer or NULL if malloc fails.</p>
+
+			<footer>tinyweb · static docs</footer>
+		</main>
+	</body>
+</html>

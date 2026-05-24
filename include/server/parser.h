@@ -6,22 +6,22 @@
 #include <structs/dict/dict.h>
 
 enum methods {
-	GET,
-	POST,
-	PUT,
-	HEAD,
-	PATCH,
-	DELETE,
-	CONNECT,
-	OPTIONS,
-	TRACE,
-	UNKNOWN
+        GET,
+        POST,
+        PUT,
+        HEAD,
+        PATCH,
+        DELETE,
+        CONNECT,
+        OPTIONS,
+        TRACE,
+        UNKNOWN
 };
 
 typedef struct request {
-	dict *body;
-	dict *req_line;
-	dict *headers;
+        dict *body;
+        dict *req_line;
+        dict *headers;
 } request;
 
 request *request_construct(char *req_str);

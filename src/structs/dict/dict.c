@@ -9,7 +9,8 @@
 
 static inline int _validate_dict_ptr(dict *dictionary) {
         if (dictionary == NULL) {
-                fprintf(stderr, "[ERROR]: %s :: dictionary pointer is null\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: dictionary pointer is null\n",
+                        __func__);
                 return 0;
         }
         return 1;
@@ -17,7 +18,8 @@ static inline int _validate_dict_ptr(dict *dictionary) {
 
 static inline int _validate_key(const char *key) {
         if (key == NULL || *key == '\0') {
-                fprintf(stderr, "[ERROR]: %s :: key is null or empty\n", __func__);
+                fprintf(stderr, "[ERROR]: %s :: key is null or empty\n",
+                        __func__);
                 return 0;
         }
         return 1;
@@ -25,7 +27,10 @@ static inline int _validate_key(const char *key) {
 
 static inline void _validate_entry_construction(entry *node) {
         if (!node) {
-                fprintf(stderr, "[ERROR]: %s :: failed to construct dict entry, aborting\n", __func__);
+                fprintf(
+                    stderr,
+                    "[ERROR]: %s :: failed to construct dict entry, aborting\n",
+                    __func__);
                 exit(3);
         }
 }
@@ -33,7 +38,9 @@ static inline void _validate_entry_construction(entry *node) {
 dict *dict_construct(void) {
         dict *dictionary = malloc(sizeof(struct dict));
         if (!dictionary) {
-                fprintf(stderr, "[ERROR]: %s :: malloc failed for dict struct\n", __func__);
+                fprintf(stderr,
+                        "[ERROR]: %s :: malloc failed for dict struct\n",
+                        __func__);
                 return NULL;
         }
 
@@ -83,7 +90,10 @@ void dict_insert(dict *dictionary, const char *key, const void *value,
                 return;
         }
         if (value == NULL) {
-                fprintf(stdout, "[%s]: error value pointer is null for key '%s' dict.c\n", __func__, key);
+                fprintf(
+                    stdout,
+                    "[%s]: error value pointer is null for key '%s' dict.c\n",
+                    __func__, key);
                 return;
         }
 
@@ -118,7 +128,8 @@ void dict_remove(dict *dictionary, const char *key) {
                 node = node->next;
         }
 
-        fprintf(stderr, "[ERROR]: %s :: key '%s' not found for removal\n", __func__, key);
+        fprintf(stderr, "[ERROR]: %s :: key '%s' not found for removal\n",
+                __func__, key);
 }
 
 unsigned int hash(const char *key) {

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tinyweb</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="wrap">
+<p class="site-title"><a href="/">tinyweb</a></p>
+<p class="site-tagline">HTTP/1.1 server in raw C — sockets, parser, thread pool, custom structs.</p>
+
+<h2>guide</h2>
+<ul class="list">
+<li>
+<a class="row" href="/guide/getting-started.html">
+<span class="name">getting started</span>
+<span class="meta">read</span>
+</a>
+<span class="desc">build, run, and point static files at docs/</span>
+</li>
+<li>
+<a class="row" href="/guide/architecture.html">
+<span class="name">architecture</span>
+<span class="meta">read</span>
+</a>
+<span class="desc">accept loop, workers, parse, route, respond</span>
+</li>
+<li>
+<a class="row" href="/guide/lifecycle.html">
+<span class="name">request lifecycle</span>
+<span class="meta">read</span>
+</a>
+<span class="desc">step-by-step path from TCP to socket close</span>
+</li>
+</ul>
+
+<h2>server api</h2>
+<ul class="list">
+<li>
+<a class="row" href="/api/server/index.html">
+<span class="name">server</span>
+<span class="meta">2</span>
+</a>
+<span class="desc">socket, bind, listen</span>
+</li>
+<li>
+<a class="row" href="/api/http/index.html">
+<span class="name">http</span>
+<span class="meta">6</span>
+</a>
+<span class="desc">construct, routes, launch, render</span>
+</li>
+<li>
+<a class="row" href="/api/parser/index.html">
+<span class="name">parser</span>
+<span class="meta">5</span>
+</a>
+<span class="desc">request parsing and method enum</span>
+</li>
+<li>
+<a class="row" href="/api/route/index.html">
+<span class="name">route</span>
+<span class="meta">1</span>
+</a>
+<span class="desc">handler metadata</span>
+</li>
+<li>
+<a class="row" href="/api/executor/index.html">
+<span class="name">executor</span>
+<span class="meta">7</span>
+</a>
+<span class="desc">pthread worker pool</span>
+</li>
+</ul>
+
+<h2>structs</h2>
+<ul class="list">
+<li>
+<a class="row" href="/api/structs/dict/index.html">
+<span class="name">dict</span>
+<span class="meta">6</span>
+</a>
+<span class="desc">chained hash map</span>
+</li>
+<li>
+<a class="row" href="/api/structs/entry/index.html">
+<span class="name">entry</span>
+<span class="meta">2</span>
+</a>
+<span class="desc">hash bucket node</span>
+</li>
+<li>
+<a class="row" href="/api/structs/queue/index.html">
+<span class="name">queue</span>
+<span class="meta">7</span>
+</a>
+<span class="desc">FIFO for executor and parser</span>
+</li>
+<li>
+<a class="row" href="/api/structs/queue-node/index.html">
+<span class="name">queue_node</span>
+<span class="meta">2</span>
+</a>
+<span class="desc">queue cell</span>
+</li>
+<li>
+<a class="row" href="/api/structs/slist/index.html">
+<span class="name">slist</span>
+<span class="meta">6</span>
+</a>
+<span class="desc">singly linked list</span>
+</li>
+<li>
+<a class="row" href="/api/structs/slist-node/index.html">
+<span class="name">slist_node</span>
+<span class="meta">2</span>
+</a>
+<span class="desc">list cell</span>
+</li>
+<li>
+<a class="row" href="/api/structs/tree/index.html">
+<span class="name">bst</span>
+<span class="meta">8</span>
+</a>
+<span class="desc">binary search tree</span>
+</li>
+</ul>
+
+<h2>reference</h2>
+<ul class="list plain">
+<li><span>api index</span> — <a href="/api/index.html">all modules</a></li>
+<li><span>types</span> — <a href="/reference/types.html">structs and typedefs</a></li>
+<li><span>headers</span> — <a href="/reference/headers.html">include layout</a></li>
+</ul>
+
+<footer>educational · not production-hardened</footer>
+</main>
+</body>
+</html>

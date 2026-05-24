@@ -8,22 +8,22 @@
 #include <structs/dict/dict.h>
 
 typedef struct http {
-	server *srv;
-	dict *routes;
-	char static_dir[256];
-	unsigned short port;
-	size_t thread_cnt;
-	void (*launch)(struct http *http_server);
+        server *srv;
+        dict *routes;
+        char static_dir[256];
+        unsigned short port;
+        size_t thread_cnt;
+        void (*launch)(struct http *http_server);
 } http;
 
 http *http_construct(unsigned short port, size_t thread_cnt);
 void register_static_dir(http *srv, const char *dir_path);
 
 void register_route(http *srv, char *(*route_func)(http *srv, request *req),
-		char *uri, int count_methods,
-		...); /* for multiple routes within the site */
+                    char *uri, int count_methods,
+                    ...); /* for multiple routes within the site */
 void launch(struct http *http_server);
 void handler(void *arg);
-char* render_func(const char *status, int file_count, ...);
+char *render_func(const char *status, int file_count, ...);
 
 #endif /* http.h */

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>exec_add_work — tinyweb</title>
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	<body>
+		<main class="wrap">
+			<nav class="crumb"><a href="/">tinyweb</a> / <a href="/api/index.html">api</a> / <a href="/api/executor/index.html">executor</a> / exec_add_work</nav>
+			<h1>exec_add_work</h1>
+			<pre class="sig">bool exec_add_work(executor *exec, exec_func func, void *arg);</pre>
+			<p>Enqueues work; signals one waiter.</p>
+			<h2>parameters</h2><dl>
+				<dt>exec</dt><dd>Executor.</dd>
+				<dt>func</dt><dd>void (*)(void *arg) callback.</dd>
+				<dt>arg</dt><dd>Opaque pointer copied into queue node.</dd>
+			</dl>
+
+			<h2>returns</h2>
+			<p>false if stopped or invalid args.</p>
+
+			<footer>tinyweb · static docs</footer>
+		</main>
+	</body>
+</html>

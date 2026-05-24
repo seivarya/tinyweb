@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>types — tinyweb</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="wrap">
+<nav class="crumb"><a href="/">tinyweb</a> / reference / types</nav>
+<h1>types</h1>
+
+<h2>server</h2>
+<pre class="sig">typedef struct server {
+    short unsigned int domain;
+    int service;
+    int protocol;
+    short unsigned int port;
+    int backlog;
+    uint32_t interface;
+    int socket;
+    struct sockaddr_in address;
+} server;</pre>
+
+<h2>http</h2>
+<pre class="sig">typedef struct http {
+    server *srv;
+    dict *routes;
+    char static_dir[256];
+    unsigned short port;
+    size_t thread_cnt;
+    void (*launch)(struct http *http_server);
+} http;</pre>
+
+<h2>request</h2>
+<pre class="sig">typedef struct request {
+    dict *body;
+    dict *req_line;
+    dict *headers;
+} request;</pre>
+
+<h2>route</h2>
+<pre class="sig">typedef struct route {
+    int methods[METHOD_COUNT];
+    char *uri;
+    char *(*route_func)(http *srv, request *req);
+} route;</pre>
+
+<h2>executor</h2>
+<pre class="sig">typedef void (*exec_func)(void *arg);
+
+typedef struct exec_work {
+    exec_func func;
+    void *arg;
+} exec_work;
+
+typedef struct executor {
+    queue *queue;
+    pthread_t *threads;
+    pthread_mutex_t mutex;
+    pthread_cond_t non_empty;
+    pthread_cond_t empty;
+    size_t working_count;
+    size_t pending_count;
+    size_t thread_count;
+    bool stop;
+} executor;</pre>
+
+<h2>dict</h2>
+<pre class="sig">typedef struct dict {
+    entry *entries[HASH_SIZE];  /* HASH_SIZE = 69 */
+} dict;
+
+struct entry {
+    char *key;
+    void *value;
+    entry *next;
+};</pre>
+
+<footer>tinyweb · static docs</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>register_route — tinyweb</title>
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	<body>
+		<main class="wrap">
+			<nav class="crumb"><a href="/">tinyweb</a> / <a href="/api/index.html">api</a> / <a href="/api/http/index.html">http</a> / register_route</nav>
+			<h1>register_route</h1>
+			<pre class="sig">void register_route(http *srv,
+	char *(*route_func)(http *srv, request *req),
+	char *uri, int count_methods, ...);</pre>
+			<p>Registers a URI handler. Varargs are count_methods int values (parser method enums).</p>
+			<h2>parameters</h2><dl>
+				<dt>srv</dt><dd>HTTP server.</dd>
+				<dt>route_func</dt><dd>Returns full HTTP response string or NULL for index fallback.</dd>
+				<dt>uri</dt><dd>Exact URI key (e.g. "/api").</dd>
+				<dt>count_methods</dt><dd>Number of following int method codes.</dd>
+				<dt>...</dt><dd>Method integers (GET, POST, etc.). Not enforced at dispatch yet.</dd>
+			</dl>
+
+			<h2>returns</h2>
+			<p>None.</p>
+			<p class="note">Route stored by value in dict; only route_func pointer is live after insert.</p>
+
+			<footer>tinyweb · static docs</footer>
+		</main>
+	</body>
+</html>

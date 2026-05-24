@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>server_construct — tinyweb</title>
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	<body>
+		<main class="wrap">
+			<nav class="crumb"><a href="/">tinyweb</a> / <a href="/api/index.html">api</a> / <a href="/api/server/index.html">server</a> / server_construct</nav>
+			<h1>server_construct</h1>
+			<pre class="sig">server *server_construct(short unsigned int domain, int service,
+	int protocol, short unsigned int port, int backlog,
+	uint32_t interface);</pre>
+			<p>Allocates a server, creates the socket, sets SO_REUSEADDR, bind(), and listen().</p>
+			<h2>parameters</h2><dl>
+				<dt>domain</dt><dd>Address family (e.g. AF_INET).</dd>
+				<dt>service</dt><dd>Socket type (e.g. SOCK_STREAM).</dd>
+				<dt>protocol</dt><dd>Protocol (0 for default TCP).</dd>
+				<dt>port</dt><dd>Host port; stored with htons().</dd>
+				<dt>backlog</dt><dd>listen() backlog.</dd>
+				<dt>interface</dt><dd>Bind address as uint32_t (e.g. INADDR_ANY via htonl).</dd>
+			</dl>
+
+			<h2>returns</h2>
+			<p>Pointer to server on success. Calls exit() on fatal socket errors.</p>
+			<p class="note">Used internally by http_construct with AF_INET, SOCK_STREAM, backlog 255.</p>
+
+			<footer>tinyweb · static docs</footer>
+		</main>
+	</body>
+</html>

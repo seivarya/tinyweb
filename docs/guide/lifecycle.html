@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>request lifecycle — tinyweb</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="wrap">
+<nav class="crumb"><a href="/">tinyweb</a> / guide / lifecycle</nav>
+<h1>request lifecycle</h1>
+
+<p>One TCP connection may serve multiple HTTP requests when the client keeps the connection open.</p>
+
+<h2>steps</h2>
+<ul class="list plain">
+<li><span>1</span> — main thread accept() on listening socket</li>
+<li><span>2</span> — malloc _client, enqueue handler on thread pool</li>
+<li><span>3</span> — worker read() up to 8191 bytes into heap buffer</li>
+<li><span>4</span> — parser splits line, headers; body not stored today</li>
+<li><span>5</span> — lookup URI in routes dict; else static_dir + uri</li>
+<li><span>6</span> — handler returns full response string; write() to socket</li>
+<li><span>7</span> — repeat if Connection is not close; then close(fd)</li>
+</ul>
+
+<p class="note">All per-request memory is freed in the worker before the next read or before close.</p>
+
+<footer>tinyweb · static docs</footer>
+</main>
+</body>
+</html>

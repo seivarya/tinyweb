@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>register_static_dir — tinyweb</title>
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	<body>
+		<main class="wrap">
+			<nav class="crumb"><a href="/">tinyweb</a> / <a href="/api/index.html">api</a> / <a href="/api/http/index.html">http</a> / register_static_dir</nav>
+			<h1>register_static_dir</h1>
+			<pre class="sig">void register_static_dir(http *srv, const char *dir_path);</pre>
+			<p>Sets the filesystem root for static fallback (max 255 chars + NUL).</p>
+			<h2>parameters</h2><dl>
+				<dt>srv</dt><dd>HTTP server.</dd>
+				<dt>dir_path</dt><dd>Directory path relative to cwd.</dd>
+			</dl>
+
+			<h2>returns</h2>
+			<p>None.</p>
+			<p class="note">test.c uses "docs" so URIs map to files under docs/.</p>
+
+			<footer>tinyweb · static docs</footer>
+		</main>
+	</body>
+</html>

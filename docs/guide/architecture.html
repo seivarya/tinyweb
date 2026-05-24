@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>architecture — tinyweb</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main class="wrap">
+<nav class="crumb"><a href="/">tinyweb</a> / guide / architecture</nav>
+<h1>architecture</h1>
+
+<p>Four layers: POSIX <strong>server</strong>, <strong>http</strong> accept loop, <strong>executor</strong> workers, and <strong>parser</strong> + <strong>dict</strong> routing.</p>
+
+<h2>components</h2>
+<ul class="list plain">
+<li><span>server.c</span> — socket(), bind(), listen()</li>
+<li><span>http.c</span> — accept, dispatch handler, static fallback</li>
+<li><span>executor.c</span> — FIFO queue + pthread_cond_wait</li>
+<li><span>parser.c</span> — tokenize request line and headers</li>
+<li><span>dict.c</span> — route table and header maps</li>
+</ul>
+
+<h2>data flow</h2>
+<pre class="sig">main → http_construct → register_static_dir("docs")
+     → launch → accept → exec_add_work(handler)
+     → read → request_construct → dict_search(routes, uri)
+     → route_func | static file → write → close</pre>
+
+<p>See <a href="/guide/lifecycle.html">request lifecycle</a> for per-connection detail.</p>
+
+<footer>tinyweb · static docs</footer>
+</main>
+</body>
+</html>
